@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="ObserverPattern.ConcertTicketSystem/ObserverPattern.ConcertTicketSystem.csproj" Id="96b08e26-c0f7-4722-874d-15cddda84ad6" />
   <Project Path="ObserverPattern.MarketRiskMonitor/ObserverPattern.MarketRiskMonitor.csproj" />
+  <Project Path="SingletonPattern.SatelliteStationCommandCenter/SingletonPattern.SatelliteStationCommandCenter.csproj" Id="a8e79e5d-ae28-4254-9958-679f53a9ac96" />
   <Project Path="VisitorPattern.EnterpriseRoleGovernanceSystem/VisitorPattern.EnterpriseRoleGovernanceSystem.csproj" Id="95f0803d-e1a0-4cfc-97cf-85341aba742a" />
 </Solution>
