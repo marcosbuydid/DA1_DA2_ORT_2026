@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="CompositePattern.PowerGridControlSystem/CompositePattern.PowerGridControlSystem.csproj" Id="0fce1cc8-37d5-41cb-a7c3-e27e6f6caedb" />
   <Project Path="ObserverPattern.ConcertTicketSystem/ObserverPattern.ConcertTicketSystem.csproj" Id="96b08e26-c0f7-4722-874d-15cddda84ad6" />
   <Project Path="ObserverPattern.MarketRiskMonitor/ObserverPattern.MarketRiskMonitor.csproj" />
   <Project Path="SingletonPattern.SatelliteStationCommandCenter/SingletonPattern.SatelliteStationCommandCenter.csproj" Id="a8e79e5d-ae28-4254-9958-679f53a9ac96" />
