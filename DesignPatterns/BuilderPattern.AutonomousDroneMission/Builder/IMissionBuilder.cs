@@ -1,6 +1,6 @@
 ﻿using BuilderPattern.AutonomousDroneMission.Product;
 
-namespace BuilderPattern.AutonomousDroneMission.BuilderInterface
+namespace BuilderPattern.AutonomousDroneMission.Builder
 {
     public interface IMissionBuilder
     {

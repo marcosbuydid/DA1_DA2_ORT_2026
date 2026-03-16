@@ -1,4 +1,4 @@
-﻿namespace CompositePattern.PowerGridControlSystem.ComponentInterface
+﻿namespace CompositePattern.PowerGridControlSystem.Component
 {
     public interface IPowerComponent
     {

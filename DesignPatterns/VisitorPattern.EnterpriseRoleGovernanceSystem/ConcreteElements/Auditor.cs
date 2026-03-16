@@ -1,7 +1,7 @@
-﻿using VisitorPattern.EnterpriseRoleGovernanceSystem.UserRoleInterface;
-using VisitorPattern.EnterpriseRoleGovernanceSystem.VisitorInterface;
+﻿using VisitorPattern.EnterpriseRoleGovernanceSystem.Element;
+using VisitorPattern.EnterpriseRoleGovernanceSystem.Visitor;
 
-namespace VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteRoles
+namespace VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteElements
 {
     public class Auditor : IUserRole
     {

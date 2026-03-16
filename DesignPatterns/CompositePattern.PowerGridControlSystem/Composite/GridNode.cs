@@ -1,6 +1,6 @@
-﻿using CompositePattern.PowerGridControlSystem.ComponentInterface;
+﻿using CompositePattern.PowerGridControlSystem.Component;
 
-namespace CompositePattern.PowerGridControlSystem.CompositeComponents
+namespace CompositePattern.PowerGridControlSystem.Composite
 {
     public class GridNode : IPowerComponent
     {

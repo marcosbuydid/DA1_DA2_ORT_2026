@@ -1,6 +1,6 @@
-﻿using VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteRoles;
-using VisitorPattern.EnterpriseRoleGovernanceSystem.UserRoleInterface;
-using VisitorPattern.EnterpriseRoleGovernanceSystem.Visitors;
+﻿using VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteElements;
+using VisitorPattern.EnterpriseRoleGovernanceSystem.Element;
+using VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteVisitors;
 
 namespace VisitorPattern.EnterpriseRoleGovernanceSystem
 {

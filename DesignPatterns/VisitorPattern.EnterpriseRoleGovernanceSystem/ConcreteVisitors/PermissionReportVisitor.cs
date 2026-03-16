@@ -1,7 +1,7 @@
-﻿using VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteRoles;
-using VisitorPattern.EnterpriseRoleGovernanceSystem.VisitorInterface;
+﻿using VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteElements;
+using VisitorPattern.EnterpriseRoleGovernanceSystem.Visitor;
 
-namespace VisitorPattern.EnterpriseRoleGovernanceSystem.Visitors
+namespace VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteVisitors
 {
     public class PermissionReportVisitor : IRoleVisitor
     {
