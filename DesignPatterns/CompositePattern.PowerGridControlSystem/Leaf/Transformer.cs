@@ -1,6 +1,6 @@
-﻿using CompositePattern.PowerGridControlSystem.ComponentInterface;
+﻿using CompositePattern.PowerGridControlSystem.Component;
 
-namespace CompositePattern.PowerGridControlSystem.LeafComponents
+namespace CompositePattern.PowerGridControlSystem.Leaf
 {
     public class Transformer : IPowerComponent
     {
