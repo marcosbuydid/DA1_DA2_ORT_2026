@@ -1,6 +1,6 @@
-﻿using VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteRoles;
+﻿using VisitorPattern.EnterpriseRoleGovernanceSystem.ConcreteElements;
 
-namespace VisitorPattern.EnterpriseRoleGovernanceSystem.VisitorInterface
+namespace VisitorPattern.EnterpriseRoleGovernanceSystem.Visitor
 {
     public interface IRoleVisitor
     {

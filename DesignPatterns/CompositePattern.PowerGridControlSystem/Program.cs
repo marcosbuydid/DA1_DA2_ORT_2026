@@ -1,5 +1,5 @@
-﻿using CompositePattern.PowerGridControlSystem.CompositeComponents;
-using CompositePattern.PowerGridControlSystem.LeafComponents;
+﻿using CompositePattern.PowerGridControlSystem.Composite;
+using CompositePattern.PowerGridControlSystem.Leaf;
 
 namespace CompositePattern.PowerGridControlSystem
 {
