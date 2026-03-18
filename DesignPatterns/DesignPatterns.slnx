@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="AdapterPattern.PaymentGateway/AdapterPattern.PaymentGateway.csproj" Id="38514858-c065-4be2-841d-7ea1fc3b2cdb" />
   <Project Path="BuilderPattern.AutonomousDroneMission/BuilderPattern.AutonomousDroneMission.csproj" Id="e74860c1-c7a5-4d3c-a5ae-61c61115c9cd" />
   <Project Path="CompositePattern.PowerGridControlSystem/CompositePattern.PowerGridControlSystem.csproj" Id="0fce1cc8-37d5-41cb-a7c3-e27e6f6caedb" />
   <Project Path="FacadePattern.RocketLaunchSystem/FacadePattern.RocketLaunchSystem.csproj" Id="c2bbaa87-e390-49eb-bc94-d2b63749b1a4" />
