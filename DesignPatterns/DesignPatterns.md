@@ -93,6 +93,19 @@ Power Grid
 #### If two dispatchers existed, conflicting commands could be sent simultaneously.
 
 
+## State Pattern Example
+### EV Charging State Machine
+### Modern electric vehicles manage charging through strict state transitions:
+- Plugged in → handshake with charger
+- Charging → regulate current/voltage
+- Near full → taper charging
+- Full charge → charger can be disconnected
+- If a fault occurs → charging cycle stops immediately
+
+#### Behavior depends entirely on the current state.
+#### Transitions are controlled internally (not by the client).
+
+
 ## Strategy Pattern Example
 ### Adaptive Energy Management Strategy in Electric Vehicles (EV)
 #### Modern EVs dynamically adjust energy usage strategies depending on:
