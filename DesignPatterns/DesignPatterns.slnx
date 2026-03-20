@@ -3,6 +3,7 @@
   <Project Path="BuilderPattern.AutonomousDroneMission/BuilderPattern.AutonomousDroneMission.csproj" Id="e74860c1-c7a5-4d3c-a5ae-61c61115c9cd" />
   <Project Path="CompositePattern.PowerGridControlSystem/CompositePattern.PowerGridControlSystem.csproj" Id="0fce1cc8-37d5-41cb-a7c3-e27e6f6caedb" />
   <Project Path="FacadePattern.RocketLaunchSystem/FacadePattern.RocketLaunchSystem.csproj" Id="c2bbaa87-e390-49eb-bc94-d2b63749b1a4" />
+  <Project Path="FactoryMethodPattern.AutomotiveSensorProcessing/FactoryMethodPattern.AutomotiveSensorProcessing.csproj" Id="7efa343a-64b8-4289-8123-6dbab1e2effe" />
   <Project Path="ObserverPattern.ConcertTicketSystem/ObserverPattern.ConcertTicketSystem.csproj" Id="96b08e26-c0f7-4722-874d-15cddda84ad6" />
   <Project Path="ProxyPattern.IndustrialRobotSafetyDelegate/ProxyPattern.IndustrialRobotSafetyDelegate.csproj" Id="5d5b0f92-8100-4eb0-98db-d7c36a82bc96" />
   <Project Path="SingletonPattern.SatelliteStationCommandCenter/SingletonPattern.SatelliteStationCommandCenter.csproj" Id="a8e79e5d-ae28-4254-9958-679f53a9ac96" />
