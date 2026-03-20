@@ -57,6 +57,22 @@ Power Grid
 #### Instead, a launch facade orchestrates the process.
 
 
+## Factory Method Example
+### Automotive Sensor Processing
+#### In modern automotive systems, different sensors such as LiDAR, Radar and Cameras
+#### require specialized data processing pipelines.
+
+### The system needs to:
+- Process data from multiple sensor types
+- Use different algorithms per sensor
+- Remain extensible for future sensors
+
+### The design introduces:
+- An abstract creator: SensorProcessorCreator
+- A factory method: CreateProcessor()
+- Concrete creators that decide which processor to instantiate
+
+
 ## Observer Pattern Example
 ### Concert Ticket Notification System
 #### In a ticketing platform:
