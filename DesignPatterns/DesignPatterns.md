@@ -138,6 +138,24 @@ Power Grid
 #### The vehicle must switch strategies at runtime without changing core control logic.
 
 
+## Template Method Pattern Example
+### Surgical Procedure System
+### In hospitals, every surgical procedure must follow a strict protocol:
+- Pre-operative preparation
+- Handle Induction
+- Start surgery
+- Post-operative stabilization
+- Monitor patient recovery
+
+### However, different surgeries require different implementations:
+- Cardiac surgery → highly complex, critical monitoring
+- Orthopedic surgery → bone repair procedures
+- Minimally invasive surgery → faster recovery, less trauma
+
+#### In critical systems, the process cannot change, only how each step is executed.
+#### Template Method enforces safety and consistency in processes where mistakes are not acceptable.
+
+
 ## Visitor Pattern Example
 ### Enterprise Role Governance System
 #### Roles represent security principals in an organization.
