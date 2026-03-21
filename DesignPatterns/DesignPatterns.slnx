@@ -9,5 +9,6 @@
   <Project Path="SingletonPattern.SatelliteStationCommandCenter/SingletonPattern.SatelliteStationCommandCenter.csproj" Id="a8e79e5d-ae28-4254-9958-679f53a9ac96" />
   <Project Path="StatePattern.EVChargingStateMachine/StatePattern.EVChargingStateMachine.csproj" Id="5b85bba5-724f-4ee4-af92-0b6dffa234cc" />
   <Project Path="StrategyPattern.ElectricVehicleEnergyManagement/StrategyPattern.ElectricVehicleEnergyManagement.csproj" Id="78f71856-6a13-4d95-ab8a-128bfd856d0a" />
+  <Project Path="TemplateMethodPattern.SurgicalProcedureSystem/TemplateMethodPattern.SurgicalProcedureSystem.csproj" Id="5247c873-7df6-4e0d-8359-f4bf462413e2" />
   <Project Path="VisitorPattern.EnterpriseRoleGovernanceSystem/VisitorPattern.EnterpriseRoleGovernanceSystem.csproj" Id="95f0803d-e1a0-4cfc-97cf-85341aba742a" />
 </Solution>
