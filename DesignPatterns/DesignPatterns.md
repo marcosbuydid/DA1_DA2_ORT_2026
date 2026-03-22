@@ -1,3 +1,18 @@
+## Abstract Factory Pattern Example
+### Nuclear Facility Monitoring System
+#### A nuclear facility uses integrated monitoring systems composed of:
+- Radiation Sensors
+- Reactor Coolant Systems
+- Reactor Emergency Shutdown Systems
+
+#### These components must be compatible and certified as a single system family:
+- Westinghouse system → specific protocols and tolerances
+- Areva system → different calibration and safety rules
+
+#### Mixing components from different vendors is unsafe and forbidden.
+#### Abstract Factory guarantees that all components belong to the same family and work together correctly.
+
+
 ## Adapter Pattern Example
 ### Payment Gateway Adapter
 #### A system was designed to work with traditional payment gateways (credit cards, bank transfers).
