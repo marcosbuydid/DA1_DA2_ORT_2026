@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="MediaCatalog.Api/MediaCatalog.Api.csproj" />
   <Project Path="MediaCatalog.DataAccess/MediaCatalog.DataAccess.csproj" Id="9535a761-317b-48fd-9cf4-6b54d96819a3" />
+  <Project Path="MediaCatalog.Domain.Tests/MediaCatalog.Domain.Tests.csproj" Id="f1ce1c4f-59c4-42df-88c2-381e0aa85fc8" />
   <Project Path="MediaCatalog.Domain/MediaCatalog.Domain.csproj" Id="fe3aeec1-d0d7-49b3-a94f-bcb6affb3308" />
   <Project Path="MediaCatalog.Services/MediaCatalog.Services.csproj" Id="edf0677b-421e-40f4-bb00-46b2934a4d8b" />
 </Solution>
