@@ -12,7 +12,7 @@ namespace MediaCatalog.Domain.Tests
         [TestInitialize]
         public void Initialize()
         {
-            _movie = new Movie("Gladiator 2", "Ridley Scott", new DateTime(2024, 11, 22), 250000000);
+            _movie = new Movie(1,"Gladiator 2", "Ridley Scott", new DateTime(2024, 11, 22), 250000000);
         }
 
         [TestMethod]

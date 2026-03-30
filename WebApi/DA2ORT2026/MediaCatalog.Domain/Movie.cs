@@ -5,10 +5,17 @@ namespace MediaCatalog.Domain
 {
     public class Movie
     {
+        private int? _id;
         private string _title;
         private string _director;
         private DateTime _releaseDate;
         private long _budget;
+
+        public int? Id
+        {
+            get => _id;
+            set => _id = value;
+        }
 
         public string Title
         {
@@ -61,8 +68,9 @@ namespace MediaCatalog.Domain
             }
         }
 
-        public Movie(string title, string director, DateTime releaseDate, int budget)
+        public Movie(int id, string title, string director, DateTime releaseDate, int budget)
         {
+            Id = id;
             Title = title;
             Director = director;
             ReleaseDate = releaseDate;

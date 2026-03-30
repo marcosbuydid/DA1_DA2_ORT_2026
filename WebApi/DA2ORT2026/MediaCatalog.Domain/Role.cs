@@ -5,13 +5,13 @@ namespace MediaCatalog.Domain
 {
     public class Role
     {
-        private int _id;
+        private int? _id;
         private string _name;
 
         private static readonly HashSet<string>
             Roles = new HashSet<string>() { "Administrator", "User" };
 
-        public int Id
+        public int? Id
         {
             get => _id;
             set => _id = value;
@@ -37,7 +37,7 @@ namespace MediaCatalog.Domain
 
         public Role() { }
 
-        public Role(int id, string name)
+        public Role(int? id, string name)
         {
             Id = id;
             Name = name;

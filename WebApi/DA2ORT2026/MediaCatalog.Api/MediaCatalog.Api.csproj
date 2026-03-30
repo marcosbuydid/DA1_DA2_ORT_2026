@@ -15,4 +15,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MediaCatalog.Factory\MediaCatalog.Factory.csproj" />
+  </ItemGroup>
+
 </Project>

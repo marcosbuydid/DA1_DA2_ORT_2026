@@ -5,12 +5,12 @@ namespace MediaCatalog.Domain
 {
     public class Session
     {
-        private int _id;
+        private int? _id;
         private string _token;
         private User _user;
         private DateTime _createdAt;
 
-        public int Id 
+        public int? Id 
         { 
             get => _id; 
             set => _id = value;
@@ -50,7 +50,7 @@ namespace MediaCatalog.Domain
 
         public Session() { }
 
-        public Session(int id, string token, User user) 
+        public Session(int? id, string token, User user) 
         { 
             Id = id;
             Token = token;

@@ -6,14 +6,14 @@ namespace MediaCatalog.Domain
 {
     public class User
     {
-        private int _id;
+        private int? _id;
         private string _name;
         private string _lastname;
         private string _email;
         private string _password;
         private Role _role;
 
-        public int Id
+        public int? Id
         {
             get => _id;
             set => _id = value;
@@ -98,7 +98,7 @@ namespace MediaCatalog.Domain
 
         public User() { }
 
-        public User(int id, string name, string lastname, string email, string password, Role role)
+        public User(int? id, string name, string lastname, string email, string password, Role role)
         {
             Id = id;
             Name = name;

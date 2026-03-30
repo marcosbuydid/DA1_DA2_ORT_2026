@@ -1,0 +1,82 @@
+﻿
+using MediaCatalog.DataAccess.Interfaces;
+using MediaCatalog.Domain;
+using MediaCatalog.Services.Exceptions;
+using MediaCatalog.Services.Interfaces;
+using MediaCatalog.Services.Models;
+
+namespace MediaCatalog.Services
+{
+    public class RoleService : IRoleService
+    {
+        private readonly IRoleRepository _roleRepository;
+
+        public RoleService(IRoleRepository roleRepository)
+        {
+            _roleRepository = roleRepository;
+        }
+
+        public void AddRole(RoleDTO role)
+        {
+            ValidateUniqueName(role.Name);
+            _roleRepository.AddRole(ToEntity(role));
+        }
+
+        public void DeleteRole(string name)
+        {
+            Role? roleToDelete = _roleRepository.GetRole(r => r.Name == name);
+            if (roleToDelete == null)
+            {
+                throw new ServiceException("Cannot find a role with this name");
+            }
+
+            _roleRepository.DeleteRole(roleToDelete);
+        }
+
+        public RoleDTO GetRole(string name)
+        {
+            Role? role = _roleRepository.GetRole(role => role.Name == name);
+            if (role == null)
+            {
+                throw new ServiceException("Cannot find a role with this name");
+            }
+
+            return FromEntity(role);
+        }
+
+        public List<RoleDTO> GetRoles()
+        {
+            List<RoleDTO> rolesDTO = new List<RoleDTO>();
+
+            foreach (var role in _roleRepository.GetRoles())
+            {
+                rolesDTO.Add(FromEntity(role));
+            }
+
+            return rolesDTO;
+        }
+
+        private void ValidateUniqueName(string name)
+        {
+            string inputName = name.Trim().ToLowerInvariant();
+            foreach (var role in _roleRepository.GetRoles())
+            {
+                string retrievedName = role.Name.Trim().ToLowerInvariant();
+                if (retrievedName == inputName)
+                {
+                    throw new ServiceException("There`s a role already defined with that name");
+                }
+            }
+        }
+
+        private static Role ToEntity(RoleDTO roleDTO)
+        {
+            return new Role(roleDTO.Id, roleDTO.Name);
+        }
+
+        private static RoleDTO FromEntity(Role role)
+        {
+            return new RoleDTO(role.Id, role.Name);
+        }
+    }
+}
