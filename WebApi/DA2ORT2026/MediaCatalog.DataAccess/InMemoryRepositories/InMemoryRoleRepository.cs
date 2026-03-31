@@ -31,5 +31,10 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         {
             Roles.Remove(role);
         }
+
+        public bool Exists(Func<Role, bool> predicate)
+        {
+            return Roles.Where(predicate).Any();
+        }
     }
 }

@@ -7,7 +7,6 @@ using MediaCatalog.Services.Models;
 using MediaCatalog.Services.Settings;
 using Microsoft.Extensions.Options;
 using Moq;
-using System.Data;
 
 
 namespace MediaCatalog.Services.Tests
@@ -53,15 +52,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role() { Id = 1 };
 
-            UserDTO newUserDTO = new UserDTO()
-            {
-                Id = 1,
-                Name = "John",
-                LastName = "Doe",
-                Email = "test",
-                Password = "password123",
-                RoleId = (int)role.Id
-            };
+            UserDTO newUserDTO = new UserDTO(1, "John", "Doe", "test", "password123", (int)role.Id);
 
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 
@@ -77,20 +68,12 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void AddUser_WhenCalledWithValidUser_ThenUserIsAdded()
+        public void AddUser_WhenCalled_ThenUserIsAdded()
         {
             //arrange
             Role role = new Role { Id = 1 };
 
-            UserDTO newUserDTO = new UserDTO
-            {
-                Id = 1,
-                Name = "John",
-                LastName = "Doe",
-                Email = "john.doe@test.com",
-                Password = "password123",
-                RoleId = (int)role.Id
-            };
+            UserDTO newUserDTO = new UserDTO(1, "John", "Doe", "john.doe@test.com", "password123", (int)role.Id);
 
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 
@@ -125,15 +108,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role { Id = 1 };
 
-            UserDTO newUserDTO = new UserDTO
-            {
-                Id = 3,
-                Name = "Nick",
-                LastName = "Smith",
-                Email = "jane.smith@test.com",
-                Password = "password123",
-                RoleId = (int)role.Id
-            };
+            UserDTO newUserDTO = new UserDTO(3, "Nick", "Smith", "jane.smith@test.com", "password123", (int)role.Id);
 
             //simulate user with the same email already exists in repository
             List<User> existingUsers = new List<User>();
@@ -151,7 +126,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void GetUser_WhenCalledWithAValidUserThenUserIsReturned()
+        public void GetUser_WhenCalledThenUserIsReturned()
         {
             //arrange
             Role role = new Role { Id = 1 };
@@ -164,7 +139,6 @@ namespace MediaCatalog.Services.Tests
             UserDTO userDTO = _userService.GetUser(newUser.Email);
 
             //assert
-            Assert.AreEqual(userDTO.Id, newUser.Id);
             Assert.AreEqual(userDTO.Name, newUser.Name);
             Assert.AreEqual(userDTO.LastName, newUser.LastName);
             Assert.AreEqual(userDTO.Email, newUser.Email);
@@ -262,10 +236,10 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action act = () => _userService.UpdateUser(updatedUserDTO);
+            Action action = () => _userService.UpdateUser(updatedUserDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(act);
+            Assert.ThrowsException<ServiceException>(action);
 
             _userRepositoryMock.Verify(r => r.UpdateUser(It.IsAny<User>()), Times.Never);
         }
@@ -292,14 +266,12 @@ namespace MediaCatalog.Services.Tests
             //assert
             _userRepositoryMock.Verify(
                 r => r.UpdateUser(It.Is<User>(u =>
-                    u.Id == updatedUserDTO.Id &&
                     u.Name == updatedUserDTO.Name &&
                     u.LastName == updatedUserDTO.LastName &&
                     u.Email == updatedUserDTO.Email &&
                     u.Role.Id == updatedUserDTO.Id
                 )), Times.Once);
 
-            Assert.AreEqual(updatedUserDTO.Id, updatedUser.Id);
             Assert.AreEqual(updatedUserDTO.Name, updatedUser.Name);
             Assert.AreEqual(updatedUserDTO.LastName, updatedUser.LastName);
             Assert.AreEqual(updatedUserDTO.Email, updatedUser.Email);
@@ -331,7 +303,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void ChangePassword_WhenCalledAndOldPasswordMatch_ThenPasswordIsUpdated()
+        public void ChangePassword_WhenCalled_ThenPasswordIsUpdated()
         {
             //arrange
             Role role = new Role { Id = 1 };

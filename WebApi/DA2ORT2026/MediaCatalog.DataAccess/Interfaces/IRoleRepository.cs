@@ -8,5 +8,6 @@ namespace MediaCatalog.DataAccess.Interfaces
         Role? GetRole(Func<Role, bool> filter);
         void AddRole(Role role);
         void DeleteRole(Role role);
+        bool Exists(Func<Role, bool> predicate);
     }
 }
