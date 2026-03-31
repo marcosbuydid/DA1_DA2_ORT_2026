@@ -7,7 +7,7 @@ namespace MediaCatalog.Services.Interfaces
     {
         List<RoleDTO> GetRoles();
         RoleDTO GetRole(string name);
-        void AddRole(RoleDTO role);
+        RoleDTO AddRole(RoleDTO role);
         void DeleteRole(string name);
     }
 }

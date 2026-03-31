@@ -1,5 +1,7 @@
 ﻿using MediaCatalog.DataAccess.InMemoryRepositories;
 using MediaCatalog.DataAccess.Interfaces;
+using MediaCatalog.Services;
+using MediaCatalog.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MediaCatalog.Factory
@@ -8,6 +10,9 @@ namespace MediaCatalog.Factory
     {
         public static void AddServices(IServiceCollection serviceCollection)
         {
+           serviceCollection.AddScoped<ISecureDataService, SecureDataService>();
+           serviceCollection.AddScoped<IRoleService, RoleService>();
+           serviceCollection.AddScoped<IUserService, UserService>();
         }
 
         public static void AddDataAccess(IServiceCollection serviceCollection)

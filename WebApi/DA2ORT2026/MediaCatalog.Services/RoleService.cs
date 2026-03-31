@@ -16,10 +16,11 @@ namespace MediaCatalog.Services
             _roleRepository = roleRepository;
         }
 
-        public void AddRole(RoleDTO role)
+        public RoleDTO AddRole(RoleDTO role)
         {
             ValidateUniqueName(role.Name);
             _roleRepository.AddRole(ToEntity(role));
+            return role;
         }
 
         public void DeleteRole(string name)
@@ -76,7 +77,7 @@ namespace MediaCatalog.Services
 
         private static RoleDTO FromEntity(Role role)
         {
-            return new RoleDTO(role.Id, role.Name);
+            return new RoleDTO(role.Id,role.Name);
         }
     }
 }
