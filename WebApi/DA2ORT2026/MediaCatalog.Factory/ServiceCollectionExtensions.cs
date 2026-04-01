@@ -13,6 +13,7 @@ namespace MediaCatalog.Factory
            serviceCollection.AddScoped<ISecureDataService, SecureDataService>();
            serviceCollection.AddScoped<IRoleService, RoleService>();
            serviceCollection.AddScoped<IUserService, UserService>();
+           serviceCollection.AddScoped<IMovieService, MovieService>();
         }
 
         public static void AddDataAccess(IServiceCollection serviceCollection)

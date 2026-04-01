@@ -10,5 +10,6 @@ namespace MediaCatalog.DataAccess.Interfaces
         void AddMovie(Movie movie);
         void UpdateMovie(Movie movie);
         void DeleteMovie(Movie movie);
+        bool Exists(Func<Movie, bool> predicate);
     }
 }

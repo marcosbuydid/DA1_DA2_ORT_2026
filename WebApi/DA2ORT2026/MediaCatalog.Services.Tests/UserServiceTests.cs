@@ -231,12 +231,12 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role { Id = 1 };
 
-            UserDTO updatedUserDTO = new UserDTO(99, "aName", "aLastName", "email@test.com", (int)role.Id);
+            UserDTO userDTO = new UserDTO(99, "aName", "aLastName", "email@test.com", (int)role.Id);
 
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action action = () => _userService.UpdateUser(updatedUserDTO);
+            Action action = () => _userService.UpdateUser(userDTO);
 
             //assert
             Assert.ThrowsException<ServiceException>(action);
@@ -252,7 +252,7 @@ namespace MediaCatalog.Services.Tests
 
             User existingUser = new User(1, "OldName", "OldLastName", "oldemail@mail.com", "hashed1234", role);
 
-            UserDTO updatedUserDTO = new UserDTO(1, "NewName", "NewLastName", "newemail@email.com", "password123", (int)role.Id);
+            UserDTO userToUpdate = new UserDTO(1, "NewName", "NewLastName", "newemail@email.com", "password123", (int)role.Id);
 
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 
@@ -261,20 +261,20 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>()));
 
             //act
-            UserDTO updatedUser = _userService.UpdateUser(updatedUserDTO);
+            UserDTO updatedUser = _userService.UpdateUser(userToUpdate);
 
             //assert
             _userRepositoryMock.Verify(
                 r => r.UpdateUser(It.Is<User>(u =>
-                    u.Name == updatedUserDTO.Name &&
-                    u.LastName == updatedUserDTO.LastName &&
-                    u.Email == updatedUserDTO.Email &&
-                    u.Role.Id == updatedUserDTO.Id
+                    u.Name == userToUpdate.Name &&
+                    u.LastName == userToUpdate.LastName &&
+                    u.Email == userToUpdate.Email &&
+                    u.Role.Id == userToUpdate.Id
                 )), Times.Once);
 
-            Assert.AreEqual(updatedUserDTO.Name, updatedUser.Name);
-            Assert.AreEqual(updatedUserDTO.LastName, updatedUser.LastName);
-            Assert.AreEqual(updatedUserDTO.Email, updatedUser.Email);
+            Assert.AreEqual(userToUpdate.Name, updatedUser.Name);
+            Assert.AreEqual(userToUpdate.LastName, updatedUser.LastName);
+            Assert.AreEqual(userToUpdate.Email, updatedUser.Email);
         }
 
         [TestMethod]

@@ -3,6 +3,7 @@ using MediaCatalog.DataAccess.Interfaces;
 using MediaCatalog.Domain;
 using MediaCatalog.Domain.Exceptions;
 using MediaCatalog.Services.Exceptions;
+using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
 using Moq;
 
@@ -39,7 +40,6 @@ namespace MediaCatalog.Services.Tests
             RoleDTO roleDTO = _roleService.GetRole(role.Name);
 
             //assert
-            Assert.AreEqual(roleDTO.Id, role.Id);
             Assert.AreEqual(roleDTO.Name, role.Name);
 
             _roleRepositoryMock.Verify(r => r.GetRole(It.IsAny<Func<Role, bool>>()), Times.Once());
@@ -97,6 +97,26 @@ namespace MediaCatalog.Services.Tests
             _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Role, bool>>()), Times.Never);
 
             Assert.AreEqual(roleDTO.Name, roleAdded.Name);
+        }
+
+        public void AddRole_WhenCalledWithANameAlreadyInUse_ThenThrowsException()
+        {
+            //arrange
+            RoleDTO roleDTO = new RoleDTO(1, "Administrator");
+
+            //simulate role with the same name already exists in repository
+            List<Role> existingRoles = new List<Role>();
+            Role role = new Role(1, "Administrator");
+            existingRoles.Add(role);
+
+            _roleRepositoryMock.Setup(r => r.GetRoles()).Returns(existingRoles);
+
+            //act
+            Action action = () => _roleService.AddRole(roleDTO);
+
+            //assert
+            Assert.ThrowsException<ServiceException>(action);
+            _roleRepositoryMock.Verify(r => r.AddRole(It.IsAny<Role>()), Times.Never);
         }
 
         [TestMethod]

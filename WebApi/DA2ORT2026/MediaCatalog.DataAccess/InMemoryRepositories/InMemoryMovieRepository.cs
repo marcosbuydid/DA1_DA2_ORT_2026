@@ -40,5 +40,10 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         {
             Movies.Remove(movie);
         }
+
+        public bool Exists(Func<Movie, bool> predicate)
+        {
+            return Movies.Where(predicate).Any();
+        }
     }
 }
