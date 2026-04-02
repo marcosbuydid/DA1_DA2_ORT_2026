@@ -14,6 +14,8 @@ namespace MediaCatalog.Factory
            serviceCollection.AddScoped<IRoleService, RoleService>();
            serviceCollection.AddScoped<IUserService, UserService>();
            serviceCollection.AddScoped<IMovieService, MovieService>();
+           serviceCollection.AddScoped<ITokenService, JWTService>();
+           serviceCollection.AddScoped<ISessionService, SessionService>();
         }
 
         public static void AddDataAccess(IServiceCollection serviceCollection)
@@ -21,6 +23,7 @@ namespace MediaCatalog.Factory
             serviceCollection.AddSingleton<IRoleRepository, InMemoryRoleRepository>();
             serviceCollection.AddSingleton<IUserRepository, InMemoryUserRepository>();
             serviceCollection.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
+            serviceCollection.AddSingleton<ISessionRepository, InMemorySessionRepository>();
         }
     }
 }
