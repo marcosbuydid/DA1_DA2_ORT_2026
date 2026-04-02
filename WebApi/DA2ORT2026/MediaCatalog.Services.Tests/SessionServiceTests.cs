@@ -31,7 +31,6 @@ namespace MediaCatalog.Services.Tests
             {
                 Token = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567",
                 SecretKey = "ab1c2a3b4c1a2b3c4a1b2c3a4b1c2a3b4c1a2b3c4a1b2="
-
             });
 
             _jwtServiceMock = new Mock<ITokenService>(MockBehavior.Strict);
@@ -56,7 +55,8 @@ namespace MediaCatalog.Services.Tests
             User user = new User(1, "John", "Doe", "john@test.com", "password123", role);
 
             _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User> { user });
-
+            
+            //simulate passwords matches
             _secureDataServiceMock.Setup(s => s.CompareHashes(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 
             _sessionRepositoryMock.Setup(r => r.AddSession(It.IsAny<Session>()));

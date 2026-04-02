@@ -3,7 +3,6 @@ using MediaCatalog.DataAccess.Interfaces;
 using MediaCatalog.Domain;
 using MediaCatalog.Domain.Exceptions;
 using MediaCatalog.Services.Exceptions;
-using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
 using Moq;
 

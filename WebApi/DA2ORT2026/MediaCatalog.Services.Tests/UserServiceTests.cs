@@ -3,9 +3,8 @@ using MediaCatalog.DataAccess.Interfaces;
 using MediaCatalog.Domain;
 using MediaCatalog.Domain.Exceptions;
 using MediaCatalog.Services.Exceptions;
+using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
-using MediaCatalog.Services.Settings;
-using Microsoft.Extensions.Options;
 using Moq;
 
 
@@ -16,9 +15,7 @@ namespace MediaCatalog.Services.Tests
     {
         private Mock<IUserRepository> _userRepositoryMock;
         private Mock<IRoleRepository> _roleRepositoryMock;
-        private SecureDataService _secureDataService;
-        private SystemSettings systemSettings;
-        private IOptions<SystemSettings> options;
+        private Mock<ISecureDataService> _secureDataServiceMock;
         private UserService _userService;
 
         [TestInitialize]
@@ -26,17 +23,11 @@ namespace MediaCatalog.Services.Tests
         {
             _roleRepositoryMock = new Mock<IRoleRepository>(MockBehavior.Strict);
             _userRepositoryMock = new Mock<IUserRepository>(MockBehavior.Strict);
-            systemSettings = new SystemSettings
-            {
-                Token = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567"
-            };
 
-            options = Options.Create(systemSettings);
-
-            _secureDataService = new SecureDataService(options);
+            _secureDataServiceMock = new Mock<ISecureDataService>(MockBehavior.Strict);
 
             _userService = new UserService(_userRepositoryMock.Object, _roleRepositoryMock.Object,
-                _secureDataService);
+                _secureDataServiceMock.Object);
         }
 
         [TestCleanup]
@@ -57,6 +48,9 @@ namespace MediaCatalog.Services.Tests
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 
             _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User>());
+
+            //setup hash method
+            _secureDataServiceMock.Setup(s => s.Hash(It.IsAny<string>())).Returns((string s) => "hashed-" + s);
 
             //act
             Action action = () => _userService.AddUser(newUserDTO);
@@ -80,6 +74,9 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User>());
 
             _userRepositoryMock.Setup(r => r.AddUser(It.IsAny<User>()));
+
+            //setup hash method
+            _secureDataServiceMock.Setup(s => s.Hash(It.IsAny<string>())).Returns((string s) => "hashed-" + s);
 
             //act
             UserDTO userAdded = _userService.AddUser(newUserDTO);
@@ -312,7 +309,14 @@ namespace MediaCatalog.Services.Tests
             string oldPassword = "oldPassword";
             string newPassword = "newPassword123";
 
-            string hashedOldPassword = _secureDataService.Hash(oldPassword);
+            //setup hash method
+            _secureDataServiceMock.Setup(s => s.Hash(It.IsAny<string>())).Returns((string s) => "hashed-" + s);
+
+            //setup compareHashes
+            _secureDataServiceMock.Setup(s => s.CompareHashes(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string hashed, string plain) => hashed == "hashed-" + plain);
+
+            string hashedOldPassword = _secureDataServiceMock.Object.Hash(oldPassword);
 
             User user = new User(1, "John", "Doe", email, hashedOldPassword, role);
 
