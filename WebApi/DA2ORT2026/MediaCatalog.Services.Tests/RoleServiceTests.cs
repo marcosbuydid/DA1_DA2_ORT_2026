@@ -36,7 +36,7 @@ namespace MediaCatalog.Services.Tests
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 
             //act
-            RoleDTO roleDTO = _roleService.GetRole(role.Name);
+            RoleDetailDTO roleDTO = _roleService.GetRole(role.Name);
 
             //assert
             Assert.AreEqual(roleDTO.Name, role.Name);
@@ -50,7 +50,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role { Id = 1, Name = "User" };
 
-            RoleDTO roleDTO = new RoleDTO(10, "User");
+            RoleDetailDTO roleDTO = new RoleDetailDTO(10, "User");
 
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns((Role)null);
 
@@ -66,7 +66,7 @@ namespace MediaCatalog.Services.Tests
         public void AddRole_WhenCalledWithANotAllowedNameThenThrowsException()
         {
             //arrange
-            RoleDTO roleDTO = new RoleDTO(1, "Owner");
+            RoleCreateDTO roleDTO = new RoleCreateDTO {Name = "Owner" };
 
             _roleRepositoryMock.Setup(r => r.GetRoles()).Returns(new List<Role>());
 
@@ -83,14 +83,14 @@ namespace MediaCatalog.Services.Tests
         public void AddUser_WhenCalled_ThenRoleIsAdded()
         {
             //arrange
-            RoleDTO roleDTO = new RoleDTO(1, "Administrator");
+            RoleCreateDTO roleDTO = new RoleCreateDTO { Name = "Administrator" };
 
             _roleRepositoryMock.Setup(r => r.GetRoles()).Returns(new List<Role>());
 
             _roleRepositoryMock.Setup(r => r.AddRole(It.IsAny<Role>()));
 
             //act
-            RoleDTO roleAdded = _roleService.AddRole(roleDTO);
+            RoleDetailDTO roleAdded = _roleService.AddRole(roleDTO);
 
             //assert
             _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Role, bool>>()), Times.Never);
@@ -101,7 +101,7 @@ namespace MediaCatalog.Services.Tests
         public void AddRole_WhenCalledWithANameAlreadyInUse_ThenThrowsException()
         {
             //arrange
-            RoleDTO roleDTO = new RoleDTO(1, "Administrator");
+            RoleCreateDTO roleDTO = new RoleCreateDTO { Name = "Administrator" };
 
             //simulate role with the same name already exists in repository
             List<Role> existingRoles = new List<Role>();
@@ -131,7 +131,7 @@ namespace MediaCatalog.Services.Tests
             _roleRepositoryMock.Setup(r => r.GetRoles()).Returns(roles);
 
             //act
-            List<RoleDTO> result = _roleService.GetRoles();
+            List<RoleDetailDTO> result = _roleService.GetRoles();
 
             //assert
             Assert.IsNotNull(result);

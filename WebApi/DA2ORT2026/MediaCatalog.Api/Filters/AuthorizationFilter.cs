@@ -7,20 +7,20 @@ namespace MediaCatalog.Api.Filters
 {
     public class AuthorizationFilter : Attribute, IAuthorizationFilter
     {
-        private List<string> _role;
-        private ISessionService _sessionService;
+        private List<string> _roles;
 
-        public AuthorizationFilter(ISessionService sessionService, string role = "")
+        public AuthorizationFilter(string role = "")
         {
-            _role = role.Split(",").ToList();
-            _sessionService = sessionService;
-
+            _roles = role.Split(",").ToList();
         }
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            ISessionService sessionService = GetSessionService(context);
+
             string? token = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-            SessionDTO? currentSession = _sessionService.ValidateSession(token);
+            SessionDTO? currentSession = sessionService.ValidateSession(token);
 
             if (currentSession == null)
             {
@@ -31,7 +31,7 @@ namespace MediaCatalog.Api.Filters
             {
                 string? loggedUserRoleName = currentSession.LoggedUserRoleName;
 
-                if (String.IsNullOrEmpty(loggedUserRoleName) || !_role.Contains(loggedUserRoleName))
+                if (String.IsNullOrEmpty(loggedUserRoleName) || !_roles.Contains(loggedUserRoleName))
                 {
                     context.Result = new JsonResult(new { Status = "Unauthorized to perform this action" })
                     { StatusCode = StatusCodes.Status403Forbidden };

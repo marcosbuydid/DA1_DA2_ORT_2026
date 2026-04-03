@@ -1,18 +1,15 @@
 ﻿
-using System.ComponentModel.DataAnnotations;
-
 namespace MediaCatalog.Services.Models
 {
-    public class RoleDTO
+    public class RoleDetailDTO
     {
         public int? Id { get; set; }
 
-        [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
-        public RoleDTO(){}
+        public RoleDetailDTO(){}
 
-        public RoleDTO(int? id, string name)
+        public RoleDetailDTO(int? id, string name)
         {
             Id = id;
             Name = name;

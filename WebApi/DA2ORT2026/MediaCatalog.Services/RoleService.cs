@@ -16,11 +16,11 @@ namespace MediaCatalog.Services
             _roleRepository = roleRepository;
         }
 
-        public RoleDTO AddRole(RoleDTO role)
+        public RoleDetailDTO AddRole(RoleCreateDTO role)
         {
             ValidateUniqueName(role.Name);
             _roleRepository.AddRole(ToEntity(role));
-            return role;
+            return new RoleDetailDTO() { Name = role.Name };
         }
 
         public void DeleteRole(string name)
@@ -34,7 +34,7 @@ namespace MediaCatalog.Services
             _roleRepository.DeleteRole(roleToDelete);
         }
 
-        public RoleDTO GetRole(string name)
+        public RoleDetailDTO GetRole(string name)
         {
             Role? role = _roleRepository.GetRole(role => role.Name == name);
             if (role == null)
@@ -45,9 +45,9 @@ namespace MediaCatalog.Services
             return FromEntity(role);
         }
 
-        public List<RoleDTO> GetRoles()
+        public List<RoleDetailDTO> GetRoles()
         {
-            List<RoleDTO> rolesDTO = new List<RoleDTO>();
+            List<RoleDetailDTO> rolesDTO = new List<RoleDetailDTO>();
 
             foreach (var role in _roleRepository.GetRoles())
             {
@@ -70,14 +70,14 @@ namespace MediaCatalog.Services
             }
         }
 
-        private static Role ToEntity(RoleDTO roleDTO)
+        private static Role ToEntity(RoleCreateDTO roleDTO)
         {
-            return new Role(roleDTO.Id, roleDTO.Name);
+            return new Role() { Name = roleDTO.Name };
         }
 
-        private static RoleDTO FromEntity(Role role)
+        private static RoleDetailDTO FromEntity(Role role)
         {
-            return new RoleDTO(role.Id,role.Name);
+            return new RoleDetailDTO(role.Id,role.Name);
         }
     }
 }

@@ -45,6 +45,9 @@ namespace MediaCatalog.Services
         {
             payload = default;
 
+            if(token == null)
+                return false;
+
             //1-split token
             var parts = token.Split('.');
             if (parts.Length != 3)
@@ -89,17 +92,12 @@ namespace MediaCatalog.Services
 
         private static string Base64UrlEncode(byte[] input)
         {
-            return Convert.ToBase64String(input)
-                .TrimEnd('=')
-                .Replace('+', '-')
-                .Replace('/', '_');
+            return Convert.ToBase64String(input).TrimEnd('=').Replace('+', '-').Replace('/', '_');
         }
 
         private static byte[] Base64UrlDecode(string input)
         {
-            string padded = input
-                .Replace('-', '+')
-                .Replace('_', '/');
+            string padded = input.Replace('-', '+').Replace('_', '/');
 
             switch (padded.Length % 4)
             {
