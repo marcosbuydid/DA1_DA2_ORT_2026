@@ -39,6 +39,17 @@ namespace MediaCatalog.Services
             _movieRepository.DeleteMovie(movieToDelete);
         }
 
+        public void DeleteMovieById(int? movieId)
+        {
+            Movie? movieToDelete = _movieRepository.GetMovie(m => m.Id == movieId);
+            if (movieToDelete == null)
+            {
+                throw new ServiceException("Cannot find a movie with this id");
+            }
+
+            _movieRepository.DeleteMovie(movieToDelete);
+        }
+
         public MovieDetailDTO GetMovie(string title)
         {
             Movie? movie = _movieRepository.GetMovie(m => m.Title == title);
@@ -68,6 +79,23 @@ namespace MediaCatalog.Services
             if (movie == null)
             {
                 throw new ServiceException("Cannot find the specified movie");
+            }
+
+            movie.Title = movieToUpdate.Title;
+            movie.Director = movieToUpdate.Director;
+            movie.ReleaseDate = movieToUpdate.ReleaseDate;
+            _movieRepository.UpdateMovie(movie);
+
+            return FromEntity(movie);
+        }
+
+
+        public MovieDetailDTO UpdateMovieById(int? movieId, MovieUpdateDTO movieToUpdate)
+        {
+            Movie? movie = _movieRepository.GetMovie(m => m.Id == movieId);
+            if (movie == null)
+            {
+                throw new ServiceException("Cannot find the specified movie with this id");
             }
 
             movie.Title = movieToUpdate.Title;

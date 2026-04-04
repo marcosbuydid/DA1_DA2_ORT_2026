@@ -60,6 +60,42 @@ namespace MediaCatalog.Services
             _userRepository.DeleteUser(userToDelete);
         }
 
+        public void DeleteUserById(int? userId)
+        {
+            User? userToDelete = _userRepository.GetUser(u => u.Id == userId);
+            if (userToDelete == null)
+            {
+                throw new ServiceException("Cannot find a user with this id");
+            }
+
+            _userRepository.DeleteUser(userToDelete);
+        }
+
+
+        public UserDetailDTO UpdateUserById(int? userId, UserUpdateDTO userToUpdate)
+        {
+            User? user = _userRepository.GetUser(u => u.Id == userId);
+            if (user == null)
+            {
+                throw new ServiceException("Cannot find the specified user with this id");
+            }
+
+            Role? userToUpdateRole = _roleRepository.GetRole(r => r.Id == userToUpdate.RoleId);
+
+            if (userToUpdateRole == null)
+            {
+                throw new ServiceException("Role is invalid");
+            }
+
+            user.Name = userToUpdate.Name;
+            user.LastName = userToUpdate.LastName;
+            user.Email = userToUpdate.Email;
+            user.Role = userToUpdateRole;
+            _userRepository.UpdateUser(user);
+
+            return FromEntity(user);
+        }
+
         public UserDetailDTO UpdateUser(UserUpdateDTO userToUpdate)
         {
             User? user = _userRepository.GetUser(u => u.Email == userToUpdate.Email);
@@ -154,6 +190,6 @@ namespace MediaCatalog.Services
                 Email = user.Email,
                 RoleId = (int)user.Role.Id,
             };
-        }
+        } 
     }
 }

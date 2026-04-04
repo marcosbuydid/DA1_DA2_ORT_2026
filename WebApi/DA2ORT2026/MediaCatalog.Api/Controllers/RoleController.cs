@@ -31,11 +31,19 @@ namespace MediaCatalog.Api.Controllers
             return Ok(createdRole);
         }
 
-        [HttpDelete("{roleName}")]
+        [HttpDelete("by-name/{name}")]
         [AuthorizationFilter("Administrator")]
-        public IActionResult Delete(string roleName)
+        public IActionResult DeleteByName(string name)
         {
-            _roleService.DeleteRole(roleName);
+            _roleService.DeleteRole(name);
+            return Ok(new { Message = "Role deleted successfully." });
+        }
+
+        [HttpDelete("{id:int}")]
+        [AuthorizationFilter("Administrator")]
+        public IActionResult Delete(int id)
+        {
+            _roleService.DeleteRoleById(id);
             return Ok(new { Message = "Role deleted successfully." });
         }
     }

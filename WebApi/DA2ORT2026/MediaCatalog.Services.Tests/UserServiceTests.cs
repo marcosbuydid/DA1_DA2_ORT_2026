@@ -204,6 +204,21 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
+        public void DeleteUser_WhenCalledWithInvalidId_ThenThrowsException()
+        {
+            //arrange
+            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
+
+            //act
+            Action action = () => _userService.DeleteUserById(25);
+
+            //assert
+            Assert.ThrowsException<ServiceException>(action);
+
+            _userRepositoryMock.Verify(r => r.DeleteUser(It.IsAny<User>()), Times.Never);
+        }
+
+        [TestMethod]
         public void DeleteUser_WhenCalled_ThenUserIsDeleted()
         {
             //arrange
@@ -223,6 +238,25 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
+        public void DeleteUser_WhenCalledWithValidId_ThenUserIsDeleted()
+        {
+            //arrange
+            Role role = new Role { Id = 1 };
+
+            User user = new User(1, "John", "Miller", "john@email.com", "hashed124", role);
+
+            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(user);
+
+            _userRepositoryMock.Setup(r => r.DeleteUser(It.IsAny<User>()));
+
+            //act
+            _userService.DeleteUserById(user.Id);
+
+            //assert
+            _userRepositoryMock.Verify(r => r.DeleteUser(It.Is<User>(u => u.Id == user.Id)), Times.Once);
+        }
+
+        [TestMethod]
         public void UpdateUser_WhenCalledWithUnregisteredUser_ThenThrowsException()
         {
             //arrange
@@ -234,6 +268,25 @@ namespace MediaCatalog.Services.Tests
 
             //act
             Action action = () => _userService.UpdateUser(userDTO);
+
+            //assert
+            Assert.ThrowsException<ServiceException>(action);
+
+            _userRepositoryMock.Verify(r => r.UpdateUser(It.IsAny<User>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void UpdateUser_WhenCalledWithInvalidId_ThenThrowsException()
+        {
+            //arrange
+            Role role = new Role { Id = 1 };
+
+            UserUpdateDTO userDTO = new UserUpdateDTO("aName", "aLastName", "email@test.com", (int)role.Id);
+
+            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
+
+            //act
+            Action action = () => _userService.UpdateUserById(25,userDTO);
 
             //assert
             Assert.ThrowsException<ServiceException>(action);
@@ -259,6 +312,39 @@ namespace MediaCatalog.Services.Tests
 
             //act
             UserDetailDTO updatedUser = _userService.UpdateUser(userToUpdate);
+
+            //assert
+            _userRepositoryMock.Verify(
+                r => r.UpdateUser(It.Is<User>(u =>
+                    u.Name == userToUpdate.Name &&
+                    u.LastName == userToUpdate.LastName &&
+                    u.Email == userToUpdate.Email &&
+                    u.Role.Id == userToUpdate.RoleId
+                )), Times.Once);
+
+            Assert.AreEqual(userToUpdate.Name, updatedUser.Name);
+            Assert.AreEqual(userToUpdate.LastName, updatedUser.LastName);
+            Assert.AreEqual(userToUpdate.Email, updatedUser.Email);
+        }
+
+        [TestMethod]
+        public void UpdateUser_WhenCalledWithValidId_ThenUserIsUpdated()
+        {
+            //arrange
+            Role role = new Role { Id = 1 };
+
+            User existingUser = new User(1, "OldName", "OldLastName", "oldemail@mail.com", "hashed1234", role);
+
+            UserUpdateDTO userToUpdate = new UserUpdateDTO("NewName", "NewLastName", "newemail@email.com", (int)role.Id);
+
+            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
+
+            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(existingUser);
+
+            _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>()));
+
+            //act
+            UserDetailDTO updatedUser = _userService.UpdateUserById(1,userToUpdate);
 
             //assert
             _userRepositoryMock.Verify(

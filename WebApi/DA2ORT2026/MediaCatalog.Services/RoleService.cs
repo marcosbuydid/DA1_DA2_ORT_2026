@@ -34,6 +34,17 @@ namespace MediaCatalog.Services
             _roleRepository.DeleteRole(roleToDelete);
         }
 
+        public void DeleteRoleById(int? roleId)
+        {
+            Role? roleToDelete = _roleRepository.GetRole(r => r.Id == roleId);
+            if (roleToDelete == null)
+            {
+                throw new ServiceException("Cannot find a role with this name");
+            }
+
+            _roleRepository.DeleteRole(roleToDelete);
+        }
+
         public RoleDetailDTO GetRole(string name)
         {
             Role? role = _roleRepository.GetRole(role => role.Name == name);

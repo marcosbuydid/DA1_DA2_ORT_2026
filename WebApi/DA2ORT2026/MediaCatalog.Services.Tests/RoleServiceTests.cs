@@ -158,6 +158,21 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
+        public void DeleteRole_WhenCalledWithInvalidId_ThenThrowsException()
+        {
+            //arrange
+            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns((Role)null);
+
+            //act
+            Action action = () => _roleService.DeleteRoleById(50);
+
+            //assert
+            Assert.ThrowsException<ServiceException>(action);
+
+            _roleRepositoryMock.Verify(r => r.DeleteRole(It.IsAny<Role>()), Times.Never);
+        }
+
+        [TestMethod]
         public void DeleteRole_WhenCalled_ThenRoleIsDeleted()
         {
             //arrange
@@ -172,6 +187,23 @@ namespace MediaCatalog.Services.Tests
 
             //assert
             _roleRepositoryMock.Verify(r => r.DeleteRole(It.Is<Role>(ro => ro.Name == "User")), Times.Once);
+        }
+
+        [TestMethod]
+        public void DeleteRole_WhenCalledWithValidId_ThenRoleIsDeleted()
+        {
+            //arrange
+            Role role = new Role { Id = 1, Name = "User" };
+
+            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
+
+            _roleRepositoryMock.Setup(r => r.DeleteRole(It.IsAny<Role>()));
+
+            //act
+            _roleService.DeleteRoleById(role.Id);
+
+            //assert
+            _roleRepositoryMock.Verify(r => r.DeleteRole(It.Is<Role>(ro => ro.Id == role.Id)), Times.Once);
         }
     }
 }
