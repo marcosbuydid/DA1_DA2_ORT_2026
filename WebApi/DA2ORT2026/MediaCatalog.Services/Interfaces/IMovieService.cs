@@ -5,10 +5,10 @@ namespace MediaCatalog.Services.Interfaces
 {
     public interface IMovieService
     {
-        List<MovieDTO> GetMovies();
-        MovieDTO GetMovie(string title);
-        MovieDTO AddMovie(MovieDTO movie);
+        List<MovieDetailDTO> GetMovies();
+        MovieDetailDTO GetMovie(string title);
+        MovieDetailDTO AddMovie(MovieCreateDTO movie);
         void DeleteMovie(string title);
-        MovieDTO UpdateMovie(MovieDTO movie);
+        MovieDetailDTO UpdateMovie(MovieUpdateDTO movie);
     }
 }

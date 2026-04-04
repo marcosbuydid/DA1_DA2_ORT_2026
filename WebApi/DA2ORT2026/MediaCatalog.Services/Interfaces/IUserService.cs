@@ -9,7 +9,7 @@ namespace MediaCatalog.Services.Interfaces
         UserDetailDTO GetUser(string email);
         UserDetailDTO AddUser(UserCreateDTO user);
         void DeleteUser(string email);
-        UserDetailDTO UpdateUser(UserCreateDTO user);
+        UserDetailDTO UpdateUser(UserUpdateDTO user);
         void ChangePassword(ChangePasswordDTO changePasswordDTO);
     }
 }

@@ -60,7 +60,7 @@ namespace MediaCatalog.Services
             _userRepository.DeleteUser(userToDelete);
         }
 
-        public UserDetailDTO UpdateUser(UserCreateDTO userToUpdate)
+        public UserDetailDTO UpdateUser(UserUpdateDTO userToUpdate)
         {
             User? user = _userRepository.GetUser(u => u.Email == userToUpdate.Email);
             if (user == null)

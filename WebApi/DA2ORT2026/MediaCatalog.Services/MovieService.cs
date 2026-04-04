@@ -16,11 +16,16 @@ namespace MediaCatalog.Services
             _movieRepository = movieRepository;
         }
 
-        public MovieDTO AddMovie(MovieDTO movie)
+        public MovieDetailDTO AddMovie(MovieCreateDTO movie)
         {
             ValidateUniqueTitle(movie.Title);
             _movieRepository.AddMovie(ToEntity(movie));
-            return new MovieDTO(movie.Id, movie.Title, movie.Director, movie.ReleaseDate);
+            return new MovieDetailDTO()
+            {
+                Title = movie.Title,
+                Director = movie.Director,
+                ReleaseDate = movie.ReleaseDate
+            };
         }
 
         public void DeleteMovie(string title)
@@ -34,7 +39,7 @@ namespace MediaCatalog.Services
             _movieRepository.DeleteMovie(movieToDelete);
         }
 
-        public MovieDTO GetMovie(string title)
+        public MovieDetailDTO GetMovie(string title)
         {
             Movie? movie = _movieRepository.GetMovie(m => m.Title == title);
             if (movie == null)
@@ -45,9 +50,9 @@ namespace MediaCatalog.Services
             return FromEntity(movie);
         }
 
-        public List<MovieDTO> GetMovies()
+        public List<MovieDetailDTO> GetMovies()
         {
-            List<MovieDTO> moviesDTO = new List<MovieDTO>();
+            List<MovieDetailDTO> moviesDTO = new List<MovieDetailDTO>();
 
             foreach (var movie in _movieRepository.GetMovies())
             {
@@ -57,7 +62,7 @@ namespace MediaCatalog.Services
             return moviesDTO;
         }
 
-        public MovieDTO UpdateMovie(MovieDTO movieToUpdate)
+        public MovieDetailDTO UpdateMovie(MovieUpdateDTO movieToUpdate)
         {
             Movie? movie = _movieRepository.GetMovie(m => m.Title == movieToUpdate.Title);
             if (movie == null)
@@ -86,14 +91,20 @@ namespace MediaCatalog.Services
             }
         }
 
-        private static Movie ToEntity(MovieDTO movieDTO)
+        private static Movie ToEntity(MovieCreateDTO movieDTO)
         {
-            return new Movie(movieDTO.Id, movieDTO.Title, movieDTO.Director, movieDTO.ReleaseDate, movieDTO.Budget);
+            return new Movie()
+            {
+                Title = movieDTO.Title,
+                Director = movieDTO.Director,
+                ReleaseDate = movieDTO.ReleaseDate,
+                Budget = movieDTO.Budget
+            };
         }
 
-        private static MovieDTO FromEntity(Movie movie)
+        private static MovieDetailDTO FromEntity(Movie movie)
         {
-            return new MovieDTO()
+            return new MovieDetailDTO()
             {
                 Id = movie.Id,
                 Title = movie.Title,

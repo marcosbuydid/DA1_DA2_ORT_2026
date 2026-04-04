@@ -228,7 +228,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role { Id = 1 };
 
-            UserCreateDTO userDTO = new UserCreateDTO("aName", "aLastName", "email@test.com", (int)role.Id);
+            UserUpdateDTO userDTO = new UserUpdateDTO("aName", "aLastName", "email@test.com", (int)role.Id);
 
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
@@ -249,7 +249,7 @@ namespace MediaCatalog.Services.Tests
 
             User existingUser = new User(1, "OldName", "OldLastName", "oldemail@mail.com", "hashed1234", role);
 
-            UserCreateDTO userToUpdate = new UserCreateDTO("NewName", "NewLastName", "newemail@email.com", "password123", (int)role.Id);
+            UserUpdateDTO userToUpdate = new UserUpdateDTO("NewName", "NewLastName", "newemail@email.com", (int)role.Id);
 
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 

@@ -1,6 +1,4 @@
 ﻿
-using System.ComponentModel.DataAnnotations;
-
 namespace MediaCatalog.Services.Models
 {
     public class UserDetailDTO

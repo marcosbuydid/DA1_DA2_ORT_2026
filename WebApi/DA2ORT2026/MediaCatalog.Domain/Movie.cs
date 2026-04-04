@@ -68,6 +68,8 @@ namespace MediaCatalog.Domain
             }
         }
 
+        public Movie() { }
+
         public Movie(int? id, string title, string director, DateTime releaseDate, long budget)
         {
             Id = id;

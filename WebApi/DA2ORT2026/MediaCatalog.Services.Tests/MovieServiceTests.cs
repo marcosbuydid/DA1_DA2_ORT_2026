@@ -34,7 +34,7 @@ namespace MediaCatalog.Services.Tests
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns(movie);
 
             //act
-            MovieDTO movieDTO = _movieService.GetMovie(movie.Title);
+            MovieDetailDTO movieDTO = _movieService.GetMovie(movie.Title);
 
             //assert
             Assert.AreEqual(movieDTO.Title, movie.Title);
@@ -50,7 +50,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Movie movie = new Movie(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22), 30000000);
 
-            MovieDTO movieDTO = new MovieDTO(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22));
+            MovieCreateDTO movieDTO = new MovieCreateDTO("Black Rain", "Ridley Scott", new DateTime(1989, 9, 22));
 
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns((Movie)null);
 
@@ -66,14 +66,14 @@ namespace MediaCatalog.Services.Tests
         public void AddMovie_WhenCalled_ThenMovieIsAdded()
         {
             //arrange
-            MovieDTO movieDTO = new MovieDTO(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22));
+            MovieCreateDTO movieDTO = new MovieCreateDTO("Black Rain", "Ridley Scott", new DateTime(1989, 9, 22));
 
             _movieRepositoryMock.Setup(r => r.GetMovies()).Returns(new List<Movie>());
 
             _movieRepositoryMock.Setup(r => r.AddMovie(It.IsAny<Movie>()));
 
             //act
-            MovieDTO movieAdded = _movieService.AddMovie(movieDTO);
+            MovieDetailDTO movieAdded = _movieService.AddMovie(movieDTO);
 
             //assert
             _movieRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Movie, bool>>()), Times.Never);
@@ -87,7 +87,7 @@ namespace MediaCatalog.Services.Tests
         public void AddMovie_WhenCalledWithATitleAlreadyInUse_ThenThrowsException()
         {
             //arrange
-            MovieDTO movieDTO = new MovieDTO(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22));
+            MovieCreateDTO movieDTO = new MovieCreateDTO("Black Rain", "Ridley Scott", new DateTime(1989, 9, 22));
 
             //simulate movie with the same title already exists in repository
             List<Movie> existingMovies = new List<Movie>();
@@ -117,7 +117,7 @@ namespace MediaCatalog.Services.Tests
             _movieRepositoryMock.Setup(r => r.GetMovies()).Returns(movies);
 
             //act
-            List<MovieDTO> result = _movieService.GetMovies();
+            List<MovieDetailDTO> result = _movieService.GetMovies();
 
             //assert
             Assert.IsNotNull(result);
@@ -164,7 +164,7 @@ namespace MediaCatalog.Services.Tests
         public void UpdateMovie_WhenCalledWithUnregisteredMovie_ThenThrowsException()
         {
             //arrange
-            MovieDTO movieDTO = new MovieDTO(92, "aTitle", "aDirector", new DateTime(2020, 01, 11));
+            MovieUpdateDTO movieDTO = new MovieUpdateDTO("aTitle", "aDirector", new DateTime(2020, 01, 11));
 
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns((Movie)null);
 
@@ -183,14 +183,14 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Movie existingMovie = new Movie(92, "oldTitle", "oldDirector", new DateTime(2020, 01, 11), 2000000);
 
-            MovieDTO movieToUpdate = new MovieDTO(92, "newTitle", "newDirector", new DateTime(2022, 11, 11));
+            MovieUpdateDTO movieToUpdate = new MovieUpdateDTO("newTitle", "newDirector", new DateTime(2022, 11, 11));
 
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns(existingMovie);
 
             _movieRepositoryMock.Setup(r => r.UpdateMovie(It.IsAny<Movie>()));
 
             //act
-            MovieDTO updatedMovie = _movieService.UpdateMovie(movieToUpdate);
+            MovieDetailDTO updatedMovie = _movieService.UpdateMovie(movieToUpdate);
 
             //assert
             _movieRepositoryMock.Verify(
