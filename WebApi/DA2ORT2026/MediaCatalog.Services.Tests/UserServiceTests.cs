@@ -43,7 +43,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role() { Id = 1 };
 
-            UserDTO newUserDTO = new UserDTO(1, "John", "Doe", "test", "password123", (int)role.Id);
+            UserCreateDTO newUserDTO = new UserCreateDTO("John", "Doe", "test", "password123", (int)role.Id);
 
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 
@@ -67,7 +67,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role { Id = 1 };
 
-            UserDTO newUserDTO = new UserDTO(1, "John", "Doe", "john.doe@test.com", "password123", (int)role.Id);
+            UserCreateDTO newUserDTO = new UserCreateDTO("John", "Doe", "john.doe@test.com", "password123", (int)role.Id);
 
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 
@@ -79,7 +79,7 @@ namespace MediaCatalog.Services.Tests
             _secureDataServiceMock.Setup(s => s.Hash(It.IsAny<string>())).Returns((string s) => "hashed-" + s);
 
             //act
-            UserDTO userAdded = _userService.AddUser(newUserDTO);
+            UserDetailDTO userAdded = _userService.AddUser(newUserDTO);
 
             //assert
             _userRepositoryMock.Verify(
@@ -105,7 +105,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role { Id = 1 };
 
-            UserDTO newUserDTO = new UserDTO(3, "Nick", "Smith", "jane.smith@test.com", "password123", (int)role.Id);
+            UserCreateDTO newUserDTO = new UserCreateDTO("Nick", "Smith", "jane.smith@test.com", "password123", (int)role.Id);
 
             //simulate user with the same email already exists in repository
             List<User> existingUsers = new List<User>();
@@ -133,7 +133,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(newUser);
 
             //act
-            UserDTO userDTO = _userService.GetUser(newUser.Email);
+            UserDetailDTO userDTO = _userService.GetUser(newUser.Email);
 
             //assert
             Assert.AreEqual(userDTO.Name, newUser.Name);
@@ -150,7 +150,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role { Id = 1 };
 
-            UserDTO newUserDTO = new UserDTO(10, "Jim", "Adks", "jim.adks@example.com", "password123", (int)role.Id);
+            UserCreateDTO newUserDTO = new UserCreateDTO("Jim", "Adks", "jim.adks@example.com", "password123", (int)role.Id);
 
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
@@ -177,7 +177,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.GetUsers()).Returns(users);
 
             //act
-            List<UserDTO> result = _userService.GetUsers();
+            List<UserDetailDTO> result = _userService.GetUsers();
 
             //assert
             Assert.IsNotNull(result);
@@ -228,7 +228,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Role role = new Role { Id = 1 };
 
-            UserDTO userDTO = new UserDTO(99, "aName", "aLastName", "email@test.com", (int)role.Id);
+            UserCreateDTO userDTO = new UserCreateDTO("aName", "aLastName", "email@test.com", (int)role.Id);
 
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
@@ -249,7 +249,7 @@ namespace MediaCatalog.Services.Tests
 
             User existingUser = new User(1, "OldName", "OldLastName", "oldemail@mail.com", "hashed1234", role);
 
-            UserDTO userToUpdate = new UserDTO(1, "NewName", "NewLastName", "newemail@email.com", "password123", (int)role.Id);
+            UserCreateDTO userToUpdate = new UserCreateDTO("NewName", "NewLastName", "newemail@email.com", "password123", (int)role.Id);
 
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
 
@@ -258,7 +258,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>()));
 
             //act
-            UserDTO updatedUser = _userService.UpdateUser(userToUpdate);
+            UserDetailDTO updatedUser = _userService.UpdateUser(userToUpdate);
 
             //assert
             _userRepositoryMock.Verify(
@@ -266,7 +266,7 @@ namespace MediaCatalog.Services.Tests
                     u.Name == userToUpdate.Name &&
                     u.LastName == userToUpdate.LastName &&
                     u.Email == userToUpdate.Email &&
-                    u.Role.Id == userToUpdate.Id
+                    u.Role.Id == userToUpdate.RoleId
                 )), Times.Once);
 
             Assert.AreEqual(userToUpdate.Name, updatedUser.Name);

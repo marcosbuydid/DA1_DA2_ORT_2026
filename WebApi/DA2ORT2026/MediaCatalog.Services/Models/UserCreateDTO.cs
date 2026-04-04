@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MediaCatalog.Services.Models
 {
-    public class UserDTO
+    public class UserCreateDTO
     {
-        public int? Id { get; set; }
-
         [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; }
 
@@ -22,13 +20,12 @@ namespace MediaCatalog.Services.Models
         [RegularExpression("^[{1,2}]$", ErrorMessage = "Role id 1 = Administrator, Role id 2 = User")]
         public int RoleId { get; set; }
 
-        public UserDTO()
+        public UserCreateDTO()
         {
         }
 
-        public UserDTO(int? id, string name, string lastName, string email, string password, int roleId)
+        public UserCreateDTO(string name, string lastName, string email, string password, int roleId)
         {
-            Id = id;
             Name = name;
             LastName = lastName;
             Email = email;
@@ -36,9 +33,8 @@ namespace MediaCatalog.Services.Models
             RoleId = roleId;
         }
 
-        public UserDTO(int? id, string name, string lastName, string email, int roleId)
+        public UserCreateDTO(string name, string lastName, string email, int roleId)
         {
-            Id = id;
             Name = name;
             LastName = lastName;
             Email = email;

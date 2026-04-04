@@ -18,7 +18,7 @@ namespace MediaCatalog.Services
         private readonly SystemSettings _settings;
         private readonly ITokenService _jwtService;
         private JsonElement tokenPayload;
-        private UserDTO _loggedUser;
+        private UserDetailDTO _loggedUser;
         private SessionDTO? _currentSession;
 
         public SessionService(ISessionRepository sessionRepository,
@@ -45,7 +45,7 @@ namespace MediaCatalog.Services
                     Session session = new Session() { Token = token, User = user };
                     _sessionRepository.AddSession(session);
 
-                    _loggedUser = new UserDTO()
+                    _loggedUser = new UserDetailDTO()
                     {
                         Name = user.Name,
                         LastName = user.LastName,

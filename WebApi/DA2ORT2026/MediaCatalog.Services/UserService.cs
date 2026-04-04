@@ -20,7 +20,7 @@ namespace MediaCatalog.Services
             _secureDataService = secureDataService;
         }
 
-        public UserDTO AddUser(UserDTO user)
+        public UserDetailDTO AddUser(UserCreateDTO user)
         {
             ValidateUserEmail(user.Email);
             Role? role = _roleRepository.GetRole(r => r.Id == user.RoleId);
@@ -32,12 +32,14 @@ namespace MediaCatalog.Services
             
             user.Password = _secureDataService.Hash(user.Password);
             _userRepository.AddUser(ToEntity(user));
-            return new UserDTO(user.Id, user.Name, user.LastName, user.Email, (int)role.Id);
+
+            return new UserDetailDTO() { Name = user.Name, LastName = user.LastName, 
+                Email = user.Email, RoleId = (int)role.Id };
         }
 
-        public List<UserDTO> GetUsers()
+        public List<UserDetailDTO> GetUsers()
         {
-            List<UserDTO> usersDTO = new List<UserDTO>();
+            List<UserDetailDTO> usersDTO = new List<UserDetailDTO>();
 
             foreach (var user in _userRepository.GetUsers())
             {
@@ -58,7 +60,7 @@ namespace MediaCatalog.Services
             _userRepository.DeleteUser(userToDelete);
         }
 
-        public UserDTO UpdateUser(UserDTO userToUpdate)
+        public UserDetailDTO UpdateUser(UserCreateDTO userToUpdate)
         {
             User? user = _userRepository.GetUser(u => u.Email == userToUpdate.Email);
             if (user == null)
@@ -82,7 +84,7 @@ namespace MediaCatalog.Services
             return FromEntity(user);
         }
 
-        public UserDTO GetUser(string email)
+        public UserDetailDTO GetUser(string email)
         {
             User? user = _userRepository.GetUser(user => user.Email == email);
             if (user == null)
@@ -135,15 +137,16 @@ namespace MediaCatalog.Services
             return hashesMatch ? user : null;
         }
 
-        private static User ToEntity(UserDTO userDTO)
+        private static User ToEntity(UserCreateDTO userDTO)
         {
-            Role role = new Role() { Id = userDTO.Id };
-            return new User(userDTO.Id, userDTO.Name, userDTO.LastName, userDTO.Email, userDTO.Password, role);
+            Role role = new Role() { Id = userDTO.RoleId };
+            return new User() { Name = userDTO.Name, LastName = userDTO.LastName, 
+            Email = userDTO.Email, Password = userDTO.Password, Role = role };
         }
 
-        private static UserDTO FromEntity(User user)
+        private static UserDetailDTO FromEntity(User user)
         {
-            return new UserDTO()
+            return new UserDetailDTO()
             {
                 Id = user.Id,
                 Name = user.Name,

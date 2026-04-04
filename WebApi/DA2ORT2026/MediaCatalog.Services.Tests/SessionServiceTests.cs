@@ -99,7 +99,7 @@ namespace MediaCatalog.Services.Tests
             SessionDTO session = new SessionDTO()
             {
                 Token = "valid-token",
-                LoggedUser = new UserDTO { Name = "John" },
+                LoggedUser = new UserDetailDTO { Name = "John" },
                 LoggedUserRoleName = "User"
             };
 
@@ -127,7 +127,7 @@ namespace MediaCatalog.Services.Tests
             SessionDTO session = new SessionDTO
             {
                 Token = "invalid-token",
-                LoggedUser = new UserDTO { Name = "John" },
+                LoggedUser = new UserDetailDTO { Name = "John" },
                 LoggedUserRoleName = "User"
             };
 

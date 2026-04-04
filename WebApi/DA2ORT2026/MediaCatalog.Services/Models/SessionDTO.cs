@@ -5,12 +5,12 @@ namespace MediaCatalog.Services.Models
     {
         public int? Id { get; set; }
         public string? Token { get; set; }
-        public UserDTO? LoggedUser { get; set; }
+        public UserDetailDTO? LoggedUser { get; set; }
         public string? LoggedUserRoleName { get; set; }
 
         public SessionDTO() { }
 
-        public SessionDTO(int? id, string token, UserDTO loggedUser, string loggedUserRoleName)
+        public SessionDTO(int? id, string token, UserDetailDTO loggedUser, string loggedUserRoleName)
         {
           Id = id;
           Token = token;
