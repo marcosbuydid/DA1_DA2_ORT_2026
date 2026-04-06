@@ -1,4 +1,6 @@
 ﻿
+using MediaCatalog.DataAccess.Interfaces;
+using MediaCatalog.Domain;
 using MediaCatalog.Services.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,8 +10,17 @@ namespace MediaCatalog.Services
 {
     public class JWTService : ITokenService
     {
+        private readonly IUserRepository _userRepository;
+
+        public JWTService(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
         public string GenerateToken(string name, string email, string secretKey)
         {
+            //user is validated previously on ValidateUserCredentials, no need to check if is null
+            User? user = _userRepository.GetUsers().FirstOrDefault(u => u.Email == email);
+
             var header = new
             {
                 alg = "HS256",
@@ -18,8 +29,11 @@ namespace MediaCatalog.Services
 
             var payload = new
             {
-                name = name,
-                email = email,
+                name = user.Name,
+                lastName = user.LastName,
+                email = user.Email,
+                roleId = user.Role.Id,
+                roleName = user.Role.Name,
                 exp = DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds()
             };
 

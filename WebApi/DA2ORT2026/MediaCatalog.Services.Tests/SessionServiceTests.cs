@@ -98,33 +98,15 @@ namespace MediaCatalog.Services.Tests
             //arrange
             string token = "valid-token";
 
-            User user = new User()
-            {
-                Name = "John",
-                LastName = "Doe",
-                Email = "john@example.com",
-                Role = new Role { Id = 1, Name = "User" }
-            };
+            //JWT payload
+            string tokenPayload = @"{""name"": ""John"",""lastName"": ""Doe"",
+                ""email"": ""john@example.com"",""roleName"": ""User"",""roleId"": 1}";
+            JsonElement payload = JsonDocument.Parse(tokenPayload).RootElement;
 
-            Session session = new Session()
-            {
-                Token = token,
-                User = user
-            };
-
-            //repository mock match predicate that returns true for the session
-            _sessionRepositoryMock.Setup(r => r.GetSession(It.Is<Func<Session, bool>>(f => f(session))))
-                .Returns(session);
-
-            JsonElement payload = default;
-
-            //JWTService mock returns true and sets out parameter correctly
-            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(), It.IsAny<string>(),
-                out It.Ref<JsonElement>.IsAny)).Returns((string t, string k, out JsonElement p) =>
-                {
-                    p = payload;
-                    return true;
-                });
+            //mock ITokenService.ValidateToken to return true and set out parameter
+            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(), It.IsAny<string>(), 
+                out It.Ref<JsonElement>.IsAny)).Returns((string t, string k, out JsonElement p) => 
+                { p = payload; return true; });
 
             //act
             SessionDTO? sessionDTO = _sessionService.ValidateSession(token);
@@ -133,6 +115,7 @@ namespace MediaCatalog.Services.Tests
             Assert.IsNotNull(sessionDTO);
             Assert.AreEqual(token, sessionDTO.Token);
             Assert.AreEqual("John", sessionDTO.LoggedUser.Name);
+            Assert.AreEqual("Doe", sessionDTO.LoggedUser.LastName);
             Assert.AreEqual("User", sessionDTO.LoggedUserRoleName);
         }
 
