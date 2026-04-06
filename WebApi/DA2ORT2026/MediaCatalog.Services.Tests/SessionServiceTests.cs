@@ -55,7 +55,7 @@ namespace MediaCatalog.Services.Tests
             User user = new User(1, "John", "Doe", "john@test.com", "password123", role);
 
             _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User> { user });
-            
+
             //simulate passwords matches
             _secureDataServiceMock.Setup(s => s.CompareHashes(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 
@@ -89,35 +89,51 @@ namespace MediaCatalog.Services.Tests
             //assert
             Assert.ThrowsException<ServiceException>(action);
 
-            _sessionRepositoryMock.Verify(r => r.AddSession(It.IsAny<Session>()),Times.Never);
+            _sessionRepositoryMock.Verify(r => r.AddSession(It.IsAny<Session>()), Times.Never);
         }
 
         [TestMethod]
         public void ValidateSession_WhenTokenIsValid_ThenSessionIsReturned()
         {
             //arrange
-            SessionDTO session = new SessionDTO()
+            string token = "valid-token";
+
+            User user = new User()
             {
-                Token = "valid-token",
-                LoggedUser = new UserDetailDTO { Name = "John" },
-                LoggedUserRoleName = "User"
+                Name = "John",
+                LastName = "Doe",
+                Email = "john@example.com",
+                Role = new Role { Id = 1, Name = "User" }
             };
 
-            //simulate that user is already authenticated
-            typeof(SessionService).
-                GetField("_currentSession", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .SetValue(_sessionService, session);
+            Session session = new Session()
+            {
+                Token = token,
+                User = user
+            };
 
-            JsonElement fakePayload = default;
+            //repository mock match predicate that returns true for the session
+            _sessionRepositoryMock.Setup(r => r.GetSession(It.Is<Func<Session, bool>>(f => f(session))))
+                .Returns(session);
 
-            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(), It.IsAny<string>(), out fakePayload)).Returns(true);
+            JsonElement payload = default;
+
+            //JWTService mock returns true and sets out parameter correctly
+            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(), It.IsAny<string>(),
+                out It.Ref<JsonElement>.IsAny)).Returns((string t, string k, out JsonElement p) =>
+                {
+                    p = payload;
+                    return true;
+                });
 
             //act
-            SessionDTO? sessionDTO = _sessionService.ValidateSession("valid-token");
+            SessionDTO? sessionDTO = _sessionService.ValidateSession(token);
 
             //assert
             Assert.IsNotNull(sessionDTO);
-            Assert.AreEqual("valid-token", sessionDTO.Token);
+            Assert.AreEqual(token, sessionDTO.Token);
+            Assert.AreEqual("John", sessionDTO.LoggedUser.Name);
+            Assert.AreEqual("User", sessionDTO.LoggedUserRoleName);
         }
 
         [TestMethod]

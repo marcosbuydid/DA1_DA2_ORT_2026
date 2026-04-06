@@ -32,7 +32,7 @@ namespace MediaCatalog.Services
             _jwtService = jwtService;
         }
 
-        public void Authenticate(string email, string password)
+        public string Authenticate(string email, string password)
         {
             if (_currentSession == null)
             {
@@ -45,22 +45,11 @@ namespace MediaCatalog.Services
                     Session session = new Session() { Token = token, User = user };
                     _sessionRepository.AddSession(session);
 
-                    _loggedUser = new UserDetailDTO()
-                    {
-                        Name = user.Name,
-                        LastName = user.LastName,
-                        Email = user.Email,
-                        RoleId = (int)user.Role.Id
-                    };
-
-                    _currentSession = new SessionDTO()
-                    {
-                        Token = token,
-                        LoggedUser = _loggedUser,
-                        LoggedUserRoleName = user.Role.Name
-                    };
+                    return token;
                 }
             }
+
+            return null;
         }
 
         public SessionDTO? ValidateSession(string token)
@@ -70,6 +59,29 @@ namespace MediaCatalog.Services
             if (!validSession)
             {
                 ClearSessionData();
+                return null;
+            }
+
+            //search session based on token
+            Session? session = GetSession(token);
+
+            if (session != null)
+            {
+                _loggedUser = new UserDetailDTO()
+                {
+                    Name = session.User.Name,
+                    LastName = session.User.LastName,
+                    Email = session.User.Email,
+                    RoleId = (int)session.User.Role.Id
+                };
+
+                //create the sessionDTO
+                _currentSession = new SessionDTO()
+                {
+                    Token = token,
+                    LoggedUser = _loggedUser,
+                    LoggedUserRoleName = session.User.Role.Name
+                };
             }
 
             return _currentSession;
@@ -91,6 +103,12 @@ namespace MediaCatalog.Services
             }
 
             return user;
+        }
+
+        private Session? GetSession(string token)
+        {
+            Session? session = _sessionRepository.GetSession(s => s.Token == token);
+            return session;
         }
 
         private void ClearSessionData()

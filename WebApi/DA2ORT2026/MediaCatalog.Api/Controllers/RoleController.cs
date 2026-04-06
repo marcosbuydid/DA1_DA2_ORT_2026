@@ -17,6 +17,7 @@ namespace MediaCatalog.Api.Controllers
         }
 
         [HttpGet]
+        [AuthorizationFilter("Administrator,User")]
         public IActionResult GetAll()
         {
             List<RoleDetailDTO> roles = _roleService.GetRoles();

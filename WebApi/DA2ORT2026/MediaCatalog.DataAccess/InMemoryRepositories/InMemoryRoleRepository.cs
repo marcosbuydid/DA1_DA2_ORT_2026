@@ -10,6 +10,7 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         public InMemoryRoleRepository()
         {
             Roles = new List<Role>();
+            LoadDefaultRoles();
         }
 
         public Role? GetRole(Func<Role, bool> filter)
@@ -35,6 +36,11 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         public bool Exists(Func<Role, bool> predicate)
         {
             return Roles.Where(predicate).Any();
+        }
+
+        private void LoadDefaultRoles()
+        {
+            Roles.Add(new Role(1, "Administrator"));
         }
     }
 }

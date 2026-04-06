@@ -11,6 +11,7 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         public InMemoryUserRepository()
         {
             Users = new List<User>();
+            LoadDefaultUsers();
         }
 
         public List<User> GetUsers()
@@ -44,6 +45,13 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         public bool Exists(Func<User, bool> predicate)
         {
             return Users.Where(predicate).Any();
+        }
+
+        private void LoadDefaultUsers()
+        {
+            Users.Add(new User(1, "Marcos", "Buydid", "marcosb@email.com", 
+                "YfCcXFdr5hMSfeP2PqGnLahaL/Aq7qDX78vZTnxYlB3iC6FQHcQi5AB9ETjAWY66", 
+                new Role(2, "User")));
         }
     }
 }

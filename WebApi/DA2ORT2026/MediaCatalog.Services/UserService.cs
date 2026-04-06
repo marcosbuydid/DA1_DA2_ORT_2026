@@ -34,7 +34,7 @@ namespace MediaCatalog.Services
             _userRepository.AddUser(ToEntity(user));
 
             return new UserDetailDTO() { Name = user.Name, LastName = user.LastName, 
-                Email = user.Email, RoleId = (int)role.Id };
+                Email = user.Email, Password = user.Password, RoleId = (int)role.Id };
         }
 
         public List<UserDetailDTO> GetUsers()
