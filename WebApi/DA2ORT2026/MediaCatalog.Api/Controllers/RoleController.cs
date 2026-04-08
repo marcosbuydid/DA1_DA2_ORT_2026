@@ -10,7 +10,7 @@ namespace MediaCatalog.Api.Controllers
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;
-        
+
         public RoleController(IRoleService roleService)
         {
             _roleService = roleService;
@@ -21,15 +21,15 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult GetAll()
         {
             List<RoleDetailDTO> roles = _roleService.GetRoles();
-            return Ok(roles);
+            return Ok(new { roles });
         }
 
         [HttpPost]
         [AuthorizationFilter("Administrator,User")]
         public IActionResult Create([FromBody] RoleCreateDTO newRole)
         {
-            RoleDetailDTO createdRole = _roleService.AddRole(newRole);
-            return Ok(createdRole);
+            RoleDetailDTO role = _roleService.AddRole(newRole);
+            return Ok(new { role });
         }
 
         [HttpDelete("by-name/{name}")]

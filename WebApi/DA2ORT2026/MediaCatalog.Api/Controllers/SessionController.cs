@@ -19,8 +19,8 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Login([FromBody] LoginUserDTO loginUserDTO)
         {
             string token = _sessionService.Authenticate(loginUserDTO.Email, loginUserDTO.Password);
-            return new JsonResult(token)
-            { StatusCode = StatusCodes.Status200OK };
+
+            return Ok(new { token });
         }
     }
 }

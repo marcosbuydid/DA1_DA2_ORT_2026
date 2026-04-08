@@ -20,8 +20,8 @@ namespace MediaCatalog.Api.Controllers
         [AuthorizationFilter("Administrator,User")]
         public IActionResult Create([FromBody] UserCreateDTO newUser)
         {
-            UserDetailDTO createdUser = _userService.AddUser(newUser);
-            return Ok(createdUser);
+            UserDetailDTO user = _userService.AddUser(newUser);
+            return Ok(new { user });
         }
     }
 }
