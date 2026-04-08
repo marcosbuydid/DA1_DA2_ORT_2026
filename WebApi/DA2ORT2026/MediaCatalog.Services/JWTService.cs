@@ -16,7 +16,7 @@ namespace MediaCatalog.Services
         {
             _userRepository = userRepository;
         }
-        public string GenerateToken(string name, string email, string secretKey)
+        public string GenerateToken(string name, string email, string secretKey, int tokenExpMinutes)
         {
             //user is validated previously on ValidateUserCredentials, no need to check if is null
             User? user = _userRepository.GetUsers().FirstOrDefault(u => u.Email == email);
@@ -34,7 +34,9 @@ namespace MediaCatalog.Services
                 email = user.Email,
                 roleId = user.Role.Id,
                 roleName = user.Role.Name,
-                exp = DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds()
+                iss = "MediaCatalogAPI", //token issuer
+                aud = "MediaCatalogWebApp", //who can consume the token
+                exp = DateTimeOffset.UtcNow.AddMinutes(tokenExpMinutes).ToUnixTimeSeconds()
             };
 
             string headerJson = JsonSerializer.Serialize(header);
@@ -55,7 +57,8 @@ namespace MediaCatalog.Services
             return $"{unsignedToken}.{signature}";
         }
 
-        public bool ValidateToken(string token, string secretKey, out JsonElement payload)
+        public bool ValidateToken(string token, string secretKey, string expectedIssuer, 
+            string expectedAudience, out JsonElement payload)
         {
             payload = default;
 
@@ -91,7 +94,25 @@ namespace MediaCatalog.Services
             byte[] payloadBytes = Base64UrlDecode(payloadEncoded);
             payload = JsonSerializer.Deserialize<JsonElement>(payloadBytes);
 
-            //5-check expiration
+            //5-check issuer
+            if (!payload.TryGetProperty("iss", out JsonElement issElement))
+                return false;
+
+            string? issuer = issElement.GetString();
+
+            if (issuer != expectedIssuer)
+                return false;
+
+            //6-check audience
+            if (!payload.TryGetProperty("aud", out JsonElement audElement))
+                return false;
+
+            string? audience = audElement.GetString();
+
+            if (audience != expectedAudience)
+                return false;
+
+            //7-check expiration
             if (!payload.TryGetProperty("exp", out JsonElement expElement))
                 return false;
 

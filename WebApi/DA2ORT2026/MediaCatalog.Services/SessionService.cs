@@ -38,7 +38,8 @@ namespace MediaCatalog.Services
 
             if (user != null)
             {
-                string token = _jwtService.GenerateToken(user.Name, user.Email, _settings.SecretKey);
+                string token = _jwtService.GenerateToken(user.Name, user.Email, 
+                    _settings.SecretKey, _settings.TokenExpMinutes);
 
                 Session session = new Session() { Token = token, User = user };
                 _sessionRepository.AddSession(session);
@@ -51,7 +52,8 @@ namespace MediaCatalog.Services
 
         public SessionDTO? ValidateSession(string token)
         {
-            bool validSession = _jwtService.ValidateToken(token, _settings.SecretKey, out tokenPayload);
+            bool validSession = _jwtService.ValidateToken(token, _settings.SecretKey, 
+                _settings.Issuer, _settings.Audience ,out tokenPayload);
 
             if (!validSession)
             {

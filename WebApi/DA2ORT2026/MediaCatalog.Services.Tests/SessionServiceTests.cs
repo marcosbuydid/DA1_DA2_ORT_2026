@@ -61,8 +61,8 @@ namespace MediaCatalog.Services.Tests
 
             _sessionRepositoryMock.Setup(r => r.AddSession(It.IsAny<Session>()));
 
-            _jwtServiceMock.Setup(t => t.GenerateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("fake-token");
+            _jwtServiceMock.Setup(t => t.GenerateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 
+                It.IsAny<int>())).Returns("fake-token");
 
             //act
             _sessionService.Authenticate("john@test.com", "password");
@@ -100,13 +100,14 @@ namespace MediaCatalog.Services.Tests
 
             //JWT payload
             string tokenPayload = @"{""name"": ""John"",""lastName"": ""Doe"",
-                ""email"": ""john@example.com"",""roleName"": ""User"",""roleId"": 1}";
+                ""email"": ""john@example.com"",""roleName"": ""User"",""roleId"": 1,
+                ""iss"": ""api"", ""aud"": ""webapp""}";
             JsonElement payload = JsonDocument.Parse(tokenPayload).RootElement;
 
             //mock ITokenService.ValidateToken to return true and set out parameter
-            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(), It.IsAny<string>(), 
-                out It.Ref<JsonElement>.IsAny)).Returns((string t, string k, out JsonElement p) => 
-                { p = payload; return true; });
+            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),
+                It.IsAny<string>(),out It.Ref<JsonElement>.IsAny)).Returns(true).Callback((string t, string k, 
+                string expectedAudience, string expectedIssuer, out JsonElement p) =>{p = payload;});
 
             //act
             SessionDTO? sessionDTO = _sessionService.ValidateSession(token);
@@ -136,7 +137,8 @@ namespace MediaCatalog.Services.Tests
 
             JsonElement fakePayload = default;
 
-            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(), It.IsAny<string>(), out fakePayload)).Returns(false);
+            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                out fakePayload)).Returns(false);
 
             //act
             SessionDTO? sessionDTO = _sessionService.ValidateSession("invalid-token");
@@ -158,13 +160,14 @@ namespace MediaCatalog.Services.Tests
 
             _sessionRepositoryMock.Setup(r => r.AddSession(It.IsAny<Session>()));
 
-            _jwtServiceMock.Setup(t => t.GenerateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("valid-token");
+            _jwtServiceMock.Setup(t => t.GenerateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 
+                It.IsAny<int>())).Returns("valid-token");
 
             //validateToken must return true before logout
             JsonElement payload = default;
 
-            _jwtServiceMock.Setup(t => t.ValidateToken("valid-token", It.IsAny<string>(), out payload)).Returns(true);
+            _jwtServiceMock.Setup(t => t.ValidateToken("valid-token", It.IsAny<string>(), 
+                It.IsAny<string>(), It.IsAny<string>(), out payload)).Returns(true);
 
             //create session
             _sessionService.Authenticate("john@test.com", "password");
@@ -173,7 +176,8 @@ namespace MediaCatalog.Services.Tests
             _sessionService.SignOut();
 
             //simulate validation after logout
-            _jwtServiceMock.Setup(t => t.ValidateToken("valid-token", It.IsAny<string>(), out payload)).Returns(false);
+            _jwtServiceMock.Setup(t => t.ValidateToken("valid-token", It.IsAny<string>(), 
+                It.IsAny<string>(), It.IsAny<string>(), out payload)).Returns(false);
 
             SessionDTO? sessionDTO = _sessionService.ValidateSession("valid-token");
 
