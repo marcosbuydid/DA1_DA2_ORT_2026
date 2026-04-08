@@ -58,7 +58,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _roleService.GetRole(roleDTO.Name);
 
             //assert
-            Assert.ThrowsException<ServiceException>(() => _roleService.GetRole(roleDTO.Name));
+            Assert.ThrowsException<ResourceNotFoundException>(() => _roleService.GetRole(roleDTO.Name));
             _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Role, bool>>()), Times.Never);
         }
 
@@ -114,7 +114,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _roleService.AddRole(roleDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ConflictException>(action);
             _roleRepositoryMock.Verify(r => r.AddRole(It.IsAny<Role>()), Times.Never);
         }
 
@@ -152,7 +152,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _roleService.DeleteRole("aRoleName");
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _roleRepositoryMock.Verify(r => r.DeleteRole(It.IsAny<Role>()), Times.Never);
         }
@@ -167,7 +167,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _roleService.DeleteRoleById(50);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _roleRepositoryMock.Verify(r => r.DeleteRole(It.IsAny<Role>()), Times.Never);
         }

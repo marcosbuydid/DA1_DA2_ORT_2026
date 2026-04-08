@@ -54,7 +54,7 @@ namespace MediaCatalog.Services
             User? userToDelete = _userRepository.GetUser(u => u.Email == email);
             if (userToDelete == null)
             {
-                throw new ServiceException("Cannot find a user with this email");
+                throw new ResourceNotFoundException("Cannot find a user with this email");
             }
 
             _userRepository.DeleteUser(userToDelete);
@@ -65,7 +65,7 @@ namespace MediaCatalog.Services
             User? userToDelete = _userRepository.GetUser(u => u.Id == userId);
             if (userToDelete == null)
             {
-                throw new ServiceException("Cannot find a user with this id");
+                throw new ResourceNotFoundException("Cannot find a user with this id");
             }
 
             _userRepository.DeleteUser(userToDelete);
@@ -77,7 +77,7 @@ namespace MediaCatalog.Services
             User? user = _userRepository.GetUser(u => u.Id == userId);
             if (user == null)
             {
-                throw new ServiceException("Cannot find the specified user with this id");
+                throw new ResourceNotFoundException("Cannot find the specified user with this id");
             }
 
             Role? userToUpdateRole = _roleRepository.GetRole(r => r.Id == userToUpdate.RoleId);
@@ -101,7 +101,7 @@ namespace MediaCatalog.Services
             User? user = _userRepository.GetUser(u => u.Email == userToUpdate.Email);
             if (user == null)
             {
-                throw new ServiceException("Cannot find the specified user");
+                throw new ResourceNotFoundException("Cannot find the specified user");
             }
 
             Role? userToUpdateRole = _roleRepository.GetRole(r => r.Id == userToUpdate.RoleId);
@@ -125,7 +125,7 @@ namespace MediaCatalog.Services
             User? user = _userRepository.GetUser(user => user.Email == email);
             if (user == null)
             {
-                throw new ServiceException("Cannot find a user with this email");
+                throw new ResourceNotFoundException("Cannot find a user with this email");
             }
 
             return FromEntity(user);
@@ -154,7 +154,7 @@ namespace MediaCatalog.Services
                 string retrievedEmail = user.Email.Trim().ToLowerInvariant();
                 if (retrievedEmail == inputEmail)
                 {
-                    throw new ServiceException("There`s a user already defined with that email");
+                    throw new ConflictException("There`s a user already defined with that email");
                 }
             }
         }
@@ -164,7 +164,7 @@ namespace MediaCatalog.Services
             User? user = _userRepository.GetUser(user => user.Email == email);
             if (user == null)
             {
-                throw new ServiceException("Cannot find user with this email");
+                throw new ResourceNotFoundException("Cannot find user with this email");
             }
 
             string storedHashedPassword = user.Password;

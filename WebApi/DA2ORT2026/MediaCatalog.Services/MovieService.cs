@@ -33,7 +33,7 @@ namespace MediaCatalog.Services
             Movie? movieToDelete = _movieRepository.GetMovie(m => m.Title == title);
             if (movieToDelete == null)
             {
-                throw new ServiceException("Cannot find a movie with this title");
+                throw new ResourceNotFoundException("Cannot find a movie with this title");
             }
 
             _movieRepository.DeleteMovie(movieToDelete);
@@ -44,7 +44,7 @@ namespace MediaCatalog.Services
             Movie? movieToDelete = _movieRepository.GetMovie(m => m.Id == movieId);
             if (movieToDelete == null)
             {
-                throw new ServiceException("Cannot find a movie with this id");
+                throw new ResourceNotFoundException("Cannot find a movie with this id");
             }
 
             _movieRepository.DeleteMovie(movieToDelete);
@@ -55,7 +55,7 @@ namespace MediaCatalog.Services
             Movie? movie = _movieRepository.GetMovie(m => m.Title == title);
             if (movie == null)
             {
-                throw new ServiceException("Cannot find a movie with this title");
+                throw new ResourceNotFoundException("Cannot find a movie with this title");
             }
 
             return FromEntity(movie);
@@ -78,7 +78,7 @@ namespace MediaCatalog.Services
             Movie? movie = _movieRepository.GetMovie(m => m.Title == movieToUpdate.Title);
             if (movie == null)
             {
-                throw new ServiceException("Cannot find the specified movie");
+                throw new ResourceNotFoundException("Cannot find the specified movie");
             }
 
             movie.Title = movieToUpdate.Title;
@@ -95,7 +95,7 @@ namespace MediaCatalog.Services
             Movie? movie = _movieRepository.GetMovie(m => m.Id == movieId);
             if (movie == null)
             {
-                throw new ServiceException("Cannot find the specified movie with this id");
+                throw new ResourceNotFoundException("Cannot find the specified movie with this id");
             }
 
             movie.Title = movieToUpdate.Title;
@@ -114,7 +114,7 @@ namespace MediaCatalog.Services
                 string retrievedTitle = movie.Title.Trim().ToLowerInvariant();
                 if (retrievedTitle == inputTitle)
                 {
-                    throw new ServiceException("There`s a movie already defined with that title");
+                    throw new ConflictException("There`s a movie already defined with that title");
                 }
             }
         }

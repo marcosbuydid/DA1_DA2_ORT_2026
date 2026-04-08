@@ -58,7 +58,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _movieService.GetMovie(movieDTO.Title);
 
             //assert
-            Assert.ThrowsException<ServiceException>(() => _movieService.GetMovie(movieDTO.Title));
+            Assert.ThrowsException<ResourceNotFoundException>(() => _movieService.GetMovie(movieDTO.Title));
             _movieRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Movie, bool>>()), Times.Never);
         }
 
@@ -100,7 +100,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _movieService.AddMovie(movieDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ConflictException>(action);
             _movieRepositoryMock.Verify(r => r.AddMovie(It.IsAny<Movie>()), Times.Never);
         }
 
@@ -138,7 +138,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _movieService.DeleteMovie("aMovieTitle");
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _movieRepositoryMock.Verify(r => r.DeleteMovie(It.IsAny<Movie>()), Times.Never);
         }
@@ -170,7 +170,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _movieService.DeleteMovieById(100);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _movieRepositoryMock.Verify(r => r.DeleteMovie(It.IsAny<Movie>()), Times.Never);
         }
@@ -203,7 +203,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _movieService.UpdateMovie(movieDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _movieRepositoryMock.Verify(r => r.UpdateMovie(It.IsAny<Movie>()), Times.Never);
         }
@@ -276,7 +276,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _movieService.UpdateMovieById(24, movieDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _movieRepositoryMock.Verify(r => r.UpdateMovie(It.IsAny<Movie>()), Times.Never);
         }

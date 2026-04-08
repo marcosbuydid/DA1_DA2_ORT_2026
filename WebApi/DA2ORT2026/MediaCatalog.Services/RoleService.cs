@@ -28,7 +28,7 @@ namespace MediaCatalog.Services
             Role? roleToDelete = _roleRepository.GetRole(r => r.Name == name);
             if (roleToDelete == null)
             {
-                throw new ServiceException("Cannot find a role with this name");
+                throw new ResourceNotFoundException("Cannot find a role with this name");
             }
 
             _roleRepository.DeleteRole(roleToDelete);
@@ -39,7 +39,7 @@ namespace MediaCatalog.Services
             Role? roleToDelete = _roleRepository.GetRole(r => r.Id == roleId);
             if (roleToDelete == null)
             {
-                throw new ServiceException("Cannot find a role with this name");
+                throw new ResourceNotFoundException("Cannot find a role with this name");
             }
 
             _roleRepository.DeleteRole(roleToDelete);
@@ -50,7 +50,7 @@ namespace MediaCatalog.Services
             Role? role = _roleRepository.GetRole(role => role.Name == name);
             if (role == null)
             {
-                throw new ServiceException("Cannot find a role with this name");
+                throw new ResourceNotFoundException("Cannot find a role with this name");
             }
 
             return FromEntity(role);
@@ -76,7 +76,7 @@ namespace MediaCatalog.Services
                 string retrievedName = role.Name.Trim().ToLowerInvariant();
                 if (retrievedName == inputName)
                 {
-                    throw new ServiceException("There`s a role already defined with that name");
+                    throw new ConflictException("There`s a role already defined with that name");
                 }
             }
         }

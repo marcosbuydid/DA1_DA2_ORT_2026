@@ -118,7 +118,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _userService.AddUser(newUserDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ConflictException>(action);
             _userRepositoryMock.Verify(r => r.AddUser(It.IsAny<User>()), Times.Never);
         }
 
@@ -158,7 +158,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _userService.GetUser(newUserDTO.Email);
 
             //assert
-            Assert.ThrowsException<ServiceException>(() => _userService.GetUser(newUserDTO.Email));
+            Assert.ThrowsException<ResourceNotFoundException>(() => _userService.GetUser(newUserDTO.Email));
             _userRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<User, bool>>()), Times.Never);
         }
 
@@ -198,7 +198,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _userService.DeleteUser("email@test.com");
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _userRepositoryMock.Verify(r => r.DeleteUser(It.IsAny<User>()), Times.Never);
         }
@@ -213,7 +213,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _userService.DeleteUserById(25);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _userRepositoryMock.Verify(r => r.DeleteUser(It.IsAny<User>()), Times.Never);
         }
@@ -270,7 +270,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _userService.UpdateUser(userDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _userRepositoryMock.Verify(r => r.UpdateUser(It.IsAny<User>()), Times.Never);
         }
@@ -289,7 +289,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _userService.UpdateUserById(25,userDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _userRepositoryMock.Verify(r => r.UpdateUser(It.IsAny<User>()), Times.Never);
         }
@@ -380,7 +380,7 @@ namespace MediaCatalog.Services.Tests
             Action action = () => _userService.ChangePassword(changePasswordDTO);
 
             //assert
-            Assert.ThrowsException<ServiceException>(action);
+            Assert.ThrowsException<ResourceNotFoundException>(action);
 
             _userRepositoryMock.Verify(r => r.UpdateUser(It.IsAny<User>()), Times.Never);
         }
