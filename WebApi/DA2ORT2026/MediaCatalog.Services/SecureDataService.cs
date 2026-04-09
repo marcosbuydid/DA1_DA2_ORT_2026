@@ -22,7 +22,7 @@ namespace MediaCatalog.Services
 
         public string Encrypt(string data)
         {
-            byte[] key = DecodeBase64Token(_settings.Token);
+            byte[] key = DecodeBase64Token(_settings.EncryptionKey);
 
             using var aesAlgorithm = Aes.Create();
             aesAlgorithm.Key = key;
@@ -45,7 +45,7 @@ namespace MediaCatalog.Services
 
         public string Decrypt(string encryptedData)
         {
-            byte[] key = DecodeBase64Token(_settings.Token);
+            byte[] key = DecodeBase64Token(_settings.EncryptionKey);
 
             //decode the Base64 string into a byte array
             byte[] encryptedBytes = Convert.FromBase64String(encryptedData);

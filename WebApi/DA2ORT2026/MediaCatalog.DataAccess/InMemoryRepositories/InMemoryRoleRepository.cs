@@ -41,6 +41,7 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         private void LoadDefaultRoles()
         {
             Roles.Add(new Role(1, "Administrator"));
+            Roles.Add(new Role(2, "User"));
         }
     }
 }

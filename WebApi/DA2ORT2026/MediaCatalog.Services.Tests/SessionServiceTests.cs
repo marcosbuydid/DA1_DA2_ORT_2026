@@ -29,7 +29,7 @@ namespace MediaCatalog.Services.Tests
 
             var systemSettings = Options.Create(new SystemSettings
             {
-                Token = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567",
+                EncryptionKey = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567",
                 SecretKey = "ab1c2a3b4c1a2b3c4a1b2c3a4b1c2a3b4c1a2b3c4a1b2="
             });
 
@@ -142,44 +142,6 @@ namespace MediaCatalog.Services.Tests
 
             //act
             SessionDTO? sessionDTO = _sessionService.ValidateSession("invalid-token");
-
-            //assert
-            Assert.IsNull(sessionDTO);
-        }
-
-        [TestMethod]
-        public void SignOut_WhenCalled_ThenSessionDataIsCleared()
-        {
-            //arrange
-            Role role = new Role(1, "User");
-            User user = new User(1, "John", "Doe", "john@test.com", "password123", role);
-
-            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User> { user });
-
-            _secureDataServiceMock.Setup(s => s.CompareHashes(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
-
-            _sessionRepositoryMock.Setup(r => r.AddSession(It.IsAny<Session>()));
-
-            _jwtServiceMock.Setup(t => t.GenerateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 
-                It.IsAny<int>())).Returns("valid-token");
-
-            //validateToken must return true before logout
-            JsonElement payload = default;
-
-            _jwtServiceMock.Setup(t => t.ValidateToken("valid-token", It.IsAny<string>(), 
-                It.IsAny<string>(), It.IsAny<string>(), out payload)).Returns(true);
-
-            //create session
-            _sessionService.Authenticate("john@test.com", "password");
-
-            //act
-            _sessionService.SignOut();
-
-            //simulate validation after logout
-            _jwtServiceMock.Setup(t => t.ValidateToken("valid-token", It.IsAny<string>(), 
-                It.IsAny<string>(), It.IsAny<string>(), out payload)).Returns(false);
-
-            SessionDTO? sessionDTO = _sessionService.ValidateSession("valid-token");
 
             //assert
             Assert.IsNull(sessionDTO);

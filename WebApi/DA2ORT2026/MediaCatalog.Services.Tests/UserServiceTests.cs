@@ -267,7 +267,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action action = () => _userService.UpdateUser(userDTO);
+            Action action = () => _userService.UpdateUser("undefined@mail.com", userDTO);
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(action);
@@ -311,7 +311,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>()));
 
             //act
-            UserDetailDTO updatedUser = _userService.UpdateUser(userToUpdate);
+            UserDetailDTO updatedUser = _userService.UpdateUser(existingUser.Email, userToUpdate);
 
             //assert
             _userRepositoryMock.Verify(
@@ -371,13 +371,13 @@ namespace MediaCatalog.Services.Tests
             string newPassword = "newPassword123";
 
             ChangePasswordDTO changePasswordDTO =
-                new ChangePasswordDTO(email, oldPassword, newPassword, newPassword);
+                new ChangePasswordDTO(oldPassword, newPassword, newPassword);
 
             //simulate validation failure, user = null
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action action = () => _userService.ChangePassword(changePasswordDTO);
+            Action action = () => _userService.ChangePassword(email,changePasswordDTO);
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(action);
@@ -407,7 +407,7 @@ namespace MediaCatalog.Services.Tests
             User user = new User(1, "John", "Doe", email, hashedOldPassword, role);
 
             ChangePasswordDTO changePasswordDTO =
-                new ChangePasswordDTO(email, oldPassword, newPassword, newPassword);
+                new ChangePasswordDTO(oldPassword, newPassword, newPassword);
 
             //mock repository to return user
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(user);
@@ -417,7 +417,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>())).Callback<User>(u => updatedUser = u);
 
             //act
-            _userService.ChangePassword(changePasswordDTO);
+            _userService.ChangePassword(email,changePasswordDTO);
 
             //assert
             Assert.IsNotNull(updatedUser);

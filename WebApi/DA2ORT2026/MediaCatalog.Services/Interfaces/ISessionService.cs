@@ -7,6 +7,5 @@ namespace MediaCatalog.Services.Interfaces
     {
         string Authenticate(string username, string password);
         SessionDTO? ValidateSession(string token);
-        void SignOut();
     }
 }

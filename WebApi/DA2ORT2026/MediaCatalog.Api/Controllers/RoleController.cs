@@ -18,10 +18,18 @@ namespace MediaCatalog.Api.Controllers
 
         [HttpGet]
         [AuthorizationFilter("Administrator,User")]
-        public IActionResult GetAll()
+        public IActionResult Get()
         {
             List<RoleDetailDTO> roles = _roleService.GetRoles();
             return Ok(new { roles });
+        }
+
+        [HttpGet("by-name/{name}")]
+        [AuthorizationFilter("Administrator,User")]
+        public IActionResult GetByName(string name)
+        {
+            RoleDetailDTO role = _roleService.GetRole(name);
+            return Ok(new { role });
         }
 
         [HttpPost]

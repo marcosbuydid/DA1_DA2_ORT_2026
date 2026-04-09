@@ -88,11 +88,6 @@ namespace MediaCatalog.Services
             return _currentSession;
         }
 
-        public void SignOut()
-        {
-            ClearSessionData();
-        }
-
         private User ValidateUserCredentials(string email, string password)
         {
             User? user = _userRepository.GetUsers()

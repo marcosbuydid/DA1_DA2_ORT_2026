@@ -34,7 +34,7 @@ namespace MediaCatalog.Services
             _userRepository.AddUser(ToEntity(user));
 
             return new UserDetailDTO() { Name = user.Name, LastName = user.LastName, 
-                Email = user.Email, Password = user.Password, RoleId = (int)role.Id };
+                Email = user.Email, RoleId = (int)role.Id };
         }
 
         public List<UserDetailDTO> GetUsers()
@@ -96,9 +96,9 @@ namespace MediaCatalog.Services
             return FromEntity(user);
         }
 
-        public UserDetailDTO UpdateUser(UserUpdateDTO userToUpdate)
+        public UserDetailDTO UpdateUser(string? email, UserUpdateDTO userToUpdate)
         {
-            User? user = _userRepository.GetUser(u => u.Email == userToUpdate.Email);
+            User? user = _userRepository.GetUser(u => u.Email == email);
             if (user == null)
             {
                 throw new ResourceNotFoundException("Cannot find the specified user");
@@ -131,9 +131,9 @@ namespace MediaCatalog.Services
             return FromEntity(user);
         }
 
-        public void ChangePassword(ChangePasswordDTO changePasswordDTO)
+        public void ChangePassword(string? email, ChangePasswordDTO changePasswordDTO)
         {
-            User? user = ValidateOldPassword(changePasswordDTO.UserEmail, changePasswordDTO.OldPassword);
+            User? user = ValidateOldPassword(email, changePasswordDTO.OldPassword);
             if (user != null)
             {
                 string newPasswordHash = _secureDataService.Hash(changePasswordDTO.NewPassword);

@@ -5,8 +5,6 @@ namespace MediaCatalog.Services.Models
 {
     public class ChangePasswordDTO
     {
-        public string UserEmail { get; set; }
-
         [Required(ErrorMessage = "Old password is required.")]
         public string OldPassword { get; set; }
 
@@ -17,9 +15,8 @@ namespace MediaCatalog.Services.Models
         [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
         public string RetypedNewPassword { get; set; }
 
-        public ChangePasswordDTO(string email, string oldPassword, string newPassword, string retypedNewPassword)
+        public ChangePasswordDTO(string oldPassword, string newPassword, string retypedNewPassword)
         {
-            UserEmail = email;
             OldPassword = oldPassword;
             NewPassword = newPassword;
             RetypedNewPassword = retypedNewPassword;
