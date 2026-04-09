@@ -50,7 +50,7 @@ namespace MediaCatalog.Api.Controllers
 
         [HttpPut("by-email/{email}")]
         [AuthorizationFilter("Administrator")]
-        public IActionResult UpdateUser(string email, [FromBody] UserUpdateDTO userToUpdate)
+        public IActionResult UpdateByEmail(string email, [FromBody] UserUpdateDTO userToUpdate)
         {
             UserDetailDTO user = _userService.UpdateUser(email, userToUpdate);
             return Ok(new { user });

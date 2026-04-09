@@ -73,15 +73,14 @@ namespace MediaCatalog.Services
             return moviesDTO;
         }
 
-        public MovieDetailDTO UpdateMovie(MovieUpdateDTO movieToUpdate)
+        public MovieDetailDTO UpdateMovie(string? title, MovieUpdateDTO movieToUpdate)
         {
-            Movie? movie = _movieRepository.GetMovie(m => m.Title == movieToUpdate.Title);
+            Movie? movie = _movieRepository.GetMovie(m => m.Title == title);
             if (movie == null)
             {
                 throw new ResourceNotFoundException("Cannot find the specified movie");
             }
 
-            movie.Title = movieToUpdate.Title;
             movie.Director = movieToUpdate.Director;
             movie.ReleaseDate = movieToUpdate.ReleaseDate;
             _movieRepository.UpdateMovie(movie);
@@ -98,7 +97,6 @@ namespace MediaCatalog.Services
                 throw new ResourceNotFoundException("Cannot find the specified movie with this id");
             }
 
-            movie.Title = movieToUpdate.Title;
             movie.Director = movieToUpdate.Director;
             movie.ReleaseDate = movieToUpdate.ReleaseDate;
             _movieRepository.UpdateMovie(movie);

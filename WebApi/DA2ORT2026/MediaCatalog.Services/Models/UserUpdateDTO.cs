@@ -11,9 +11,6 @@ namespace MediaCatalog.Services.Models
         [Required(ErrorMessage = "LastName is required.")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Email is required.")]
-        public string Email { get; set; }
-
         [RegularExpression("^[{1,2}]$", ErrorMessage = "Role id 1 = Administrator, Role id 2 = User")]
         public int RoleId { get; set; }
 
@@ -25,7 +22,6 @@ namespace MediaCatalog.Services.Models
         {
             Name = name;
             LastName = lastName;
-            Email = email;
             RoleId = roleId;
         }
     }

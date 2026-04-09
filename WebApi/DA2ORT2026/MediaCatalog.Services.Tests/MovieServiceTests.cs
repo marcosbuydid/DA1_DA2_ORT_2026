@@ -195,12 +195,12 @@ namespace MediaCatalog.Services.Tests
         public void UpdateMovie_WhenCalledWithUnregisteredMovie_ThenThrowsException()
         {
             //arrange
-            MovieUpdateDTO movieDTO = new MovieUpdateDTO("aTitle", "aDirector", new DateTime(2020, 01, 11));
+            MovieUpdateDTO movieDTO = new MovieUpdateDTO("aDirector", new DateTime(2020, 01, 11));
 
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns((Movie)null);
 
             //act
-            Action action = () => _movieService.UpdateMovie(movieDTO);
+            Action action = () => _movieService.UpdateMovie("aTitle", movieDTO);
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(action);
@@ -214,14 +214,14 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Movie existingMovie = new Movie(92, "oldTitle", "oldDirector", new DateTime(2020, 01, 11), 2000000);
 
-            MovieUpdateDTO movieToUpdate = new MovieUpdateDTO("newTitle", "newDirector", new DateTime(2022, 11, 11));
+            MovieUpdateDTO movieToUpdate = new MovieUpdateDTO("newDirector", new DateTime(2022, 11, 11));
 
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns(existingMovie);
 
             _movieRepositoryMock.Setup(r => r.UpdateMovie(It.IsAny<Movie>()));
 
             //act
-            MovieDetailDTO updatedMovie = _movieService.UpdateMovie(movieToUpdate);
+            MovieDetailDTO updatedMovie = _movieService.UpdateMovie(existingMovie.Title, movieToUpdate);
 
             //assert
             _movieRepositoryMock.Verify(
@@ -242,7 +242,7 @@ namespace MediaCatalog.Services.Tests
             //arrange
             Movie existingMovie = new Movie(92, "oldTitle", "oldDirector", new DateTime(2020, 01, 11), 2000000);
 
-            MovieUpdateDTO movieToUpdate = new MovieUpdateDTO("newTitle", "newDirector", new DateTime(2022, 11, 11));
+            MovieUpdateDTO movieToUpdate = new MovieUpdateDTO("newDirector", new DateTime(2022, 11, 11));
 
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns(existingMovie);
 
@@ -268,7 +268,7 @@ namespace MediaCatalog.Services.Tests
         public void UpdateMovie_WhenCalledWithNotValidId_ThenThrowsException()
         {
             //arrange
-            MovieUpdateDTO movieDTO = new MovieUpdateDTO("aTitle", "aDirector", new DateTime(2020, 01, 11));
+            MovieUpdateDTO movieDTO = new MovieUpdateDTO("aDirector", new DateTime(2020, 01, 11));
 
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns((Movie)null);
 

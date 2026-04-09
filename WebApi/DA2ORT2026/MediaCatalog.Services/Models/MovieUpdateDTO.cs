@@ -5,9 +5,6 @@ namespace MediaCatalog.Services.Models
 {
     public class MovieUpdateDTO
     {
-        [Required(ErrorMessage = "Title is required.")]
-        public string Title { get; set; }
-
         [Required(ErrorMessage = "Director is required.")]
         public string Director { get; set; }
 
@@ -16,9 +13,8 @@ namespace MediaCatalog.Services.Models
 
         public MovieUpdateDTO() { }
 
-        public MovieUpdateDTO(string title, string director, DateTime releaseDate)
+        public MovieUpdateDTO(string director, DateTime releaseDate)
         {
-            Title = title;
             Director = director;
             ReleaseDate = releaseDate;
         }

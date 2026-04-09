@@ -286,7 +286,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action action = () => _userService.UpdateUserById(25,userDTO);
+            Action action = () => _userService.UpdateUserById(25, userDTO);
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(action);
@@ -318,13 +318,12 @@ namespace MediaCatalog.Services.Tests
                 r => r.UpdateUser(It.Is<User>(u =>
                     u.Name == userToUpdate.Name &&
                     u.LastName == userToUpdate.LastName &&
-                    u.Email == userToUpdate.Email &&
                     u.Role.Id == userToUpdate.RoleId
                 )), Times.Once);
 
             Assert.AreEqual(userToUpdate.Name, updatedUser.Name);
             Assert.AreEqual(userToUpdate.LastName, updatedUser.LastName);
-            Assert.AreEqual(userToUpdate.Email, updatedUser.Email);
+            Assert.AreEqual(userToUpdate.RoleId, updatedUser.RoleId);
         }
 
         [TestMethod]
@@ -344,20 +343,19 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>()));
 
             //act
-            UserDetailDTO updatedUser = _userService.UpdateUserById(1,userToUpdate);
+            UserDetailDTO updatedUser = _userService.UpdateUserById(1, userToUpdate);
 
             //assert
             _userRepositoryMock.Verify(
                 r => r.UpdateUser(It.Is<User>(u =>
                     u.Name == userToUpdate.Name &&
                     u.LastName == userToUpdate.LastName &&
-                    u.Email == userToUpdate.Email &&
                     u.Role.Id == userToUpdate.RoleId
                 )), Times.Once);
 
             Assert.AreEqual(userToUpdate.Name, updatedUser.Name);
             Assert.AreEqual(userToUpdate.LastName, updatedUser.LastName);
-            Assert.AreEqual(userToUpdate.Email, updatedUser.Email);
+            Assert.AreEqual(userToUpdate.RoleId, updatedUser.RoleId);
         }
 
         [TestMethod]
@@ -377,7 +375,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action action = () => _userService.ChangePassword(email,changePasswordDTO);
+            Action action = () => _userService.ChangePassword(email, changePasswordDTO);
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(action);
@@ -417,7 +415,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>())).Callback<User>(u => updatedUser = u);
 
             //act
-            _userService.ChangePassword(email,changePasswordDTO);
+            _userService.ChangePassword(email, changePasswordDTO);
 
             //assert
             Assert.IsNotNull(updatedUser);

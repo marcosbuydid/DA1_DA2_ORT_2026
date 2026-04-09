@@ -10,7 +10,7 @@ namespace MediaCatalog.Services.Interfaces
         MovieDetailDTO AddMovie(MovieCreateDTO movie);
         void DeleteMovie(string title);
         void DeleteMovieById(int? movieId);
-        MovieDetailDTO UpdateMovie(MovieUpdateDTO movie);
+        MovieDetailDTO UpdateMovie(string? title, MovieUpdateDTO movie);
         MovieDetailDTO UpdateMovieById(int? movieId, MovieUpdateDTO movie);
     }
 }

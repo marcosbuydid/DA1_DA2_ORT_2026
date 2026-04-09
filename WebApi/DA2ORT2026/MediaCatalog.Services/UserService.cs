@@ -89,7 +89,6 @@ namespace MediaCatalog.Services
 
             user.Name = userToUpdate.Name;
             user.LastName = userToUpdate.LastName;
-            user.Email = userToUpdate.Email;
             user.Role = userToUpdateRole;
             _userRepository.UpdateUser(user);
 
@@ -113,7 +112,6 @@ namespace MediaCatalog.Services
 
             user.Name = userToUpdate.Name;
             user.LastName = userToUpdate.LastName;
-            user.Email = userToUpdate.Email;
             user.Role = userToUpdateRole;
             _userRepository.UpdateUser(user);
 
