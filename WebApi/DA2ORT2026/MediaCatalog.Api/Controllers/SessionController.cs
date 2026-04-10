@@ -1,5 +1,6 @@
 ﻿using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
+using MediaCatalog.Services.Models.GenericWrapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaCatalog.Api.Controllers
@@ -20,7 +21,7 @@ namespace MediaCatalog.Api.Controllers
         {
             string token = _sessionService.Authenticate(loginUserDTO.Email, loginUserDTO.Password);
 
-            return Ok(new { token });
+            return Ok(new ApiResponse<string> { Result = token });
         }
     }
 }

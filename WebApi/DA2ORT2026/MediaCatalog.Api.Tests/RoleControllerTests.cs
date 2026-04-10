@@ -2,6 +2,7 @@
 using MediaCatalog.Api.Controllers;
 using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
+using MediaCatalog.Services.Models.GenericWrapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -41,11 +42,20 @@ namespace MediaCatalog.Api.Tests
 
             //assert
             Assert.IsNotNull(result);
+
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult, "Expected OkObjectResult.");
             Assert.AreEqual(200, okResult.StatusCode);
-            var returnedRoles = okResult.Value;
+
+            var response = okResult.Value as ApiResponse<List<RoleDetailDTO>>;
+            Assert.IsNotNull(response);
+
+            var returnedRoles = response.Result;
             Assert.IsNotNull(returnedRoles);
+            Assert.AreEqual(2, returnedRoles.Count);
+
+            Assert.AreEqual("Administrator", returnedRoles[0].Name);
+            Assert.AreEqual("User", returnedRoles[1].Name);
 
             _roleServiceMock.Verify(rs => rs.GetRoles(), Times.Once);
         }
@@ -67,6 +77,14 @@ namespace MediaCatalog.Api.Tests
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult, "Expected OkObjectResult.");
             Assert.AreEqual(200, okResult.StatusCode);
+
+            var response = okResult.Value as ApiResponse<RoleDetailDTO>;
+            Assert.IsNotNull(response);
+
+            var returnedRole = response.Result;
+            Assert.IsNotNull(returnedRole);
+
+            Assert.AreEqual("Administrator", returnedRole.Name);
 
             _roleServiceMock.Verify(rs => rs.GetRole("Administrator"), Times.Once);
         }
@@ -92,6 +110,14 @@ namespace MediaCatalog.Api.Tests
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
 
+            var response = okResult.Value as ApiResponse<RoleDetailDTO>;
+            Assert.IsNotNull(response);
+
+            var createdRole = response.Result;
+            Assert.IsNotNull(createdRole);
+
+            Assert.AreEqual("User", createdRole.Name);
+
             _roleServiceMock.Verify(rs => rs.AddRole(It.IsAny<RoleCreateDTO>()), Times.Once);
         }
 
@@ -112,14 +138,12 @@ namespace MediaCatalog.Api.Tests
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
 
-            //verify response message
-            var value = okResult.Value;
-            Assert.IsNotNull(value);
+            var response = okResult.Value as ApiResponse<string>;
+            Assert.IsNotNull(response);
 
-            var messageProperty = value.GetType().GetProperty("Message");
-            Assert.IsNotNull(messageProperty);
+            var message = response.Result;
+            Assert.IsNotNull(message);
 
-            var message = messageProperty.GetValue(value)?.ToString();
             Assert.AreEqual("Role deleted successfully.", message);
 
             // verify service call
@@ -143,14 +167,12 @@ namespace MediaCatalog.Api.Tests
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
 
-            //verify response message
-            var value = okResult.Value;
-            Assert.IsNotNull(value);
+            var response = okResult.Value as ApiResponse<string>;
+            Assert.IsNotNull(response);
 
-            var messageProperty = value.GetType().GetProperty("Message");
-            Assert.IsNotNull(messageProperty);
+            var message = response.Result;
+            Assert.IsNotNull(message);
 
-            var message = messageProperty.GetValue(value)?.ToString();
             Assert.AreEqual("Role deleted successfully.", message);
 
             // verify service call

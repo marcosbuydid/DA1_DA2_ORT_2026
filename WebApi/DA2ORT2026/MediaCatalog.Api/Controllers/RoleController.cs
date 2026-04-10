@@ -1,6 +1,8 @@
 ﻿using MediaCatalog.Api.Filters;
+using MediaCatalog.Domain;
 using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
+using MediaCatalog.Services.Models.GenericWrapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaCatalog.Api.Controllers
@@ -21,7 +23,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Get()
         {
             List<RoleDetailDTO> roles = _roleService.GetRoles();
-            return Ok(new { roles });
+            return Ok(new ApiResponse<List<RoleDetailDTO>> { Result = roles });
         }
 
         [HttpGet("by-name/{name}")]
@@ -29,7 +31,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult GetByName(string name)
         {
             RoleDetailDTO role = _roleService.GetRole(name);
-            return Ok(new { role });
+            return Ok(new ApiResponse<RoleDetailDTO> { Result = role });
         }
 
         [HttpPost]
@@ -37,7 +39,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Create([FromBody] RoleCreateDTO newRole)
         {
             RoleDetailDTO role = _roleService.AddRole(newRole);
-            return Ok(new { role });
+            return Ok(new ApiResponse<RoleDetailDTO> { Result = role });
         }
 
         [HttpDelete("by-name/{name}")]
@@ -45,7 +47,8 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult DeleteByName(string name)
         {
             _roleService.DeleteRole(name);
-            return Ok(new { Message = "Role deleted successfully." });
+            string Message = "Role deleted successfully.";
+            return Ok(new ApiResponse<string> { Result = Message });
         }
 
         [HttpDelete("{id:int}")]
@@ -53,7 +56,8 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Delete(int id)
         {
             _roleService.DeleteRoleById(id);
-            return Ok(new { Message = "Role deleted successfully." });
+            string Message = "Role deleted successfully.";
+            return Ok(new ApiResponse<string> { Result = Message });
         }
     }
 }
