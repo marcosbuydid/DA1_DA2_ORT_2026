@@ -105,6 +105,23 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
+        public void AddMovie_WhenCalledWithAInvalidReleaseDate_ThenThrowsException()
+        {
+            //arrange
+            MovieCreateDTO movieDTO = new MovieCreateDTO("Gladiator 2",
+                "Ridley Scott", new DateTime(2038, 11, 15));
+
+            _movieRepositoryMock.Setup(r => r.GetMovies()).Returns(new List<Movie>());
+
+            //act
+            Action action = () => _movieService.AddMovie(movieDTO);
+
+            //assert
+            Assert.ThrowsException<ServiceException>(action);
+            _movieRepositoryMock.Verify(r => r.AddMovie(It.IsAny<Movie>()), Times.Never);
+        }
+
+        [TestMethod]
         public void GetMovies_WhenCalled_ThenMoviesAreReturned()
         {
             //arrange
