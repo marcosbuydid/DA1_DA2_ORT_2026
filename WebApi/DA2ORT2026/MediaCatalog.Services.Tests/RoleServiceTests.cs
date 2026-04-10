@@ -75,7 +75,7 @@ namespace MediaCatalog.Services.Tests
 
             //assert
             Assert.ThrowsException<DomainException>(action);
-            //verify that no existence check was performed (as per your expectation)
+
             _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Role, bool>>()), Times.Never);
         }
 
@@ -158,7 +158,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void DeleteRole_WhenCalledWithInvalidId_ThenThrowsException()
+        public void DeleteRoleById_WhenCalledWithInvalidId_ThenThrowsException()
         {
             //arrange
             _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns((Role)null);
@@ -190,7 +190,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void DeleteRole_WhenCalledWithValidId_ThenRoleIsDeleted()
+        public void DeleteRoleById_WhenCalledWithValidId_ThenRoleIsDeleted()
         {
             //arrange
             Role role = new Role { Id = 1, Name = "User" };

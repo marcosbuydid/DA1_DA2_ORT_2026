@@ -19,7 +19,10 @@ namespace MediaCatalog.Services
         public MovieDetailDTO AddMovie(MovieCreateDTO movie)
         {
             ValidateUniqueTitle(movie.Title);
+            ValidateReleaseDate(movie.ReleaseDate);
+
             _movieRepository.AddMovie(ToEntity(movie));
+
             return new MovieDetailDTO()
             {
                 Title = movie.Title,
@@ -30,7 +33,14 @@ namespace MediaCatalog.Services
 
         public void DeleteMovie(string title)
         {
-            Movie? movieToDelete = _movieRepository.GetMovie(m => m.Title == title);
+            if (String.IsNullOrWhiteSpace(title))
+            {
+                throw new ServiceException("Title cannot be null or empty");
+            }
+
+            Movie? movieToDelete = _movieRepository.GetMovie(m => m.Title.Equals(title, 
+                StringComparison.OrdinalIgnoreCase));
+
             if (movieToDelete == null)
             {
                 throw new ResourceNotFoundException("Cannot find a movie with this title");
@@ -52,7 +62,14 @@ namespace MediaCatalog.Services
 
         public MovieDetailDTO GetMovie(string title)
         {
-            Movie? movie = _movieRepository.GetMovie(m => m.Title == title);
+            if (String.IsNullOrWhiteSpace(title))
+            {
+                throw new ServiceException("Title cannot be null or empty");
+            }
+
+            Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title, 
+                StringComparison.OrdinalIgnoreCase));
+
             if (movie == null)
             {
                 throw new ResourceNotFoundException("Cannot find a movie with this title");
@@ -75,11 +92,20 @@ namespace MediaCatalog.Services
 
         public MovieDetailDTO UpdateMovie(string? title, MovieUpdateDTO movieToUpdate)
         {
-            Movie? movie = _movieRepository.GetMovie(m => m.Title == title);
+            if (String.IsNullOrWhiteSpace(title))
+            {
+                throw new ServiceException("Title cannot be null or empty");
+            }
+
+            Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title,
+                StringComparison.OrdinalIgnoreCase));
+
             if (movie == null)
             {
                 throw new ResourceNotFoundException("Cannot find the specified movie");
             }
+
+            ValidateReleaseDate(movieToUpdate.ReleaseDate);
 
             movie.Director = movieToUpdate.Director;
             movie.ReleaseDate = movieToUpdate.ReleaseDate;
@@ -92,10 +118,13 @@ namespace MediaCatalog.Services
         public MovieDetailDTO UpdateMovieById(int? movieId, MovieUpdateDTO movieToUpdate)
         {
             Movie? movie = _movieRepository.GetMovie(m => m.Id == movieId);
+
             if (movie == null)
             {
                 throw new ResourceNotFoundException("Cannot find the specified movie with this id");
             }
+
+            ValidateReleaseDate(movieToUpdate.ReleaseDate);
 
             movie.Director = movieToUpdate.Director;
             movie.ReleaseDate = movieToUpdate.ReleaseDate;
@@ -106,14 +135,28 @@ namespace MediaCatalog.Services
 
         private void ValidateUniqueTitle(string title)
         {
-            string inputTitle = title.Trim().ToLowerInvariant();
-            foreach (var movie in _movieRepository.GetMovies())
+            if (String.IsNullOrWhiteSpace(title))
             {
-                string retrievedTitle = movie.Title.Trim().ToLowerInvariant();
-                if (retrievedTitle == inputTitle)
-                {
-                    throw new ConflictException("There`s a movie already defined with that title");
-                }
+                throw new ServiceException("Title cannot be null or empty");
+            }
+
+            string inputTitle = title.Trim().ToLowerInvariant();
+
+            //hash set for faster lookups if repository has many items
+            HashSet<string> movieTitles = new HashSet<string>(_movieRepository.GetMovies()
+                .Select(m => m.Title.ToLowerInvariant()));
+
+            if (movieTitles.Contains(inputTitle))
+            {
+                throw new ConflictException("There’s a movie already defined with that title");
+            }
+        }
+
+        private void ValidateReleaseDate(DateTime releaseDate)
+        {
+            if ((releaseDate == DateTime.MinValue) || (releaseDate > DateTime.Now))
+            {
+                throw new ServiceException("Invalid release date");
             }
         }
 

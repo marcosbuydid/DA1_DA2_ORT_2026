@@ -11,6 +11,7 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         public InMemoryMovieRepository()
         {
             Movies = new List<Movie>();
+            LoadDefaultMovies();
         }
 
         public Movie? GetMovie(Func<Movie, bool> filter)
@@ -44,6 +45,11 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         public bool Exists(Func<Movie, bool> predicate)
         {
             return Movies.Where(predicate).Any();
+        }
+
+        private void LoadDefaultMovies()
+        {
+            Movies.Add(new Movie(1, "Cast Away", "Robert Zemeckis", new DateTime(2000, 12, 22), 25000000));
         }
     }
 }

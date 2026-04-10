@@ -25,7 +25,14 @@ namespace MediaCatalog.Services
 
         public void DeleteRole(string name)
         {
-            Role? roleToDelete = _roleRepository.GetRole(r => r.Name == name);
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                throw new ServiceException("Name cannot be null or empty");
+            }
+
+            Role? roleToDelete = _roleRepository.GetRole(r => r.Name.Equals(name,
+                StringComparison.OrdinalIgnoreCase));
+
             if (roleToDelete == null)
             {
                 throw new ResourceNotFoundException("Cannot find a role with this name");
@@ -39,7 +46,7 @@ namespace MediaCatalog.Services
             Role? roleToDelete = _roleRepository.GetRole(r => r.Id == roleId);
             if (roleToDelete == null)
             {
-                throw new ResourceNotFoundException("Cannot find a role with this name");
+                throw new ResourceNotFoundException("Cannot find a role with this id");
             }
 
             _roleRepository.DeleteRole(roleToDelete);
@@ -47,7 +54,14 @@ namespace MediaCatalog.Services
 
         public RoleDetailDTO GetRole(string name)
         {
-            Role? role = _roleRepository.GetRole(role => role.Name == name);
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                throw new ServiceException("Name cannot be null or empty");
+            }
+
+            Role? role = _roleRepository.GetRole(r => r.Name.Equals(name,
+                StringComparison.OrdinalIgnoreCase));
+
             if (role == null)
             {
                 throw new ResourceNotFoundException("Cannot find a role with this name");
@@ -70,14 +84,20 @@ namespace MediaCatalog.Services
 
         private void ValidateUniqueName(string name)
         {
-            string inputName = name.Trim().ToLowerInvariant();
-            foreach (var role in _roleRepository.GetRoles())
+            if (String.IsNullOrWhiteSpace(name))
             {
-                string retrievedName = role.Name.Trim().ToLowerInvariant();
-                if (retrievedName == inputName)
-                {
-                    throw new ConflictException("There`s a role already defined with that name");
-                }
+                throw new ServiceException("Name cannot be null or empty");
+            }
+
+            string inputName = name.Trim().ToLowerInvariant();
+
+            //hash set for faster lookups if repository has many items
+            HashSet<string> roleNames = new HashSet<string>(_roleRepository.GetRoles()
+                .Select(r => r.Name.ToLowerInvariant()));
+
+            if (roleNames.Contains(inputName))
+            {
+                throw new ConflictException("There’s a role already defined with that name");
             }
         }
 
@@ -88,7 +108,7 @@ namespace MediaCatalog.Services
 
         private static RoleDetailDTO FromEntity(Role role)
         {
-            return new RoleDetailDTO(role.Id,role.Name);
+            return new RoleDetailDTO(role.Id, role.Name);
         }
     }
 }

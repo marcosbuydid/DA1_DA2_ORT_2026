@@ -161,7 +161,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void DeleteMovie_WhenCalledWithInvalidId_ThenThrowsException()
+        public void DeleteMovieById_WhenCalledWithInvalidId_ThenThrowsException()
         {
             //arrange
             _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns((Movie)null);
@@ -175,7 +175,7 @@ namespace MediaCatalog.Services.Tests
             _movieRepositoryMock.Verify(r => r.DeleteMovie(It.IsAny<Movie>()), Times.Never);
         }
 
-        public void DeleteMovie_WhenCalledWithValidId_ThenMovieIsDeleted()
+        public void DeleteMovieById_WhenCalledWithValidId_ThenMovieIsDeleted()
         {
             //arrange
             Movie movie = new Movie(2, "Sing Sing", "Greg Kwedar", new DateTime(2024, 07, 12), 2000000);
@@ -265,7 +265,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void UpdateMovie_WhenCalledWithNotValidId_ThenThrowsException()
+        public void UpdateMovieById_WhenCalledWithNotValidId_ThenThrowsException()
         {
             //arrange
             MovieUpdateDTO movieDTO = new MovieUpdateDTO("aDirector", new DateTime(2020, 01, 11));
@@ -277,6 +277,42 @@ namespace MediaCatalog.Services.Tests
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(action);
+
+            _movieRepositoryMock.Verify(r => r.UpdateMovie(It.IsAny<Movie>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void UpdateMovie_WhenCalledWithNotValidReleaseDate_ThenThrowsException()
+        {
+            //arrange
+            Movie existingMovie = new Movie(92, "Title", "Director", new DateTime(2020, 01, 11), 2000000);
+            MovieUpdateDTO movieDTO = new MovieUpdateDTO("aDirector", new DateTime(2028, 01, 11));
+
+            _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns(existingMovie);
+
+            //act
+            Action action = () => _movieService.UpdateMovie("aTitle", movieDTO);
+
+            //assert
+            Assert.ThrowsException<ServiceException>(action);
+
+            _movieRepositoryMock.Verify(r => r.UpdateMovie(It.IsAny<Movie>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void UpdateMovieById_WhenCalledWithNotValidReleaseDate_ThenThrowsException()
+        {
+            //arrange
+            Movie existingMovie = new Movie(92, "Title", "Director", new DateTime(2020, 01, 11), 2000000);
+            MovieUpdateDTO movieDTO = new MovieUpdateDTO("aDirector", new DateTime(2028, 01, 11));
+
+            _movieRepositoryMock.Setup(r => r.GetMovie(It.IsAny<Func<Movie, bool>>())).Returns(existingMovie);
+
+            //act
+            Action action = () => _movieService.UpdateMovieById(92, movieDTO);
+
+            //assert
+            Assert.ThrowsException<ServiceException>(action);
 
             _movieRepositoryMock.Verify(r => r.UpdateMovie(It.IsAny<Movie>()), Times.Never);
         }
