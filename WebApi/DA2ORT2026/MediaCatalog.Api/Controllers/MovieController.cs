@@ -1,6 +1,7 @@
 ﻿using MediaCatalog.Api.Filters;
 using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
+using MediaCatalog.Services.Models.GenericWrapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaCatalog.Api.Controllers
@@ -21,7 +22,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Get()
         {
             List<MovieDetailDTO> movies = _movieService.GetMovies();
-            return Ok(new { movies });
+            return Ok(new ApiResponse<List<MovieDetailDTO>> { Result = movies });
         }
 
         [HttpGet("by-title/{title}")]
@@ -29,7 +30,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult GetByTitle(string title)
         {
             MovieDetailDTO movie = _movieService.GetMovie(title);
-            return Ok(new { movie });
+            return Ok(new ApiResponse<MovieDetailDTO> { Result = movie });
         }
 
         [HttpPost]
@@ -37,7 +38,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Create([FromBody] MovieCreateDTO newMovie)
         {
             MovieDetailDTO movie = _movieService.AddMovie(newMovie);
-            return Ok(new { movie });
+            return Ok(new ApiResponse<MovieDetailDTO> { Result = movie });
         }
 
         [HttpPut("{movieId}")]
@@ -45,7 +46,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Update(int movieId, [FromBody] MovieUpdateDTO movieToUpdate)
         {
             MovieDetailDTO movie = _movieService.UpdateMovieById(movieId, movieToUpdate);
-            return Ok(new { movie });
+            return Ok(new ApiResponse<MovieDetailDTO> { Result = movie });
         }
 
         [HttpPut("by-title/{title}")]
@@ -53,7 +54,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult UpdateByTitle(string title, [FromBody] MovieUpdateDTO movieToUpdate)
         {
             MovieDetailDTO movie = _movieService.UpdateMovie(title, movieToUpdate);
-            return Ok(new { movie });
+            return Ok(new ApiResponse<MovieDetailDTO> { Result = movie });
         }
 
         [HttpDelete("by-title/{title}")]
@@ -61,7 +62,8 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult DeleteByTitle(string title)
         {
             _movieService.DeleteMovie(title);
-            return Ok(new { Message = "Movie deleted successfully." });
+            string Message = "Movie deleted successfully.";
+            return Ok(new ApiResponse<string> { Result = Message });
         }
 
         [HttpDelete("{movieId:int}")]
@@ -69,7 +71,9 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Delete(int movieId)
         {
             _movieService.DeleteMovieById(movieId);
-            return Ok(new { Message = "Movie deleted successfully." });
+            string Message = "Movie deleted successfully.";
+            return Ok(new ApiResponse<string> { Result = Message });
+
         }
     }
 }

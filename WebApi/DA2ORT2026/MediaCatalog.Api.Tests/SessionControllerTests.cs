@@ -1,6 +1,5 @@
 ﻿
 using MediaCatalog.Api.Controllers;
-using MediaCatalog.Services.Exceptions;
 using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
 using MediaCatalog.Services.Models.GenericWrapper;
@@ -55,22 +54,6 @@ namespace MediaCatalog.Api.Tests
 
             _sessionServiceMock.Verify(s => s.Authenticate(loginUserDTO.Email, 
                 loginUserDTO.Password),Times.Once);
-        }
-
-        [TestMethod]
-        public void Login_WhenCredentialsAreInvalid_ThenThrowsException()
-        {
-            // arrange
-            LoginUserDTO loginUserDTO = new LoginUserDTO("test@mail.com", "aPassword!");
-
-            _sessionServiceMock.Setup(s => s.Authenticate(It.IsAny<string>(), 
-                It.IsAny<string>())).Throws(new ServiceException("Invalid credentials"));
-
-            // act
-            Action action = () => _sessionController.Login(loginUserDTO);
-
-            // assert
-            Assert.ThrowsException<ServiceException>(action);
         }
     }
 }

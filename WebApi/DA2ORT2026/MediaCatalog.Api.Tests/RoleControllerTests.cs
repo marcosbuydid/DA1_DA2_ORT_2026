@@ -13,12 +13,23 @@ namespace MediaCatalog.Api.Tests
     {
         private Mock<IRoleService> _roleServiceMock;
         private RoleController _roleController;
+        List<RoleDetailDTO> roles;
+        RoleCreateDTO role;
+        RoleDetailDTO expectedRole;
 
         [TestInitialize]
         public void Setup()
         {
             _roleServiceMock = new Mock<IRoleService>(MockBehavior.Strict);
             _roleController = new RoleController(_roleServiceMock.Object);
+
+            roles = new List<RoleDetailDTO>()
+            { new RoleDetailDTO() { Name = "Administrator" },
+              new RoleDetailDTO() { Name = "User" }
+            };
+
+            role = new RoleCreateDTO("Administrator");
+            expectedRole = new RoleDetailDTO() { Name = "Administrator" };
         }
 
         [TestCleanup]
@@ -31,10 +42,6 @@ namespace MediaCatalog.Api.Tests
         public void Get_WhenCalled_ThenRolesAreReturned()
         {
             //arrange
-            List<RoleDetailDTO> roles = new List<RoleDetailDTO>()
-            { new RoleDetailDTO() { Name = "Administrator" },
-              new RoleDetailDTO() { Name = "User" }};
-
             _roleServiceMock.Setup(rs => rs.GetRoles()).Returns(roles);
 
             //act
@@ -64,14 +71,12 @@ namespace MediaCatalog.Api.Tests
         public void GetByName_WhenCalled_ThenRoleIsReturned()
         {
             //arrange
-            RoleDetailDTO expectedRole = new RoleDetailDTO() { Name = "Administrator" };
-
             _roleServiceMock.Setup(rs => rs.GetRole("Administrator")).Returns(expectedRole);
 
             //act
             IActionResult? result = _roleController.GetByName("Administrator");
 
-            // assert
+            //assert
             Assert.IsNotNull(result);
 
             var okResult = result as OkObjectResult;
@@ -92,18 +97,14 @@ namespace MediaCatalog.Api.Tests
         [TestMethod]
         public void Create_WhenCalled_ThenRoleIsCreated()
         {
-            // arrange
-            RoleCreateDTO role = new RoleCreateDTO("User");
-            RoleDetailDTO expectedRole = new RoleDetailDTO(1, "User");
-
-            _roleServiceMock
-                .Setup(rs => rs.AddRole(It.IsAny<RoleCreateDTO>()))
+            //arrange
+            _roleServiceMock.Setup(rs => rs.AddRole(It.IsAny<RoleCreateDTO>()))
                 .Returns(expectedRole);
 
-            // act
+            //act
             IActionResult? result = _roleController.Create(role);
 
-            // assert
+            //assert
             Assert.IsNotNull(result);
 
             var okResult = result as OkObjectResult;
@@ -116,7 +117,7 @@ namespace MediaCatalog.Api.Tests
             var createdRole = response.Result;
             Assert.IsNotNull(createdRole);
 
-            Assert.AreEqual("User", createdRole.Name);
+            Assert.AreEqual("Administrator", createdRole.Name);
 
             _roleServiceMock.Verify(rs => rs.AddRole(It.IsAny<RoleCreateDTO>()), Times.Once);
         }
@@ -146,7 +147,7 @@ namespace MediaCatalog.Api.Tests
 
             Assert.AreEqual("Role deleted successfully.", message);
 
-            // verify service call
+            //verify service call
             _roleServiceMock.Verify(rs => rs.DeleteRoleById(roleId), Times.Once);
         }
 
@@ -154,7 +155,6 @@ namespace MediaCatalog.Api.Tests
         public void DeleteByName_WhenCalled_ThenRoleIsDeleted()
         {
             //arrange
-            RoleCreateDTO role = new RoleCreateDTO("User");
             _roleServiceMock.Setup(rs => rs.DeleteRole(role.Name));
 
             //act
@@ -175,7 +175,7 @@ namespace MediaCatalog.Api.Tests
 
             Assert.AreEqual("Role deleted successfully.", message);
 
-            // verify service call
+            //verify service call
             _roleServiceMock.Verify(rs => rs.DeleteRole(role.Name), Times.Once);
         }
     }
