@@ -28,7 +28,7 @@ namespace MediaCatalog.Api.Tests
         }
 
         [TestMethod]
-        public void Get_WhenCalledThenRolesAreReturned()
+        public void Get_WhenCalled_ThenRolesAreReturned()
         {
             //arrange
             List<RoleDetailDTO> roles = new List<RoleDetailDTO>()
@@ -61,7 +61,7 @@ namespace MediaCatalog.Api.Tests
         }
 
         [TestMethod]
-        public void GetByName_WhenCalledThenRoleIsReturned()
+        public void GetByName_WhenCalled_ThenRoleIsReturned()
         {
             //arrange
             RoleDetailDTO expectedRole = new RoleDetailDTO() { Name = "Administrator" };
@@ -90,7 +90,7 @@ namespace MediaCatalog.Api.Tests
         }
 
         [TestMethod]
-        public void Create_WhenCalledThenRoleIsCreated()
+        public void Create_WhenCalled_ThenRoleIsCreated()
         {
             // arrange
             RoleCreateDTO role = new RoleCreateDTO("User");

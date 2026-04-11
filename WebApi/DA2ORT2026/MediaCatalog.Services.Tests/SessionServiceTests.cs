@@ -61,7 +61,7 @@ namespace MediaCatalog.Services.Tests
 
             _sessionRepositoryMock.Setup(r => r.AddSession(It.IsAny<Session>()));
 
-            _jwtServiceMock.Setup(t => t.GenerateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 
+            _jwtServiceMock.Setup(t => t.GenerateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
                 It.IsAny<int>())).Returns("fake-token");
 
             //act
@@ -105,9 +105,10 @@ namespace MediaCatalog.Services.Tests
             JsonElement payload = JsonDocument.Parse(tokenPayload).RootElement;
 
             //mock ITokenService.ValidateToken to return true and set out parameter
-            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),
-                It.IsAny<string>(),out It.Ref<JsonElement>.IsAny)).Returns(true).Callback((string t, string k, 
-                string expectedAudience, string expectedIssuer, out JsonElement p) =>{p = payload;});
+            _jwtServiceMock.Setup(s => s.ValidateToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), out It.Ref<JsonElement>.IsAny)).Returns(true).Callback((string t, string k,
+                string expectedAudience, string expectedIssuer, out JsonElement p) =>
+                { p = payload; });
 
             //act
             SessionDTO? sessionDTO = _sessionService.ValidateSession(token);

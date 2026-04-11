@@ -38,7 +38,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void AddUser_WhenCalledWithInvalidUserThenThrowsException()
+        public void AddUser_WhenCalledWithInvalidUser_ThenThrowsException()
         {
             //arrange
             Role role = new Role() { Id = 1 };
@@ -123,7 +123,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void GetUser_WhenCalledThenUserIsReturned()
+        public void GetUser_WhenCalled_ThenUserIsReturned()
         {
             //arrange
             Role role = new Role { Id = 1 };
@@ -145,7 +145,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void GetUser_WhenCalledWithNonRegisteredUserThenThrowsException()
+        public void GetUser_WhenCalledWithNonRegisteredUser_ThenThrowsException()
         {
             //arrange
             Role role = new Role { Id = 1 };

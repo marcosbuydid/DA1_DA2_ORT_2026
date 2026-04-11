@@ -28,7 +28,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void GetRole_WhenCalledThenRoleIsReturned()
+        public void GetRole_WhenCalled_ThenRoleIsReturned()
         {
             //arrange
             Role role = new Role { Id = 1, Name = "User" };
@@ -45,7 +45,7 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void GetRole_WhenCalledWithUnregisteredRoleThenThrowsException()
+        public void GetRole_WhenCalledWithUnregisteredRole_ThenThrowsException()
         {
             //arrange
             Role role = new Role { Id = 1, Name = "User" };
@@ -63,10 +63,10 @@ namespace MediaCatalog.Services.Tests
         }
 
         [TestMethod]
-        public void AddRole_WhenCalledWithANotAllowedNameThenThrowsException()
+        public void AddRole_WhenCalledWithANotAllowedName_ThenThrowsException()
         {
             //arrange
-            RoleCreateDTO roleDTO = new RoleCreateDTO {Name = "Owner" };
+            RoleCreateDTO roleDTO = new RoleCreateDTO { Name = "Owner" };
 
             _roleRepositoryMock.Setup(r => r.GetRoles()).Returns(new List<Role>());
 
