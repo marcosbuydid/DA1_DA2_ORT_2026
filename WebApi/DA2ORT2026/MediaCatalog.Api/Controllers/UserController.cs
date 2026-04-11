@@ -1,6 +1,7 @@
 ﻿using MediaCatalog.Api.Filters;
 using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
+using MediaCatalog.Services.Models.GenericWrapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaCatalog.Api.Controllers
@@ -21,7 +22,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Get()
         {
             List<UserDetailDTO> users = _userService.GetUsers();
-            return Ok(new { users });
+            return Ok(new ApiResponse<List<UserDetailDTO>> { Result = users });
         }
 
         [HttpGet("by-email/{email}")]
@@ -29,7 +30,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult GetByEmail(string email)
         {
             UserDetailDTO user = _userService.GetUser(email);
-            return Ok(new { user });
+            return Ok(new ApiResponse<UserDetailDTO> { Result = user });
         }
 
         [HttpPost]
@@ -37,7 +38,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Create([FromBody] UserCreateDTO newUser)
         {
             UserDetailDTO user = _userService.AddUser(newUser);
-            return Ok(new { user });
+            return Ok(new ApiResponse<UserDetailDTO> { Result = user });
         }
 
         [HttpPut("{userId}")]
@@ -45,7 +46,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Update(int userId, [FromBody] UserUpdateDTO userToUpdate)
         {
             UserDetailDTO user = _userService.UpdateUserById(userId, userToUpdate);
-            return Ok(new { user });
+            return Ok(new ApiResponse<UserDetailDTO> { Result = user });
         }
 
         [HttpPut("by-email/{email}")]
@@ -53,7 +54,7 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult UpdateByEmail(string email, [FromBody] UserUpdateDTO userToUpdate)
         {
             UserDetailDTO user = _userService.UpdateUser(email, userToUpdate);
-            return Ok(new { user });
+            return Ok(new ApiResponse<UserDetailDTO> { Result = user });
         }
 
         [HttpDelete("by-email/{email}")]
@@ -61,7 +62,8 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult DeleteByEmail(string email)
         {
             _userService.DeleteUser(email);
-            return Ok(new { Message = "User deleted successfully." });
+            string Message = "User deleted successfully.";
+            return Ok(new ApiResponse<string> { Result = Message });
         }
 
         [HttpDelete("{userId:int}")]
@@ -69,7 +71,8 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult Delete(int userId)
         {
             _userService.DeleteUserById(userId);
-            return Ok(new { Message = "User deleted successfully." });
+            string Message = "User deleted successfully.";
+            return Ok(new ApiResponse<string> { Result = Message });
         }
 
         [HttpPut("by-email/{email}/password")]
@@ -77,7 +80,8 @@ namespace MediaCatalog.Api.Controllers
         public IActionResult ChangePassword(string email, [FromBody] ChangePasswordDTO changePasswordDTO)
         {
             _userService.ChangePassword(email, changePasswordDTO);
-            return Ok(new { Message = "Password updated successfully." });
+            string Message = "Password updated successfully.";
+            return Ok(new ApiResponse<string> { Result = Message });
         }
     }
 }

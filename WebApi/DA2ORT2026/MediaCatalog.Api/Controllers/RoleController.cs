@@ -1,5 +1,4 @@
 ﻿using MediaCatalog.Api.Filters;
-using MediaCatalog.Domain;
 using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
 using MediaCatalog.Services.Models.GenericWrapper;

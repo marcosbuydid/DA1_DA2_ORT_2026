@@ -38,7 +38,7 @@ namespace MediaCatalog.Services
 
             if (user != null)
             {
-                string token = _jwtService.GenerateToken(user.Name, user.Email, 
+                string token = _jwtService.GenerateToken(user.Name, user.Email,
                     _settings.SecretKey, _settings.TokenExpMinutes);
 
                 Session session = new Session() { Token = token, User = user };
@@ -52,8 +52,8 @@ namespace MediaCatalog.Services
 
         public SessionDTO? ValidateSession(string token)
         {
-            bool validSession = _jwtService.ValidateToken(token, _settings.SecretKey, 
-                _settings.Issuer, _settings.Audience ,out tokenPayload);
+            bool validSession = _jwtService.ValidateToken(token, _settings.SecretKey,
+                _settings.Issuer, _settings.Audience, out tokenPayload);
 
             if (!validSession)
             {
@@ -69,21 +69,20 @@ namespace MediaCatalog.Services
             string? userRoleName = tokenPayload.GetProperty("roleName").GetString();
 
             _loggedUser = new UserDetailDTO()
-                {
-                    Name = userName,
-                    LastName = userLastName,
-                    Email = userEmail,
-                    RoleId = (int)userRoleId
+            {
+                Name = userName,
+                LastName = userLastName,
+                Email = userEmail,
+                RoleId = (int)userRoleId
             };
 
-                //create the sessionDTO
-                _currentSession = new SessionDTO()
-                {
-                    Token = token,
-                    LoggedUser = _loggedUser,
-                    LoggedUserRoleName = userRoleName
-                };
-            //}
+            //create the sessionDTO
+            _currentSession = new SessionDTO()
+            {
+                Token = token,
+                LoggedUser = _loggedUser,
+                LoggedUserRoleName = userRoleName
+            };
 
             return _currentSession;
         }
