@@ -6,6 +6,7 @@ using MediaCatalog.Services.Exceptions;
 using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
 using Moq;
+using System.Linq.Expressions;
 
 
 namespace MediaCatalog.Services.Tests
@@ -57,8 +58,9 @@ namespace MediaCatalog.Services.Tests
 
             //assert
             Assert.ThrowsException<DomainException>(() => _userService.AddUser(newUserDTO));
+
             //verify that no existence check was performed (as per your expectation)
-            _userRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<User, bool>>()), Times.Never);
+            _userRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<User, bool>>>()), Times.Never);
         }
 
         [TestMethod]
@@ -159,7 +161,8 @@ namespace MediaCatalog.Services.Tests
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(() => _userService.GetUser(newUserDTO.Email));
-            _userRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<User, bool>>()), Times.Never);
+
+            _userRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<User, bool>>>()), Times.Never);
         }
 
         [TestMethod]

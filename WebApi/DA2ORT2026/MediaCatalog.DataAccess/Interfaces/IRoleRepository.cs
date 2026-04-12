@@ -1,4 +1,5 @@
 ﻿using MediaCatalog.Domain;
+using System.Linq.Expressions;
 
 namespace MediaCatalog.DataAccess.Interfaces
 {
@@ -8,6 +9,6 @@ namespace MediaCatalog.DataAccess.Interfaces
         Role? GetRole(Func<Role, bool> filter);
         void AddRole(Role role);
         void DeleteRole(Role role);
-        bool Exists(Func<Role, bool> predicate);
+        bool Exists(Expression<Func<Role, bool>> predicate);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MediaCatalog.DataAccess.Interfaces;
 using MediaCatalog.Domain;
 using System.Data;
+using System.Linq.Expressions;
 
 namespace MediaCatalog.DataAccess.InMemoryRepositories
 {
@@ -42,9 +43,9 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
             Users.Remove(user);
         }
 
-        public bool Exists(Func<User, bool> predicate)
+        public bool Exists(Expression<Func<User, bool>> predicate)
         {
-            return Users.Where(predicate).Any();
+            return Users.AsQueryable().Any(predicate);
         }
 
         private void LoadDefaultUsers()

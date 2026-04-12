@@ -1,7 +1,6 @@
 using MediaCatalog.Api.Filters;
 using MediaCatalog.Factory;
 using MediaCatalog.Services.Settings;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 

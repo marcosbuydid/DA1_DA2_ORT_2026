@@ -7,6 +7,5 @@ namespace MediaCatalog.DataAccess.Interfaces
     {
         void AddSession(Session session);
         Session? GetSession(Func<Session, bool> filter);
-        bool Exists(Func<Session, bool> predicate);
     }
 }

@@ -22,10 +22,5 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         {
             return Sessions.Where(filter).FirstOrDefault();
         }
-
-        public bool Exists(Func<Session, bool> predicate)
-        {
-            return Sessions.Where(predicate).Any();
-        }
     }
 }

@@ -5,6 +5,7 @@ using MediaCatalog.Domain.Exceptions;
 using MediaCatalog.Services.Exceptions;
 using MediaCatalog.Services.Models;
 using Moq;
+using System.Linq.Expressions;
 
 namespace MediaCatalog.Services.Tests
 {
@@ -59,7 +60,8 @@ namespace MediaCatalog.Services.Tests
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(() => _roleService.GetRole(roleDTO.Name));
-            _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Role, bool>>()), Times.Never);
+
+            _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<Role, bool>>>()),Times.Never);
         }
 
         [TestMethod]
@@ -76,7 +78,7 @@ namespace MediaCatalog.Services.Tests
             //assert
             Assert.ThrowsException<DomainException>(action);
 
-            _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Role, bool>>()), Times.Never);
+            _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<Role, bool>>>()), Times.Never);
         }
 
         [TestMethod]
@@ -93,9 +95,9 @@ namespace MediaCatalog.Services.Tests
             RoleDetailDTO roleAdded = _roleService.AddRole(roleDTO);
 
             //assert
-            _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Role, bool>>()), Times.Never);
-
             Assert.AreEqual(roleDTO.Name, roleAdded.Name);
+
+            _roleRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<Role, bool>>>()), Times.Never);
         }
 
         public void AddRole_WhenCalledWithANameAlreadyInUse_ThenThrowsException()

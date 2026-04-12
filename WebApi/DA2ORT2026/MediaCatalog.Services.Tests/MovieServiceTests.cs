@@ -3,6 +3,7 @@ using MediaCatalog.Domain;
 using MediaCatalog.Services.Exceptions;
 using MediaCatalog.Services.Models;
 using Moq;
+using System.Linq.Expressions;
 
 namespace MediaCatalog.Services.Tests
 {
@@ -59,7 +60,8 @@ namespace MediaCatalog.Services.Tests
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(() => _movieService.GetMovie(movieDTO.Title));
-            _movieRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Movie, bool>>()), Times.Never);
+
+            _movieRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<Movie, bool>>>()), Times.Never);   
         }
 
         [TestMethod]
@@ -76,11 +78,11 @@ namespace MediaCatalog.Services.Tests
             MovieDetailDTO movieAdded = _movieService.AddMovie(movieDTO);
 
             //assert
-            _movieRepositoryMock.Verify(r => r.Exists(It.IsAny<Func<Movie, bool>>()), Times.Never);
-
             Assert.AreEqual(movieDTO.Title, movieAdded.Title);
             Assert.AreEqual(movieDTO.Director, movieAdded.Director);
             Assert.AreEqual(movieDTO.ReleaseDate, movieAdded.ReleaseDate);
+
+            _movieRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<Movie, bool>>>()), Times.Never);
         }
 
         [TestMethod]

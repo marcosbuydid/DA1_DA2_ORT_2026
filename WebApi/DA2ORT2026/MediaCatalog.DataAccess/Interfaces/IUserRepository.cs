@@ -1,5 +1,6 @@
 ﻿
 using MediaCatalog.Domain;
+using System.Linq.Expressions;
 
 namespace MediaCatalog.DataAccess.Interfaces
 {
@@ -10,6 +11,6 @@ namespace MediaCatalog.DataAccess.Interfaces
         void AddUser(User user);
         void UpdateUser(User user);
         void DeleteUser(User user);
-        bool Exists(Func<User, bool> predicate);
+        bool Exists(Expression<Func<User, bool>> predicate);
     }
 }
