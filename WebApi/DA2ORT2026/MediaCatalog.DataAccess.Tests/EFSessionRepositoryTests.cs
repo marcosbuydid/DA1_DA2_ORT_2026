@@ -62,7 +62,7 @@ namespace MediaCatalog.DataAccess.Tests
             Session expectedSession = _appDbContext.Sessions.First();
 
             //act
-            Session? retrievedSession = _sessionRepository.GetSession(r => r.Token == expectedSession.Token);
+            Session? retrievedSession = _sessionRepository.GetSession(s => s.Token == expectedSession.Token);
 
             //assert
             Assert.AreEqual(expectedSession, retrievedSession);
@@ -78,7 +78,7 @@ namespace MediaCatalog.DataAccess.Tests
             _sessionRepository.AddSession(newSession);
 
             //assert
-            Session? retrievedSession = _sessionRepository.GetSession(r => r.Token == newSession.Token);
+            Session? retrievedSession = _sessionRepository.GetSession(s => s.Token == newSession.Token);
             Assert.IsNotNull(retrievedSession);
             Assert.AreEqual(newSession, retrievedSession);
         }
