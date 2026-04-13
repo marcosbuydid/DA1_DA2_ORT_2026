@@ -14,6 +14,8 @@ namespace MediaCatalog.DataAccess.Tests
         private IRoleRepository _roleRepository;
         private AppDbContext _appDbContext;
         private SqliteConnection _connection;
+        private Role _role;
+        private List<Role> _roles;
 
         [TestInitialize]
         public void Setup()
@@ -30,10 +32,10 @@ namespace MediaCatalog.DataAccess.Tests
 
             _roleRepository = new EFRoleRepository(_appDbContext);
 
-            Role role1 = new Role(1, "Administrator");
-            List<Role> roles = new List<Role> { role1 };
+           _role = new Role(1, "Administrator");
+           _roles = new List<Role> { _role };
 
-            _appDbContext.Roles.AddRange(roles);
+            _appDbContext.Roles.AddRange(_roles);
             _appDbContext.SaveChanges();
         }
 

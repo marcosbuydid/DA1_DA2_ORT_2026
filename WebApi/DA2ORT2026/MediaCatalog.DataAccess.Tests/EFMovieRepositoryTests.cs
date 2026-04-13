@@ -13,6 +13,8 @@ namespace MediaCatalog.DataAccess.Tests
         private IMovieRepository _movieRepository;
         private AppDbContext _appDbContext;
         private SqliteConnection _connection;
+        private Movie _movie;
+        private List<Movie> _movies;
 
         [TestInitialize]
         public void Setup()
@@ -29,10 +31,10 @@ namespace MediaCatalog.DataAccess.Tests
 
             _movieRepository = new EFMovieRepository(_appDbContext);
 
-            Movie movie = new Movie(1, "aTitle", "aDirector", new DateTime(2000, 12, 12), 30000000);
-            List<Movie> movies = new List<Movie> { movie };
+            _movie = new Movie(1, "aTitle", "aDirector", new DateTime(2000, 12, 12), 30000000);
+            _movies = new List<Movie> { _movie };
 
-            _appDbContext.Movies.AddRange(movies);
+            _appDbContext.Movies.AddRange(_movies);
             _appDbContext.SaveChanges();
         }
 

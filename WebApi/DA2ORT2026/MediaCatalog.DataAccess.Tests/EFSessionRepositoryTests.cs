@@ -40,12 +40,9 @@ namespace MediaCatalog.DataAccess.Tests
             List<Session> sessions = new List<Session> { session };
 
             _appDbContext.Roles.AddRange(roles);
-            _appDbContext.SaveChanges();
-
             _appDbContext.Users.AddRange(users);
-            _appDbContext.SaveChanges();
-
             _appDbContext.Sessions.AddRange(sessions);
+
             _appDbContext.SaveChanges();
         }
 
