@@ -1,7 +1,7 @@
 ﻿using MediaCatalog.Domain;
 using System.Linq.Expressions;
 
-namespace MediaCatalog.DataAccess.Interfaces
+namespace MediaCatalog.Services.Interfaces.Repositories
 {
     public interface IRoleRepository
     {

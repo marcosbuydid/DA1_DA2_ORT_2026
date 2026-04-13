@@ -1,6 +1,5 @@
-﻿
-using MediaCatalog.DataAccess.Interfaces;
-using MediaCatalog.Domain;
+﻿using MediaCatalog.Domain;
+using MediaCatalog.Services.Interfaces.Repositories;
 
 namespace MediaCatalog.DataAccess.InMemoryRepositories
 {

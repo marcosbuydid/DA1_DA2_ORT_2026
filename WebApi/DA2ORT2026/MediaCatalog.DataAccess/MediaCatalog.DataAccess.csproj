@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MediaCatalog.Domain\MediaCatalog.Domain.csproj" />
+    <ProjectReference Include="..\MediaCatalog.Services\MediaCatalog.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,6 @@
-﻿
-using MediaCatalog.DataAccess.Interfaces;
-using MediaCatalog.Domain;
+﻿using MediaCatalog.Domain;
 using MediaCatalog.Services.Interfaces;
+using MediaCatalog.Services.Interfaces.Repositories;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
