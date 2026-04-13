@@ -30,7 +30,7 @@ namespace MediaCatalog.DataAccess.Tests
 
             _roleRepository = new EFRoleRepository(_appDbContext);
 
-            Role role1 = new Role { Id = 1, Name = "Administrator" };
+            Role role1 = new Role(1, "Administrator");
             List<Role> roles = new List<Role> { role1 };
 
             _appDbContext.Roles.AddRange(roles);
@@ -57,7 +57,7 @@ namespace MediaCatalog.DataAccess.Tests
         }
 
         [TestMethod]
-        public void GetRole_WhenCaled_ThenRoleIsReturned()
+        public void GetRole_WhenCalled_ThenRoleIsReturned()
         {
             //arrange
             Role expectedRole = _appDbContext.Roles.First();
@@ -73,7 +73,7 @@ namespace MediaCatalog.DataAccess.Tests
         public void AddRole_WhenCalled_ThenRoleIsAdded()
         {
             //arrange
-            Role newRole = new Role { Id = 2, Name = "User" };
+            Role newRole = new Role(2, "User");
 
             //act
             _roleRepository.AddRole(newRole);
