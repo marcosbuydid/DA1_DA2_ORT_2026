@@ -213,7 +213,6 @@ namespace MediaCatalog.Services
 
         private static User ToEntity(UserCreateDTO userDTO)
         {
-            //Role role = new Role() { Id = userDTO.RoleId };
             return new User()
             {
                 Name = userDTO.Name,

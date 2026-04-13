@@ -1,6 +1,7 @@
 ﻿
 using MediaCatalog.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite.Infrastructure.Internal;
 
 namespace MediaCatalog.DataAccess
 {
@@ -11,6 +12,12 @@ namespace MediaCatalog.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<Session> Sessions { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
+        {
+            if (!options.Extensions.OfType<SqliteOptionsExtension>().Any())
+            {
+                Database.Migrate();
+            }
+        }
     }
 }

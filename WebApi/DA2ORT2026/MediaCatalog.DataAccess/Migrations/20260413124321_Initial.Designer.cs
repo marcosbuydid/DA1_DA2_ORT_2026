@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediaCatalog.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260413001615_Initial")]
+    [Migration("20260413124321_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

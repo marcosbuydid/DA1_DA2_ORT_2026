@@ -2,6 +2,7 @@
   <Project Path="MediaCatalog.Api.Tests/MediaCatalog.Api.Tests.csproj" Id="80fb15b6-91d8-4f09-9d5f-d1e2c4f8167a" />
   <Project Path="MediaCatalog.Api/MediaCatalog.Api.csproj" />
   <Project Path="MediaCatalog.Common/MediaCatalog.Common.csproj" Id="b9d48f38-3e35-4225-8971-181a21e6e620" />
+  <Project Path="MediaCatalog.DataAccess.Tests/MediaCatalog.DataAccess.Tests.csproj" Id="da585223-7e1c-4f46-b256-019462c088ca" />
   <Project Path="MediaCatalog.DataAccess/MediaCatalog.DataAccess.csproj" Id="9535a761-317b-48fd-9cf4-6b54d96819a3" />
   <Project Path="MediaCatalog.Domain.Tests/MediaCatalog.Domain.Tests.csproj" Id="f1ce1c4f-59c4-42df-88c2-381e0aa85fc8" />
   <Project Path="MediaCatalog.Domain/MediaCatalog.Domain.csproj" Id="fe3aeec1-d0d7-49b3-a94f-bcb6affb3308" />
