@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MediaCatalog.DataAccess\MediaCatalog.DataAccess.csproj" />
     <ProjectReference Include="..\MediaCatalog.Domain\MediaCatalog.Domain.csproj" />
   </ItemGroup>
 

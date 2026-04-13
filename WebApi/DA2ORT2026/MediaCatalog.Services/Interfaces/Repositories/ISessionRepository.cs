@@ -1,7 +1,7 @@
 ﻿
 using MediaCatalog.Domain;
 
-namespace MediaCatalog.DataAccess.Interfaces
+namespace MediaCatalog.Services.Interfaces.Repositories
 {
     public interface ISessionRepository
     {

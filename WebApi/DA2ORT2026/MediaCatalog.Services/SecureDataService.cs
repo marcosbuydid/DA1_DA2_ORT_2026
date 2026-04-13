@@ -1,5 +1,4 @@
-﻿
-using MediaCatalog.Services.Interfaces;
+﻿using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Settings;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;

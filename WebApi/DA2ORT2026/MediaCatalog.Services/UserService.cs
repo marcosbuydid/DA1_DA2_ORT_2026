@@ -1,7 +1,7 @@
-﻿using MediaCatalog.DataAccess.Interfaces;
-using MediaCatalog.Domain;
+﻿using MediaCatalog.Domain;
 using MediaCatalog.Services.Exceptions;
 using MediaCatalog.Services.Interfaces;
+using MediaCatalog.Services.Interfaces.Repositories;
 using MediaCatalog.Services.Models;
 
 namespace MediaCatalog.Services
