@@ -11,15 +11,19 @@ namespace MediaCatalog.Services
     public class JWTService : ITokenService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
 
-        public JWTService(IUserRepository userRepository)
+        public JWTService(IUserRepository userRepository, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
         }
         public string GenerateToken(string name, string email, string secretKey, int tokenExpMinutes)
         {
             //user is validated previously on ValidateUserCredentials, no need to check if is null
             User? user = _userRepository.GetUsers().FirstOrDefault(u => u.Email == email);
+
+            Role? userRole = _roleRepository.GetRoles().FirstOrDefault(r => r.Id == user.RoleId);
 
             var header = new
             {
@@ -32,8 +36,8 @@ namespace MediaCatalog.Services
                 name = user.Name,
                 lastName = user.LastName,
                 email = user.Email,
-                roleId = user.Role.Id,
-                roleName = user.Role.Name,
+                roleId = user.RoleId,
+                roleName = userRole.Name,
                 iss = "MediaCatalogAPI", //token issuer
                 aud = "MediaCatalogWebApp", //who can consume the token
                 exp = DateTimeOffset.UtcNow.AddMinutes(tokenExpMinutes).ToUnixTimeSeconds()

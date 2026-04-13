@@ -23,12 +23,7 @@ namespace MediaCatalog.Services
         public UserDetailDTO AddUser(UserCreateDTO user)
         {
             ValidateUserEmail(user.Email);
-            Role? role = _roleRepository.GetRole(r => r.Id == user.RoleId);
-
-            if (role == null)
-            {
-                throw new ServiceException("Role is invalid");
-            }
+            Role role = GetUserRole(user.RoleId);
 
             user.Password = _secureDataService.Hash(user.Password);
             _userRepository.AddUser(ToEntity(user));
@@ -94,12 +89,7 @@ namespace MediaCatalog.Services
                 throw new ResourceNotFoundException("Cannot find the specified user with this id");
             }
 
-            Role? userToUpdateRole = _roleRepository.GetRole(r => r.Id == userToUpdate.RoleId);
-
-            if (userToUpdateRole == null)
-            {
-                throw new ServiceException("Role is invalid");
-            }
+            Role? userToUpdateRole = GetUserRole(userToUpdate.RoleId);
 
             user.Name = userToUpdate.Name;
             user.LastName = userToUpdate.LastName;
@@ -124,12 +114,7 @@ namespace MediaCatalog.Services
                 throw new ResourceNotFoundException("Cannot find the specified user");
             }
 
-            Role? userToUpdateRole = _roleRepository.GetRole(r => r.Id == userToUpdate.RoleId);
-
-            if (userToUpdateRole == null)
-            {
-                throw new ServiceException("Role is invalid");
-            }
+            Role? userToUpdateRole = GetUserRole(userToUpdate.RoleId);
 
             user.Name = userToUpdate.Name;
             user.LastName = userToUpdate.LastName;
@@ -214,16 +199,28 @@ namespace MediaCatalog.Services
             return hashesMatch ? user : null;
         }
 
+        private Role GetUserRole(int roleId)
+        {
+            Role? role = _roleRepository.GetRole(r => r.Id == roleId);
+
+            if (role == null)
+            {
+                throw new ServiceException("Role is invalid");
+            }
+
+            return role;
+        }
+
         private static User ToEntity(UserCreateDTO userDTO)
         {
-            Role role = new Role() { Id = userDTO.RoleId };
+            //Role role = new Role() { Id = userDTO.RoleId };
             return new User()
             {
                 Name = userDTO.Name,
                 LastName = userDTO.LastName,
                 Email = userDTO.Email,
                 Password = userDTO.Password,
-                Role = role
+                RoleId = userDTO.RoleId
             };
         }
 
@@ -235,7 +232,7 @@ namespace MediaCatalog.Services
                 Name = user.Name,
                 LastName = user.LastName,
                 Email = user.Email,
-                RoleId = (int)user.Role.Id,
+                RoleId = user.RoleId,
             };
         }
     }

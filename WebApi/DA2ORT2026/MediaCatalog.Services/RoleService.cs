@@ -10,10 +10,13 @@ namespace MediaCatalog.Services
     public class RoleService : IRoleService
     {
         private readonly IRoleRepository _roleRepository;
+        private readonly IUserRepository _userRepository;
 
-        public RoleService(IRoleRepository roleRepository)
+        public RoleService(IRoleRepository roleRepository, 
+            IUserRepository userRepository)
         {
             _roleRepository = roleRepository;
+            _userRepository = userRepository;
         }
 
         public RoleDetailDTO AddRole(RoleCreateDTO role)
@@ -38,6 +41,12 @@ namespace MediaCatalog.Services
                 throw new ResourceNotFoundException("Cannot find a role with this name");
             }
 
+            //validate if role can be deleted
+            if (RoleInUser(name))
+            {
+                throw new ServiceException("Role is being used by user");
+            }
+
             _roleRepository.DeleteRole(roleToDelete);
         }
 
@@ -47,6 +56,12 @@ namespace MediaCatalog.Services
             if (roleToDelete == null)
             {
                 throw new ResourceNotFoundException("Cannot find a role with this id");
+            }
+
+            //validate if role can be deleted
+            if (RoleInUser(roleToDelete.Name))
+            {
+                throw new ServiceException("Role is being used by user");
             }
 
             _roleRepository.DeleteRole(roleToDelete);
@@ -99,6 +114,14 @@ namespace MediaCatalog.Services
             {
                 throw new ConflictException("There’s a role already defined with that name");
             }
+        }
+
+        private bool RoleInUser(string name)
+        {   
+            Role? role = _roleRepository.GetRole(r => r.Name.Equals(name,
+                StringComparison.OrdinalIgnoreCase));
+
+            return _userRepository.Exists(u => u.RoleId == role.Id);
         }
 
         private static Role ToEntity(RoleCreateDTO roleDTO)

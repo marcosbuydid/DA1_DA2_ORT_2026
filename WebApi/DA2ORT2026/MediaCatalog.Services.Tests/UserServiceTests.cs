@@ -18,17 +18,40 @@ namespace MediaCatalog.Services.Tests
         private Mock<IRoleRepository> _roleRepositoryMock;
         private Mock<ISecureDataService> _secureDataServiceMock;
         private UserService _userService;
+        private Role _role;
+        private UserCreateDTO _newUserDTO;
+        private List<User> _existingUsers;
+        private User _newUser;
+        private UserUpdateDTO _userDTO;
+        private User _existingUser;
+        private UserUpdateDTO _userToUpdate;
 
         [TestInitialize]
         public void Setup()
         {
             _roleRepositoryMock = new Mock<IRoleRepository>(MockBehavior.Strict);
             _userRepositoryMock = new Mock<IUserRepository>(MockBehavior.Strict);
-
             _secureDataServiceMock = new Mock<ISecureDataService>(MockBehavior.Strict);
 
             _userService = new UserService(_userRepositoryMock.Object, _roleRepositoryMock.Object,
                 _secureDataServiceMock.Object);
+
+            _role = new Role() { Id = 1 };
+
+            _newUserDTO = new UserCreateDTO("John", "Doe", "john.doe@test.com", "password123", (int)_role.Id);
+
+            _newUser = new User(10, "Jim", "Adks", "jim.adks@example.com", "password123", 1);
+
+            _existingUsers = new List<User>() {
+                new User(1, "Jane", "Smith", "jane@test.com","password4321",1),
+                new User(2, "John", "Doe", "john.doe@test.com", "password123", 1)
+            };
+
+            _userDTO = new UserUpdateDTO("aName", "aLastName", "email@test.com", (int)_role.Id);
+
+            _existingUser = new User(1, "OldName", "OldLastName", "oldemail@mail.com", "hashed1234", 1);
+
+            _userToUpdate = new UserUpdateDTO("NewName", "NewLastName", "newemail@email.com", (int)_role.Id);
         }
 
         [TestCleanup]
@@ -42,22 +65,19 @@ namespace MediaCatalog.Services.Tests
         public void AddUser_WhenCalledWithInvalidUser_ThenThrowsException()
         {
             //arrange
-            Role role = new Role() { Id = 1 };
-
-            UserCreateDTO newUserDTO = new UserCreateDTO("John", "Doe", "test", "password123", (int)role.Id);
-
-            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
-
+            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(_role);
             _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User>());
 
             //setup hash method
             _secureDataServiceMock.Setup(s => s.Hash(It.IsAny<string>())).Returns((string s) => "hashed-" + s);
 
+            _newUserDTO.Email = "test";
+
             //act
-            Action action = () => _userService.AddUser(newUserDTO);
+            Action action = () => _userService.AddUser(_newUserDTO);
 
             //assert
-            Assert.ThrowsException<DomainException>(() => _userService.AddUser(newUserDTO));
+            Assert.ThrowsException<DomainException>(() => _userService.AddUser(_newUserDTO));
 
             //verify that no existence check was performed (as per your expectation)
             _userRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<User, bool>>>()), Times.Never);
@@ -67,57 +87,43 @@ namespace MediaCatalog.Services.Tests
         public void AddUser_WhenCalled_ThenUserIsAdded()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            UserCreateDTO newUserDTO = new UserCreateDTO("John", "Doe", "john.doe@test.com", "password123", (int)role.Id);
-
-            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
-
+            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(_role);
             _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User>());
-
             _userRepositoryMock.Setup(r => r.AddUser(It.IsAny<User>()));
 
             //setup hash method
             _secureDataServiceMock.Setup(s => s.Hash(It.IsAny<string>())).Returns((string s) => "hashed-" + s);
 
             //act
-            UserDetailDTO userAdded = _userService.AddUser(newUserDTO);
+            UserDetailDTO userAdded = _userService.AddUser(_newUserDTO);
 
             //assert
             _userRepositoryMock.Verify(
                 r => r.AddUser(It.Is<User>(u =>
-                    u.Name == newUserDTO.Name &&
-                    u.LastName == newUserDTO.LastName &&
-                    u.Email == newUserDTO.Email &&
-                    u.Role != null &&
+                    u.Name == _newUserDTO.Name &&
+                    u.LastName == _newUserDTO.LastName &&
+                    u.Email == _newUserDTO.Email &&
+                    u.RoleId == _role.Id &&
                     u.Password != "password123" //to ensure it was hashed
                 )),
                 Times.Once
             );
 
-            Assert.AreEqual(newUserDTO.Name, userAdded.Name);
-            Assert.AreEqual(newUserDTO.LastName, userAdded.LastName);
-            Assert.AreEqual(newUserDTO.Email, userAdded.Email);
-            Assert.AreEqual(newUserDTO.RoleId, userAdded.RoleId);
+            Assert.AreEqual(_newUserDTO.Name, userAdded.Name);
+            Assert.AreEqual(_newUserDTO.LastName, userAdded.LastName);
+            Assert.AreEqual(_newUserDTO.Email, userAdded.Email);
+            Assert.AreEqual(_newUserDTO.RoleId, userAdded.RoleId);
         }
 
         [TestMethod]
         public void AddUser_WhenCalledWithAnEmailAlreadyInUse_ThenThrowsException()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            UserCreateDTO newUserDTO = new UserCreateDTO("Nick", "Smith", "jane.smith@test.com", "password123", (int)role.Id);
-
             //simulate user with the same email already exists in repository
-            List<User> existingUsers = new List<User>();
-            User newUser = new User(2, "Jane", "Smith", "jane.smith@test.com", "hashed123", role);
-            existingUsers.Add(newUser);
-
-            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(existingUsers);
+            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(_existingUsers);
 
             //act
-            Action action = () => _userService.AddUser(newUserDTO);
+            Action action = () => _userService.AddUser(_newUserDTO);
 
             //assert
             Assert.ThrowsException<ConflictException>(action);
@@ -128,20 +134,16 @@ namespace MediaCatalog.Services.Tests
         public void GetUser_WhenCalled_ThenUserIsReturned()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            User newUser = new User(10, "Jim", "Adks", "jim.adks@example.com", "password123", role);
-
-            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(newUser);
+            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(_newUser);
 
             //act
-            UserDetailDTO userDTO = _userService.GetUser(newUser.Email);
+            UserDetailDTO userDTO = _userService.GetUser(_newUser.Email);
 
             //assert
-            Assert.AreEqual(userDTO.Name, newUser.Name);
-            Assert.AreEqual(userDTO.LastName, newUser.LastName);
-            Assert.AreEqual(userDTO.Email, newUser.Email);
-            Assert.AreEqual(userDTO.RoleId, newUser.Role.Id);
+            Assert.AreEqual(userDTO.Name, _newUser.Name);
+            Assert.AreEqual(userDTO.LastName, _newUser.LastName);
+            Assert.AreEqual(userDTO.Email, _newUser.Email);
+            Assert.AreEqual(userDTO.RoleId, _newUser.RoleId);
 
             _userRepositoryMock.Verify(r => r.GetUser(It.IsAny<Func<User, bool>>()), Times.Once());
         }
@@ -150,17 +152,15 @@ namespace MediaCatalog.Services.Tests
         public void GetUser_WhenCalledWithNonRegisteredUser_ThenThrowsException()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            UserCreateDTO newUserDTO = new UserCreateDTO("Jim", "Adks", "jim.adks@example.com", "password123", (int)role.Id);
+            _newUserDTO.Email = "jim.adks@example.com";
 
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action action = () => _userService.GetUser(newUserDTO.Email);
+            Action action = () => _userService.GetUser(_newUserDTO.Email);
 
             //assert
-            Assert.ThrowsException<ResourceNotFoundException>(() => _userService.GetUser(newUserDTO.Email));
+            Assert.ThrowsException<ResourceNotFoundException>(() => _userService.GetUser(_newUserDTO.Email));
 
             _userRepositoryMock.Verify(r => r.Exists(It.IsAny<Expression<Func<User, bool>>>()), Times.Never);
         }
@@ -169,15 +169,7 @@ namespace MediaCatalog.Services.Tests
         public void GetUsers_WhenCalled_ThenUsersAreReturned()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            List<User> users = new List<User>()
-            {
-                new User(1,"John","Doe","john@test.com", "password1234",role),
-                new User(1, "Jane", "Smith", "jane@test.com","password4321",role)
-            };
-
-            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(users);
+            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(_existingUsers);
 
             //act
             List<UserDetailDTO> result = _userService.GetUsers();
@@ -185,8 +177,8 @@ namespace MediaCatalog.Services.Tests
             //assert
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Count);
-            Assert.AreEqual("John", result[0].Name);
-            Assert.AreEqual("Jane", result[1].Name);
+            Assert.AreEqual("Jane", result[0].Name);
+            Assert.AreEqual("John", result[1].Name);
 
             _userRepositoryMock.Verify(r => r.GetUsers(), Times.Once);
         }
@@ -225,52 +217,39 @@ namespace MediaCatalog.Services.Tests
         public void DeleteUser_WhenCalled_ThenUserIsDeleted()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            User user = new User(1, "John", "Miller", "john@email.com", "hashed124", role);
-
-            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(user);
+            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(_newUser);
 
             _userRepositoryMock.Setup(r => r.DeleteUser(It.IsAny<User>()));
 
             //act
-            _userService.DeleteUser(user.Email);
+            _userService.DeleteUser(_newUser.Email);
 
             //assert
-            _userRepositoryMock.Verify(r => r.DeleteUser(It.Is<User>(u => u.Email == "john@email.com")), Times.Once);
+            _userRepositoryMock.Verify(r => r.DeleteUser(It.Is<User>(u => u.Email == "jim.adks@example.com")), Times.Once);
         }
 
         [TestMethod]
         public void DeleteUser_WhenCalledWithValidId_ThenUserIsDeleted()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            User user = new User(1, "John", "Miller", "john@email.com", "hashed124", role);
-
-            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(user);
-
+            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(_newUser);
             _userRepositoryMock.Setup(r => r.DeleteUser(It.IsAny<User>()));
 
             //act
-            _userService.DeleteUserById(user.Id);
+            _userService.DeleteUserById(_newUser.Id);
 
             //assert
-            _userRepositoryMock.Verify(r => r.DeleteUser(It.Is<User>(u => u.Id == user.Id)), Times.Once);
+            _userRepositoryMock.Verify(r => r.DeleteUser(It.Is<User>(u => u.Id == _newUser.Id)), Times.Once);
         }
 
         [TestMethod]
         public void UpdateUser_WhenCalledWithUnregisteredUser_ThenThrowsException()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            UserUpdateDTO userDTO = new UserUpdateDTO("aName", "aLastName", "email@test.com", (int)role.Id);
-
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action action = () => _userService.UpdateUser("undefined@mail.com", userDTO);
+            Action action = () => _userService.UpdateUser("undefined@mail.com", _userDTO);
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(action);
@@ -282,14 +261,10 @@ namespace MediaCatalog.Services.Tests
         public void UpdateUser_WhenCalledWithInvalidId_ThenThrowsException()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            UserUpdateDTO userDTO = new UserUpdateDTO("aName", "aLastName", "email@test.com", (int)role.Id);
-
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns((User)null);
 
             //act
-            Action action = () => _userService.UpdateUserById(25, userDTO);
+            Action action = () => _userService.UpdateUserById(25, _userDTO);
 
             //assert
             Assert.ThrowsException<ResourceNotFoundException>(action);
@@ -301,16 +276,11 @@ namespace MediaCatalog.Services.Tests
         public void UpdateUser_WhenCalled_ThenUserIsUpdated()
         {
             //arrange
-            Role role = new Role { Id = 1 };
+            User existingUser = new User(1, "OldName", "OldLastName", "oldemail@mail.com", "hashed1234", 1);
+            UserUpdateDTO userToUpdate = new UserUpdateDTO("NewName", "NewLastName", "newemail@email.com", (int)_role.Id);
 
-            User existingUser = new User(1, "OldName", "OldLastName", "oldemail@mail.com", "hashed1234", role);
-
-            UserUpdateDTO userToUpdate = new UserUpdateDTO("NewName", "NewLastName", "newemail@email.com", (int)role.Id);
-
-            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
-
+            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(_role);
             _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(existingUser);
-
             _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>()));
 
             //act
@@ -333,40 +303,30 @@ namespace MediaCatalog.Services.Tests
         public void UpdateUser_WhenCalledWithValidId_ThenUserIsUpdated()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
-            User existingUser = new User(1, "OldName", "OldLastName", "oldemail@mail.com", "hashed1234", role);
-
-            UserUpdateDTO userToUpdate = new UserUpdateDTO("NewName", "NewLastName", "newemail@email.com", (int)role.Id);
-
-            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(role);
-
-            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(existingUser);
-
+            _roleRepositoryMock.Setup(r => r.GetRole(It.IsAny<Func<Role, bool>>())).Returns(_role);
+            _userRepositoryMock.Setup(r => r.GetUser(It.IsAny<Func<User, bool>>())).Returns(_existingUser);
             _userRepositoryMock.Setup(r => r.UpdateUser(It.IsAny<User>()));
 
             //act
-            UserDetailDTO updatedUser = _userService.UpdateUserById(1, userToUpdate);
+            UserDetailDTO updatedUser = _userService.UpdateUserById(1, _userToUpdate);
 
             //assert
             _userRepositoryMock.Verify(
                 r => r.UpdateUser(It.Is<User>(u =>
-                    u.Name == userToUpdate.Name &&
-                    u.LastName == userToUpdate.LastName &&
-                    u.Role.Id == userToUpdate.RoleId
+                    u.Name == _userToUpdate.Name &&
+                    u.LastName == _userToUpdate.LastName &&
+                    u.Role.Id == _userToUpdate.RoleId
                 )), Times.Once);
 
-            Assert.AreEqual(userToUpdate.Name, updatedUser.Name);
-            Assert.AreEqual(userToUpdate.LastName, updatedUser.LastName);
-            Assert.AreEqual(userToUpdate.RoleId, updatedUser.RoleId);
+            Assert.AreEqual(_userToUpdate.Name, updatedUser.Name);
+            Assert.AreEqual(_userToUpdate.LastName, updatedUser.LastName);
+            Assert.AreEqual(_userToUpdate.RoleId, updatedUser.RoleId);
         }
 
         [TestMethod]
         public void ChangePassword_WhenCalledAndOldPasswordNotMatch_ThenThrowsException()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
             string email = "john@test.com";
             string oldPassword = "oldPassword";
             string newPassword = "newPassword123";
@@ -390,8 +350,6 @@ namespace MediaCatalog.Services.Tests
         public void ChangePassword_WhenCalled_ThenPasswordIsUpdated()
         {
             //arrange
-            Role role = new Role { Id = 1 };
-
             string email = "john@test.com";
             string oldPassword = "oldPassword";
             string newPassword = "newPassword123";
@@ -405,7 +363,7 @@ namespace MediaCatalog.Services.Tests
 
             string hashedOldPassword = _secureDataServiceMock.Object.Hash(oldPassword);
 
-            User user = new User(1, "John", "Doe", email, hashedOldPassword, role);
+            User user = new User(1, "John", "Doe", email, hashedOldPassword, 1);
 
             ChangePasswordDTO changePasswordDTO =
                 new ChangePasswordDTO(oldPassword, newPassword, newPassword);

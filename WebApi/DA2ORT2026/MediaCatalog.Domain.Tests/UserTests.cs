@@ -14,7 +14,7 @@ namespace MediaCatalog.Domain.Tests
         public void Initialize()
         {
             _role = new Role(1, "Administrator");
-            _user = new User(1, "FirstName", "LastName", "email@example.com", "password1234", _role);
+            _user = new User(1, "FirstName", "LastName", "email@example.com", "password1234", 1);
         }
 
 
@@ -119,8 +119,8 @@ namespace MediaCatalog.Domain.Tests
         [TestMethod]
         public void CreateNewUser_WhenRoleIsValidThenRoleIsAssigned()
         {
-            Assert.IsNotNull(_user.Role);
-            Assert.AreEqual(_role, _user.Role);
+            Assert.IsNotNull(_user.RoleId);
+            Assert.AreEqual(_role.Id, _user.RoleId);
         }
     }
 }

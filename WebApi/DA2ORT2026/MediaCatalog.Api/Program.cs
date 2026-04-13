@@ -1,6 +1,8 @@
 using MediaCatalog.Api.Filters;
+using MediaCatalog.DataAccess;
 using MediaCatalog.Factory;
 using MediaCatalog.Services.Settings;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,12 @@ builder.Services.Configure<SystemSettings>(builder.Configuration.GetSection("Sys
 
 ServiceCollectionExtensions.AddServices(builder.Services);
 ServiceCollectionExtensions.AddDataAccess(builder.Services);
+
+builder.Services.AddDbContext<AppDbContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        providerOptions => providerOptions.EnableRetryOnFailure())
+);
 
 var app = builder.Build();
 

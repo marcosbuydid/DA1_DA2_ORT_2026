@@ -21,11 +21,13 @@ namespace MediaCatalog.Factory
 
         public static void AddDataAccess(IServiceCollection serviceCollection)
         {
+            /* InMemory Repositories */
             serviceCollection.AddSingleton<IRoleRepository, InMemoryRoleRepository>();
             serviceCollection.AddSingleton<IUserRepository, InMemoryUserRepository>();
             serviceCollection.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
             serviceCollection.AddSingleton<ISessionRepository, InMemorySessionRepository>();
 
+            /* Entity Framework Repositories */
             //serviceCollection.AddScoped<IMovieRepository, EFMovieRepository>();
             //serviceCollection.AddScoped<IRoleRepository, EFRoleRepository>();
             //serviceCollection.AddScoped<ISessionRepository, EFSessionRepository>();

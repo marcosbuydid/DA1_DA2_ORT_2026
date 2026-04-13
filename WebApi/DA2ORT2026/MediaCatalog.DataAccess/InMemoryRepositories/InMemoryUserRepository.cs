@@ -50,9 +50,8 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
 
         private void LoadDefaultUsers()
         {
-            Users.Add(new User(1, "Marcos", "Buydid", "marcosb@email.com", 
-                "YfCcXFdr5hMSfeP2PqGnLahaL/Aq7qDX78vZTnxYlB3iC6FQHcQi5AB9ETjAWY66", 
-                new Role(1, "Administrator")));
+            Users.Add(new User(1, "Administrator", "MediaCatalog", "administrator@mediacatalog.com", 
+                "YfCcXFdr5hMSfeP2PqGnLahaL/Aq7qDX78vZTnxYlB3iC6FQHcQi5AB9ETjAWY66", 1));
         }
     }
 }

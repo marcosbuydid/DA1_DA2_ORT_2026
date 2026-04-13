@@ -11,6 +11,7 @@ namespace MediaCatalog.Domain
         private string _lastname;
         private string _email;
         private string _password;
+        private int _roleId;
         private Role _role;
 
         public int? Id
@@ -90,6 +91,12 @@ namespace MediaCatalog.Domain
             }
         }
 
+        public int RoleId
+        {
+            get => _roleId;
+            set => _roleId = value;
+        }
+
         public Role Role
         {
             get => _role;
@@ -98,14 +105,14 @@ namespace MediaCatalog.Domain
 
         public User() { }
 
-        public User(int? id, string name, string lastname, string email, string password, Role role)
+        public User(int? id, string name, string lastname, string email, string password, int roleId)
         {
             Id = id;
             Name = name;
             LastName = lastname;
             Email = email;
             Password = password;
-            Role = role;
+            RoleId = roleId;
         }
 
     }

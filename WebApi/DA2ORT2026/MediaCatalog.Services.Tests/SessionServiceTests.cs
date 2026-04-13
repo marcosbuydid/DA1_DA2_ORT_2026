@@ -19,6 +19,8 @@ namespace MediaCatalog.Services.Tests
         private Mock<ISecureDataService> _secureDataServiceMock;
         private Mock<ITokenService> _jwtServiceMock;
         private SessionService _sessionService;
+        private Role _role;
+        private User _user;
 
         [TestInitialize]
         public void Setup()
@@ -38,6 +40,9 @@ namespace MediaCatalog.Services.Tests
             _sessionService = new SessionService(_sessionRepositoryMock.Object,
                 _userRepositoryMock.Object, _secureDataServiceMock.Object, systemSettings,
                 _jwtServiceMock.Object);
+
+            _role = new Role(1, "Administrator");
+            _user = new User(1, "John", "Doe", "john@test.com", "password123", 1);
         }
 
         [TestCleanup]
@@ -51,10 +56,7 @@ namespace MediaCatalog.Services.Tests
         public void Authenticate_WhenUsingValidCredentials_ThenSessionIsCreated()
         {
             //arrange
-            Role role = new Role(1, "User");
-            User user = new User(1, "John", "Doe", "john@test.com", "password123", role);
-
-            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User> { user });
+            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User> { _user });
 
             //simulate passwords matches
             _secureDataServiceMock.Setup(s => s.CompareHashes(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
@@ -75,10 +77,7 @@ namespace MediaCatalog.Services.Tests
         public void Authenticate_WhenCredentialsAreInvalid_ThenThrowsException()
         {
             //arrange
-            Role role = new Role(1, "User");
-            User user = new User(1, "John", "Doe", "john@test.com", "password123", role);
-
-            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User> { user });
+            _userRepositoryMock.Setup(r => r.GetUsers()).Returns(new List<User> { _user });
 
             //password does not match
             _secureDataServiceMock.Setup(s => s.CompareHashes(It.IsAny<string>(), It.IsAny<string>())).Returns(false);

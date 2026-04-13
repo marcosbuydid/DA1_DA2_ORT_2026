@@ -41,7 +41,8 @@ namespace MediaCatalog.Services
                 string token = _jwtService.GenerateToken(user.Name, user.Email,
                     _settings.SecretKey, _settings.TokenExpMinutes);
 
-                Session session = new Session() { Token = token, User = user };
+                Session session = new Session() { Token = token, User = user, 
+                    CreatedAt = DateTime.UtcNow };
                 _sessionRepository.AddSession(session);
 
                 return token;

@@ -15,7 +15,7 @@ namespace MediaCatalog.Domain.Tests
         public void Initialize()
         {
             _role = new Role(1, "User");
-            _user = new User(1, "FirstName", "LastName", "email@example.com", "password1234", _role);
+            _user = new User(1, "FirstName", "LastName", "email@example.com", "password1234", 1);
             _session = new Session(1, "aToken", _user);
         }
 
