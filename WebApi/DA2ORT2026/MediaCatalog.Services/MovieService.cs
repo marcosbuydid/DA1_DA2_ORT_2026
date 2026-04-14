@@ -32,19 +32,6 @@ namespace MediaCatalog.Services
 
         public void DeleteMovie(string title)
         {
-            //if (String.IsNullOrWhiteSpace(title))
-            //{
-            //    throw new ServiceException("Title cannot be null or empty");
-            //}
-
-            //Movie? movieToDelete = _movieRepository.GetMovie(m => m.Title.Equals(title, 
-            //    StringComparison.OrdinalIgnoreCase));
-
-            //if (movieToDelete == null)
-            //{
-            //    throw new ResourceNotFoundException("Cannot find a movie with this title");
-            //}
-
             Movie movieToDelete = GetMovieByTitle(title);
 
             _movieRepository.DeleteMovie(movieToDelete);
@@ -52,12 +39,6 @@ namespace MediaCatalog.Services
 
         public void DeleteMovieById(int movieId)
         {
-            //Movie? movieToDelete = _movieRepository.GetMovie(m => m.Id == movieId);
-            //if (movieToDelete == null)
-            //{
-            //    throw new ResourceNotFoundException("Cannot find a movie with this id");
-            //}
-
             Movie movieToDelete = GetMovieById(movieId);
 
             _movieRepository.DeleteMovie(movieToDelete);
@@ -65,19 +46,6 @@ namespace MediaCatalog.Services
 
         public MovieDetailDTO GetMovie(string title)
         {
-            //if (String.IsNullOrWhiteSpace(title))
-            //{
-            //    throw new ServiceException("Title cannot be null or empty");
-            //}
-
-            //Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title, 
-            //    StringComparison.OrdinalIgnoreCase));
-
-            //if (movie == null)
-            //{
-            //    throw new ResourceNotFoundException("Cannot find a movie with this title");
-            //}
-
             Movie movie = GetMovieByTitle(title);
 
             return FromEntity(movie);
@@ -97,19 +65,6 @@ namespace MediaCatalog.Services
 
         public MovieDetailDTO UpdateMovie(string title, MovieUpdateDTO movieToUpdate)
         {
-            //if (String.IsNullOrWhiteSpace(title))
-            //{
-            //    throw new ServiceException("Title cannot be null or empty");
-            //}
-
-            //Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title,
-            //    StringComparison.OrdinalIgnoreCase));
-
-            //if (movie == null)
-            //{
-            //    throw new ResourceNotFoundException("Cannot find the specified movie");
-            //}
-
             Movie movie = GetMovieByTitle(title);
 
             ValidateReleaseDate(movieToUpdate.ReleaseDate);
@@ -124,13 +79,6 @@ namespace MediaCatalog.Services
 
         public MovieDetailDTO UpdateMovieById(int movieId, MovieUpdateDTO movieToUpdate)
         {
-            //Movie? movie = _movieRepository.GetMovie(m => m.Id == movieId);
-
-            //if (movie == null)
-            //{
-            //    throw new ResourceNotFoundException("Cannot find the specified movie with this id");
-            //}
-
             Movie movie = GetMovieById(movieId);
 
             ValidateReleaseDate(movieToUpdate.ReleaseDate);
