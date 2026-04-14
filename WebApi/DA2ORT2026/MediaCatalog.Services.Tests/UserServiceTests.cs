@@ -235,7 +235,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(r => r.DeleteUser(It.IsAny<User>()));
 
             //act
-            _userService.DeleteUserById(_newUser.Id);
+            _userService.DeleteUserById((int)_newUser.Id);
 
             //assert
             _userRepositoryMock.Verify(r => r.DeleteUser(It.Is<User>(u => u.Id == _newUser.Id)), Times.Once);

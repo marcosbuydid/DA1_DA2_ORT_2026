@@ -195,7 +195,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(u => u.Exists(It.IsAny<Expression<Func<User, bool>>>())).Returns(false);
 
             //act
-            _roleService.DeleteRoleById(_role.Id);
+            _roleService.DeleteRoleById((int)_role.Id);
 
             //assert
             _roleRepositoryMock.Verify(r => r.DeleteRole(It.Is<Role>(ro => ro.Id == _role.Id)), Times.Once);
@@ -227,7 +227,7 @@ namespace MediaCatalog.Services.Tests
             _userRepositoryMock.Setup(u => u.Exists(It.IsAny<Expression<Func<User, bool>>>())).Returns(true);
 
             //act and assert
-            Assert.ThrowsException<ServiceException>(() => _roleService.DeleteRoleById(_role.Id));
+            Assert.ThrowsException<ServiceException>(() => _roleService.DeleteRoleById((int)_role.Id));
 
             //verify delete was never called
             _roleRepositoryMock.Verify(r => r.DeleteRole(It.IsAny<Role>()), Times.Never);

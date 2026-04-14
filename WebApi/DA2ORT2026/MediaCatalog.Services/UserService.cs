@@ -51,43 +51,22 @@ namespace MediaCatalog.Services
 
         public void DeleteUser(string email)
         {
-            if (String.IsNullOrWhiteSpace(email))
-            {
-                throw new ServiceException("Email cannot be null or empty");
-            }
-
-            User? userToDelete = _userRepository.GetUser(u => u.Email.Equals(email,
-                StringComparison.OrdinalIgnoreCase));
-
-            if (userToDelete == null)
-            {
-                throw new ResourceNotFoundException("Cannot find a user with this email");
-            }
+            User userToDelete = GetUserByEmail(email);
 
             _userRepository.DeleteUser(userToDelete);
         }
 
-        public void DeleteUserById(int? userId)
+        public void DeleteUserById(int userId)
         {
-            User? userToDelete = _userRepository.GetUser(u => u.Id == userId);
-
-            if (userToDelete == null)
-            {
-                throw new ResourceNotFoundException("Cannot find a user with this id");
-            }
+            User userToDelete = GetUserById(userId);
 
             _userRepository.DeleteUser(userToDelete);
         }
 
 
-        public UserDetailDTO UpdateUserById(int? userId, UserUpdateDTO userToUpdate)
+        public UserDetailDTO UpdateUserById(int userId, UserUpdateDTO userToUpdate)
         {
-            User? user = _userRepository.GetUser(u => u.Id == userId);
-
-            if (user == null)
-            {
-                throw new ResourceNotFoundException("Cannot find the specified user with this id");
-            }
+            User user = GetUserById(userId);
 
             Role? userToUpdateRole = GetUserRole(userToUpdate.RoleId);
 
@@ -99,26 +78,16 @@ namespace MediaCatalog.Services
             return FromEntity(user);
         }
 
-        public UserDetailDTO UpdateUser(string? email, UserUpdateDTO userToUpdate)
+        public UserDetailDTO UpdateUser(string email, UserUpdateDTO userToUpdate)
         {
-            if (String.IsNullOrWhiteSpace(email))
-            {
-                throw new ServiceException("Email cannot be null or empty");
-            }
-
-            User? user = _userRepository.GetUser(u => u.Email.Equals(email,
-                StringComparison.OrdinalIgnoreCase));
-
-            if (user == null)
-            {
-                throw new ResourceNotFoundException("Cannot find the specified user");
-            }
+            User user = GetUserByEmail(email);
 
             Role? userToUpdateRole = GetUserRole(userToUpdate.RoleId);
 
             user.Name = userToUpdate.Name;
             user.LastName = userToUpdate.LastName;
             user.Role = userToUpdateRole;
+
             _userRepository.UpdateUser(user);
 
             return FromEntity(user);
@@ -126,23 +95,12 @@ namespace MediaCatalog.Services
 
         public UserDetailDTO GetUser(string email)
         {
-            if (String.IsNullOrWhiteSpace(email))
-            {
-                throw new ServiceException("Email cannot be null or empty");
-            }
-
-            User? user = _userRepository.GetUser(u => u.Email.Equals(email,
-                StringComparison.OrdinalIgnoreCase));
-
-            if (user == null)
-            {
-                throw new ResourceNotFoundException("Cannot find a user with this email");
-            }
+            User user = GetUserByEmail(email);
 
             return FromEntity(user);
         }
 
-        public void ChangePassword(string? email, ChangePasswordDTO changePasswordDTO)
+        public void ChangePassword(string email, ChangePasswordDTO changePasswordDTO)
         {
             User? user = ValidateOldPassword(email, changePasswordDTO.OldPassword);
 
@@ -178,20 +136,9 @@ namespace MediaCatalog.Services
             }
         }
 
-        private User? ValidateOldPassword(string? email, string inputPassword)
+        private User? ValidateOldPassword(string email, string inputPassword)
         {
-            if (String.IsNullOrWhiteSpace(email))
-            {
-                throw new ServiceException("Email cannot be null or empty");
-            }
-
-            User? user = _userRepository.GetUser(u => u.Email.Equals(email,
-                StringComparison.OrdinalIgnoreCase));
-
-            if (user == null)
-            {
-                throw new ResourceNotFoundException("Cannot find user with this email");
-            }
+            User user = GetUserByEmail(email);
 
             string storedHashedPassword = user.Password;
             bool hashesMatch = _secureDataService.CompareHashes(storedHashedPassword, inputPassword);
@@ -209,6 +156,36 @@ namespace MediaCatalog.Services
             }
 
             return role;
+        }
+
+        private User GetUserByEmail(string email)
+        {
+            if (String.IsNullOrWhiteSpace(email))
+            {
+                throw new ServiceException("Email cannot be null or empty");
+            }
+
+            User? user = _userRepository.GetUser(u => u.Email.Equals(email,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (user == null)
+            {
+                throw new ResourceNotFoundException("Cannot find a user with this email");
+            }
+
+            return user;
+        }
+
+        private User GetUserById(int userId)
+        {
+            User? user = _userRepository.GetUser(u => u.Id == userId);
+
+            if (user == null)
+            {
+                throw new ResourceNotFoundException("Cannot find a user with this id");
+            }
+
+            return user;
         }
 
         private static User ToEntity(UserCreateDTO userDTO)

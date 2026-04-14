@@ -9,6 +9,6 @@ namespace MediaCatalog.Services.Interfaces
         RoleDetailDTO GetRole(string name);
         RoleDetailDTO AddRole(RoleCreateDTO role);
         void DeleteRole(string name);
-        void DeleteRoleById(int? roleId);
+        void DeleteRoleById(int roleId);
     }
 }

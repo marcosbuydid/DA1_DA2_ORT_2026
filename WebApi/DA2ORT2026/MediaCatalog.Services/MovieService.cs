@@ -32,47 +32,53 @@ namespace MediaCatalog.Services
 
         public void DeleteMovie(string title)
         {
-            if (String.IsNullOrWhiteSpace(title))
-            {
-                throw new ServiceException("Title cannot be null or empty");
-            }
+            //if (String.IsNullOrWhiteSpace(title))
+            //{
+            //    throw new ServiceException("Title cannot be null or empty");
+            //}
 
-            Movie? movieToDelete = _movieRepository.GetMovie(m => m.Title.Equals(title, 
-                StringComparison.OrdinalIgnoreCase));
+            //Movie? movieToDelete = _movieRepository.GetMovie(m => m.Title.Equals(title, 
+            //    StringComparison.OrdinalIgnoreCase));
 
-            if (movieToDelete == null)
-            {
-                throw new ResourceNotFoundException("Cannot find a movie with this title");
-            }
+            //if (movieToDelete == null)
+            //{
+            //    throw new ResourceNotFoundException("Cannot find a movie with this title");
+            //}
+
+            Movie movieToDelete = GetMovieByTitle(title);
 
             _movieRepository.DeleteMovie(movieToDelete);
         }
 
-        public void DeleteMovieById(int? movieId)
+        public void DeleteMovieById(int movieId)
         {
-            Movie? movieToDelete = _movieRepository.GetMovie(m => m.Id == movieId);
-            if (movieToDelete == null)
-            {
-                throw new ResourceNotFoundException("Cannot find a movie with this id");
-            }
+            //Movie? movieToDelete = _movieRepository.GetMovie(m => m.Id == movieId);
+            //if (movieToDelete == null)
+            //{
+            //    throw new ResourceNotFoundException("Cannot find a movie with this id");
+            //}
+
+            Movie movieToDelete = GetMovieById(movieId);
 
             _movieRepository.DeleteMovie(movieToDelete);
         }
 
         public MovieDetailDTO GetMovie(string title)
         {
-            if (String.IsNullOrWhiteSpace(title))
-            {
-                throw new ServiceException("Title cannot be null or empty");
-            }
+            //if (String.IsNullOrWhiteSpace(title))
+            //{
+            //    throw new ServiceException("Title cannot be null or empty");
+            //}
 
-            Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title, 
-                StringComparison.OrdinalIgnoreCase));
+            //Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title, 
+            //    StringComparison.OrdinalIgnoreCase));
 
-            if (movie == null)
-            {
-                throw new ResourceNotFoundException("Cannot find a movie with this title");
-            }
+            //if (movie == null)
+            //{
+            //    throw new ResourceNotFoundException("Cannot find a movie with this title");
+            //}
+
+            Movie movie = GetMovieByTitle(title);
 
             return FromEntity(movie);
         }
@@ -89,20 +95,22 @@ namespace MediaCatalog.Services
             return moviesDTO;
         }
 
-        public MovieDetailDTO UpdateMovie(string? title, MovieUpdateDTO movieToUpdate)
+        public MovieDetailDTO UpdateMovie(string title, MovieUpdateDTO movieToUpdate)
         {
-            if (String.IsNullOrWhiteSpace(title))
-            {
-                throw new ServiceException("Title cannot be null or empty");
-            }
+            //if (String.IsNullOrWhiteSpace(title))
+            //{
+            //    throw new ServiceException("Title cannot be null or empty");
+            //}
 
-            Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title,
-                StringComparison.OrdinalIgnoreCase));
+            //Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title,
+            //    StringComparison.OrdinalIgnoreCase));
 
-            if (movie == null)
-            {
-                throw new ResourceNotFoundException("Cannot find the specified movie");
-            }
+            //if (movie == null)
+            //{
+            //    throw new ResourceNotFoundException("Cannot find the specified movie");
+            //}
+
+            Movie movie = GetMovieByTitle(title);
 
             ValidateReleaseDate(movieToUpdate.ReleaseDate);
 
@@ -114,14 +122,16 @@ namespace MediaCatalog.Services
         }
 
 
-        public MovieDetailDTO UpdateMovieById(int? movieId, MovieUpdateDTO movieToUpdate)
+        public MovieDetailDTO UpdateMovieById(int movieId, MovieUpdateDTO movieToUpdate)
         {
-            Movie? movie = _movieRepository.GetMovie(m => m.Id == movieId);
+            //Movie? movie = _movieRepository.GetMovie(m => m.Id == movieId);
 
-            if (movie == null)
-            {
-                throw new ResourceNotFoundException("Cannot find the specified movie with this id");
-            }
+            //if (movie == null)
+            //{
+            //    throw new ResourceNotFoundException("Cannot find the specified movie with this id");
+            //}
+
+            Movie movie = GetMovieById(movieId);
 
             ValidateReleaseDate(movieToUpdate.ReleaseDate);
 
@@ -157,6 +167,36 @@ namespace MediaCatalog.Services
             {
                 throw new ServiceException("Invalid release date");
             }
+        }
+
+        private Movie GetMovieByTitle(string title)
+        {
+            if (String.IsNullOrWhiteSpace(title))
+            {
+                throw new ServiceException("Title cannot be null or empty");
+            }
+
+            Movie? movie = _movieRepository.GetMovie(m => m.Title.Equals(title,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (movie == null)
+            {
+                throw new ResourceNotFoundException("Cannot find a movie with this title");
+            }
+
+            return movie;
+        }
+
+        private Movie GetMovieById(int movieId)
+        {
+            Movie? movie = _movieRepository.GetMovie(m => m.Id == movieId);
+
+            if (movie == null)
+            {
+                throw new ResourceNotFoundException("Cannot find a movie with this id");
+            }
+
+            return movie;
         }
 
         private static Movie ToEntity(MovieCreateDTO movieDTO)

@@ -195,7 +195,7 @@ namespace MediaCatalog.Services.Tests
             _movieRepositoryMock.Setup(r => r.DeleteMovie(It.IsAny<Movie>()));
 
             //act
-            _movieService.DeleteMovieById(_movie.Id);
+            _movieService.DeleteMovieById((int)_movie.Id);
 
             //assert
             _movieRepositoryMock.Verify(r => r.DeleteMovie(It.Is<Movie>(m => m.Title == "Black Rain")), Times.Once);

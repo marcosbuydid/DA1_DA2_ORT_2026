@@ -11,7 +11,7 @@ namespace MediaCatalog.Services
         private readonly IRoleRepository _roleRepository;
         private readonly IUserRepository _userRepository;
 
-        public RoleService(IRoleRepository roleRepository, 
+        public RoleService(IRoleRepository roleRepository,
             IUserRepository userRepository)
         {
             _roleRepository = roleRepository;
@@ -27,18 +27,7 @@ namespace MediaCatalog.Services
 
         public void DeleteRole(string name)
         {
-            if (String.IsNullOrWhiteSpace(name))
-            {
-                throw new ServiceException("Name cannot be null or empty");
-            }
-
-            Role? roleToDelete = _roleRepository.GetRole(r => r.Name.Equals(name,
-                StringComparison.OrdinalIgnoreCase));
-
-            if (roleToDelete == null)
-            {
-                throw new ResourceNotFoundException("Cannot find a role with this name");
-            }
+            Role roleToDelete = GetRoleByName(name);
 
             //validate if role can be deleted
             if (RoleInUser(name))
@@ -49,7 +38,7 @@ namespace MediaCatalog.Services
             _roleRepository.DeleteRole(roleToDelete);
         }
 
-        public void DeleteRoleById(int? roleId)
+        public void DeleteRoleById(int roleId)
         {
             Role? roleToDelete = _roleRepository.GetRole(r => r.Id == roleId);
             if (roleToDelete == null)
@@ -68,18 +57,7 @@ namespace MediaCatalog.Services
 
         public RoleDetailDTO GetRole(string name)
         {
-            if (String.IsNullOrWhiteSpace(name))
-            {
-                throw new ServiceException("Name cannot be null or empty");
-            }
-
-            Role? role = _roleRepository.GetRole(r => r.Name.Equals(name,
-                StringComparison.OrdinalIgnoreCase));
-
-            if (role == null)
-            {
-                throw new ResourceNotFoundException("Cannot find a role with this name");
-            }
+            Role role = GetRoleByName(name);
 
             return FromEntity(role);
         }
@@ -115,8 +93,26 @@ namespace MediaCatalog.Services
             }
         }
 
+        private Role GetRoleByName(string name)
+        {
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                throw new ServiceException("Name cannot be null or empty");
+            }
+
+            Role? role = _roleRepository.GetRole(r => r.Name.Equals(name,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (role == null)
+            {
+                throw new ResourceNotFoundException("Cannot find a role with this name");
+            }
+
+            return role;
+        }
+
         private bool RoleInUser(string name)
-        {   
+        {
             Role? role = _roleRepository.GetRole(r => r.Name.Equals(name,
                 StringComparison.OrdinalIgnoreCase));
 
