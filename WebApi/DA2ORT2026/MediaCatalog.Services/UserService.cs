@@ -73,6 +73,8 @@ namespace MediaCatalog.Services
             user.Name = userToUpdate.Name;
             user.LastName = userToUpdate.LastName;
             user.Role = userToUpdateRole;
+            user.RoleId = (int)userToUpdateRole.Id;
+
             _userRepository.UpdateUser(user);
 
             return FromEntity(user);
@@ -87,6 +89,7 @@ namespace MediaCatalog.Services
             user.Name = userToUpdate.Name;
             user.LastName = userToUpdate.LastName;
             user.Role = userToUpdateRole;
+            user.RoleId = (int)userToUpdateRole.Id;
 
             _userRepository.UpdateUser(user);
 

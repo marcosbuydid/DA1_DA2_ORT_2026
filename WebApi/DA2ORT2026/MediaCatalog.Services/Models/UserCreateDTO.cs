@@ -17,7 +17,7 @@ namespace MediaCatalog.Services.Models
         [Required(ErrorMessage = "Password is required.")]
         public string Password { get; set; }
 
-        [RegularExpression("^[{1,2}]$", ErrorMessage = "Role id 1 = Administrator, Role id 2 = User")]
+        [Required(ErrorMessage = "Role id is required.")]
         public int RoleId { get; set; }
 
         public UserCreateDTO()
