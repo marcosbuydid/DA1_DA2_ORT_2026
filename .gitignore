@@ -278,7 +278,6 @@ paket-files/
 __pycache__/
 *.pyc
 
-
 ### macOS ###
 # General
 .DS_Store
