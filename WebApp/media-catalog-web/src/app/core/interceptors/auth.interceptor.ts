@@ -54,7 +54,7 @@ export class AuthInterceptor implements HttpInterceptor {
         switch (error.status) {
             case 401:
                 this.session.removeToken();
-                this.router.navigate(['/login']);
+                this.router.navigate(['auth/login'], { replaceUrl: true });
                 break;
             case 400:
                 this.toastService.show(message, 'warning');

@@ -63,6 +63,6 @@ export class Login implements OnInit {
 
   private onAuthenticated(result: { value: string }) {
     this.session.setToken(result);
-    this.router.navigate(['/home']);
+    this.router.navigate(['/dashboard']);
   }
 }

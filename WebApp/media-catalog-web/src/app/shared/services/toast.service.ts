@@ -41,7 +41,7 @@ export class ToastService {
         toast.setAttribute('aria-atomic', 'true');
 
         toast.innerHTML = `
-            <div class="toast-body py-2 px-3">
+            <div class="toast-body py-2 px-3 d-flex align-items-center" style="min-height: 44px;">
                 ${message}
             </div>
         `;
