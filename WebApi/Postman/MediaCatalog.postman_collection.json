@@ -54,6 +54,36 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Get Current Session",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5161/api/sessions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5161",
+              "path": [
+                "api",
+                "sessions"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
