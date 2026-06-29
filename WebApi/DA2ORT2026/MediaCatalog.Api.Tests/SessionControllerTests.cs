@@ -3,6 +3,7 @@ using MediaCatalog.Api.Controllers;
 using MediaCatalog.Services.Interfaces;
 using MediaCatalog.Services.Models;
 using MediaCatalog.Services.Models.GenericWrapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -54,6 +55,51 @@ namespace MediaCatalog.Api.Tests
 
             _sessionServiceMock.Verify(s => s.Authenticate(loginUserDTO.Email, 
                 loginUserDTO.Password),Times.Once);
+        }
+
+        [TestMethod]
+        public void GetCurrentSession_WhenCalled_ThenSessionIsReturned()
+        {
+            //arrange
+            SessionDTO expectedSession = new SessionDTO
+            {
+                Token = "fake-token",
+                LoggedUser = new UserDetailDTO
+                {
+                    Name = "John",
+                    LastName = "Doe",
+                    Email = "john@test.com",
+                    RoleId = 1
+                },
+                LoggedUserRoleName = "Administrator"
+            };
+
+            _sessionServiceMock
+                .Setup(s => s.ValidateSession("fake-token"))
+                .Returns(expectedSession);
+
+            //fake HTTP context with header
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers["Authorization"] = "Bearer fake-token";
+
+            _sessionController.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
+            //act
+            var result = _sessionController.GetCurrentSession();
+
+            //assert
+            var okResult = result as OkObjectResult;
+            Assert.IsNotNull(okResult);
+
+            var response = okResult.Value as ApiResponse<SessionDTO>;
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Result);
+
+            Assert.AreEqual("John", response.Result.LoggedUser.Name);
+            Assert.AreEqual("Doe", response.Result.LoggedUser.LastName);
         }
     }
 }
