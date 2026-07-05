@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
 import { TokenDTO } from '../../features/auth/models/token.dto';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { SessionDTO } from '../../features/auth/models/session.dto';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SessionService {
     private readonly tokenKey = 'token';
+
+    private readonly sessionSubject =
+        new BehaviorSubject<SessionDTO | null>(null);
+
+    session$: Observable<SessionDTO | null> =
+        this.sessionSubject.asObservable();
 
     setToken(token: TokenDTO): void {
         try {
@@ -35,5 +43,18 @@ export class SessionService {
     hasToken(): boolean {
         const token = this.getToken();
         return token !== null && !!token.value;
+    }
+
+    setSession(session: SessionDTO | null): void {
+        this.sessionSubject.next(session);
+    }
+
+    getCurrentSession(): SessionDTO | null {
+        return this.sessionSubject.value;
+    }
+
+    clear(): void {
+        this.removeToken();
+        this.sessionSubject.next(null);
     }
 }

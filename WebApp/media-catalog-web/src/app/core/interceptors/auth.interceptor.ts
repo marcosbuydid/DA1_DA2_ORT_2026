@@ -17,12 +17,11 @@ export class AuthInterceptor implements HttpInterceptor {
     constructor(
         private router: Router,
         private toastService: ToastService,
-        private session: SessionService
+        private sessionService: SessionService
     ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const token = this.session.getToken()?.value;
-
+        const token = this.sessionService.getToken()?.value;
         let authReq = req;
         if (token) {
             authReq = req.clone({
@@ -53,7 +52,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
         switch (error.status) {
             case 401:
-                this.session.removeToken();
+                this.sessionService.clear();
                 this.router.navigate(['auth/login'], { replaceUrl: true });
                 break;
             case 400:
