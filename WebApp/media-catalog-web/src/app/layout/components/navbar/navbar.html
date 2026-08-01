@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
 
-  <a class="navbar-brand fw-bold" href="#">
-    Media-Catalog
+  <a class="navbar-brand fw-bold" routerLink="/">
+    MEDIA-CATALOG
   </a>
 
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -12,15 +12,48 @@
     <div class="d-flex w-100 align-items-center">
       <div class="flex-fill"></div>
       <ul class="navbar-nav d-flex flex-row gap-4 justify-content-center flex-fill">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Item2</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Item3</a>
-        </li>
+        <button type="button" class="btn bg-light" routerLink="/dashboard">
+          Dashboard
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav">
+
+            <li class="nav-item dropdown">
+              <button class="btn bg-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Roles
+              </button>
+              <ul class="dropdown-menu dropdown-menu-light">
+                <li><a class="dropdown-item" href="#">Role List</a></li>
+                <li><a class="dropdown-item" href="#">Add Role</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <button class="btn bg-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Users
+              </button>
+              <ul class="dropdown-menu dropdown-menu-light">
+                <li><a class="dropdown-item" href="#">User List</a></li>
+                <li><a class="dropdown-item" href="#">Add User</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <button class="btn bg-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Movies
+              </button>
+              <ul class="dropdown-menu dropdown-menu-light">
+                <li><a class="dropdown-item" href="#">Movie List</a></li>
+                <li><a class="dropdown-item" href="#">Add Movie</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        </div>
       </ul>
       <ul class="navbar-nav flex-fill justify-content-end">
         <li class="nav-item dropdown">
