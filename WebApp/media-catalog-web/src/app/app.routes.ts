@@ -7,6 +7,7 @@ import { NotFound } from './shared/components/not-found/not-found';
 export const routes: Routes = [
     { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
     { path: 'auth/login', component: Login },
-    { path: 'dashboard', component: Dashboard },
+    { path: 'dashboard/:section', component: Dashboard },
+    { path: 'dashboard', redirectTo: 'dashboard/home', pathMatch: 'full' },
     { path: '**', component: NotFound },
 ];

@@ -17,6 +17,10 @@ export class Navbar {
 
   session$ = this.sessionService.session$;
 
+  selectSection(section: 'home' | 'roles' | 'users' | 'movies') {
+    this.router.navigate(['/dashboard', section]);
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/auth/login']);

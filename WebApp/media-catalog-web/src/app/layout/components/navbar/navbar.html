@@ -1,92 +1,100 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
 
-  <a class="navbar-brand fw-bold" routerLink="/">
-    MEDIA-CATALOG
-  </a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-3 position-relative">
 
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+  <a class="navbar-brand fw-bold" [routerLink]="['/dashboard', 'home']">MEDIA-CATALOG</a>
+
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarContent">
-    <div class="d-flex w-100 align-items-center">
-      <div class="flex-fill"></div>
-      <ul class="navbar-nav d-flex flex-row gap-4 justify-content-center flex-fill">
-        <button type="button" class="btn bg-light" routerLink="/dashboard">
-          Dashboard
+
+    <ul class="navbar-nav navbar-center d-flex gap-4 align-items-center">
+      <li class="nav-item">
+        <button type="button" class="btn bg-light" [routerLink]="['/dashboard', 'home']">Dashboard</button>
+      </li>
+
+      <li class="nav-item dropdown">
+        <button class="btn bg-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
+          aria-expanded="false">Roles</button>
+
+        <ul class="dropdown-menu dropdown-menu-light">
+          <li>
+            <a class="dropdown-item" [routerLink]="['/dashboard', 'roles']">Role List</a>
+          </li>
+          <li>
+            <a class="dropdown-item">Add Role</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item dropdown">
+        <button class="btn bg-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Users
         </button>
-        <div class="collapse navbar-collapse" id="navbarContent">
-          <ul class="navbar-nav">
 
-            <li class="nav-item dropdown">
-              <button class="btn bg-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                Roles
-              </button>
-              <ul class="dropdown-menu dropdown-menu-light">
-                <li><a class="dropdown-item" href="#">Role List</a></li>
-                <li><a class="dropdown-item" href="#">Add Role</a></li>
-              </ul>
+        <ul class="dropdown-menu dropdown-menu-light">
+          <li>
+            <a class="dropdown-item">User List</a>
+          </li>
+          <li>
+            <a class="dropdown-item">Add User</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item dropdown">
+        <button class="btn bg-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Movies
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-light">
+          <li>
+            <a class="dropdown-item">Movie List</a>
+          </li>
+          <li>
+            <a class="dropdown-item">Add Movie</a>
+          </li>
+        </ul>
+      </li>
+
+    </ul>
+
+    <ul class="navbar-nav navbar-profile">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <i class="bi bi-person-circle fs-4"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow">
+          <ng-container *ngIf="session$ | async as session; else guest">
+            <li class="px-3 py-2">
+              <div class="fw-bold">
+                {{ session.loggedUser.name }}
+              </div>
+              <small class="text-muted">
+                {{ session.loggedUser.email }}
+              </small>
             </li>
-          </ul>
+          </ng-container>
 
-          <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <button class="btn bg-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                Users
-              </button>
-              <ul class="dropdown-menu dropdown-menu-light">
-                <li><a class="dropdown-item" href="#">User List</a></li>
-                <li><a class="dropdown-item" href="#">Add User</a></li>
-              </ul>
+          <ng-template #guest>
+            <li class="px-3 py-2">
+              <div class="fw-bold">Guest</div>
+              <small class="text-muted">Not logged in</small>
             </li>
-          </ul>
+          </ng-template>
 
-          <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <button class="btn bg-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                Movies
-              </button>
-              <ul class="dropdown-menu dropdown-menu-light">
-                <li><a class="dropdown-item" href="#">Movie List</a></li>
-                <li><a class="dropdown-item" href="#">Add Movie</a></li>
-              </ul>
-            </li>
-          </ul>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li>
+            <a class="dropdown-item text-danger" (click)="logout()">Logout</a>
+          </li>
 
-        </div>
-      </ul>
-      <ul class="navbar-nav flex-fill justify-content-end">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
-            data-bs-toggle="dropdown">
-            <i class="bi bi-person-circle fs-4"></i>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end shadow">
-            <ng-container *ngIf="session$ | async as session; else guest">
-              <li class="px-3 py-2">
-                <div class="fw-bold">
-                  {{ session.loggedUser.name }}
-                </div>
-                <small class="text-muted">
-                  {{ session.loggedUser.email }}
-                </small>
-              </li>
-            </ng-container>
-
-            <ng-template #guest>
-              <li class="px-3 py-2">
-                <div class="fw-bold">Guest</div>
-                <small class="text-muted">Not logged in</small>
-              </li>
-            </ng-template>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item text-danger" (click)="logout()">Logout</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+        </ul>
+      </li>
+    </ul>
   </div>
-
 </nav>
