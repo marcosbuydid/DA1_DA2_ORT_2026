@@ -6,6 +6,8 @@ import { RoleDetailDTO } from '../../../auth/models/role-detail.dto';
 import { ActivatedRoute } from '@angular/router';
 import { SessionService } from '../../../../core/services/session.service';
 import { filter, take, switchMap } from 'rxjs';
+import { UserService } from '../../../users/user.service';
+import { UserDetailDTO } from '../../../auth/models/user-detail.dto';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +19,7 @@ export class Dashboard {
   items = Array.from({ length: 50 });
 
   roles: RoleDetailDTO[] = [];
+  users: UserDetailDTO[] = [];
   section = 'home';
   loading = false;
 
@@ -24,17 +27,22 @@ export class Dashboard {
     private route: ActivatedRoute,
     private roleService: RoleService,
     private sessionService: SessionService,
-    private cdr: ChangeDetectorRef        // ← add this
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
   ) {
     this.route.paramMap.subscribe(params => {
       this.section = params.get('section') ?? 'home';
       this.roles = [];
+      this.users = [];
 
       switch (this.section) {
         case 'roles':
           this.loadRoles();
           break;
         case 'home':
+          break;
+        case 'users':
+          this.loadUsers();
           break;
       }
     });
@@ -51,6 +59,28 @@ export class Dashboard {
       .subscribe({
         next: response => {
           this.roles = response;
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: error => {
+          console.error(error);
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  private loadUsers(): void {
+    this.loading = true;
+    this.sessionService.session$
+      .pipe(
+        filter(session => session !== null),
+        take(1),
+        switchMap(() => this.userService.getUsers())
+      )
+      .subscribe({
+        next: response => {
+          this.users = response;
           this.loading = false;
           this.cdr.detectChanges();
         },
