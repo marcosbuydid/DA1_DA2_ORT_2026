@@ -51,7 +51,7 @@
 
         <ul class="dropdown-menu dropdown-menu-light">
           <li>
-            <a class="dropdown-item">Movie List</a>
+            <a class="dropdown-item" [routerLink]="['/dashboard', 'movies']">Movie List</a>
           </li>
           <li>
             <a class="dropdown-item">Add Movie</a>
@@ -67,7 +67,7 @@
           aria-expanded="false">
           <i class="bi bi-person-circle fs-4"></i>
         </a>
-        <ul class="dropdown-menu dropdown-menu-end shadow">
+        <ul class="dropdown-menu dropdown-menu-lg-end shadow">
           <ng-container *ngIf="session$ | async as session; else guest">
             <li class="px-3 py-2">
               <div class="fw-bold">
