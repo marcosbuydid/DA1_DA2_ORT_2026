@@ -20,4 +20,8 @@ export class RoleService {
         map(response => response.result)
       );
   }
+
+  deleteRole(name: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/by-name/${name}`);
+  }
 }

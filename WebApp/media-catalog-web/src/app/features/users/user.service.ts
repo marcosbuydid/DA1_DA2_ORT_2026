@@ -19,4 +19,8 @@ export class UserService {
                 map(response => response.result)
             );
     }
+
+    deleteUser(email: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/by-email/${email}`);
+    }
 }

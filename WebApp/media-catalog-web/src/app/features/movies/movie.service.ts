@@ -20,4 +20,8 @@ export class MovieService {
                 map(response => response.result)
             );
     }
+
+    deleteMovie(title: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/by-title/${title}`);
+    }
 }

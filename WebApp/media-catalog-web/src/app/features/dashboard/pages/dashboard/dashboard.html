@@ -9,7 +9,7 @@
 
     @if (section === 'home') {
         <h4>Dashboard</h4>
-        <p>Welcome to the Media Catalog Dashboard.</p>
+        <p>Media Catalog Dashboard</p>
     }
 
     @if (section === 'roles') {
@@ -35,16 +35,23 @@
                     <tr>
                         <td>{{ role.id }}</td>
                         <td>{{ role.name }}</td>
+                        <ng-container *ngIf="isAdmin$ | async">
+                            <td class="text-end pe-5">
+                                <button class="btn btn-danger btn-sm" (click)="deleteRole(role.name)">
+                                    Delete
+                                </button>
+                            </td>
+                        </ng-container>
                     </tr>
                     } @empty {
                     <tr>
-                        <td colspan="2" class="text-center">No roles found.</td>
+                        <td colspan="3" class="text-center">No roles found.</td>
                     </tr>
                     }
                 </tbody>
             </table>
         }
-    }   
+    }
 
     @if (section === 'users') {
         <h4>User List</h4>
@@ -55,8 +62,14 @@
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
-        }
+        } 
         @else {
+            @if (deleteUserAlertVisible) {
+                <div class="alert alert-warning alert-dismissible fade show py-2" role="alert">
+                    <strong>User is logged in.</strong>
+                    <button type="button" class="btn-close py-2 mt-1" (click)="closedeleteUserAlert()"></button>
+                </div>
+            }
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -75,6 +88,13 @@
                         <td>{{ user.lastName }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.roleId }}</td>
+                        <ng-container *ngIf="isAdmin$ | async">
+                            <td class="text-end pe-5">
+                                <button class="btn btn-danger btn-sm" (click)="deleteUser(user.email)">
+                                    Delete
+                                </button>
+                            </td>
+                        </ng-container>
                     </tr>
                     } @empty {
                     <tr>
@@ -113,6 +133,13 @@
                         <td>{{ movie.title }}</td>
                         <td>{{ movie.director }}</td>
                         <td>{{ movie.releaseDate | date:'dd/MM/yyyy' }}</td>
+                        <ng-container *ngIf="isAdmin$ | async">
+                            <td class="text-end pe-5">
+                                <button class="btn btn-danger btn-sm" (click)="deleteMovie(movie.title)">
+                                    Delete
+                                </button>
+                            </td>
+                        </ng-container>
                     </tr>
                     } @empty {
                     <tr>
@@ -123,5 +150,5 @@
             </table>
         }
     }
-    
+
 </div>
