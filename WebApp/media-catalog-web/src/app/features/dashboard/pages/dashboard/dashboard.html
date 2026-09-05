@@ -8,147 +8,22 @@
     </div>
 
     @if (section === 'home') {
-        <h4>Dashboard</h4>
-        <p>Media Catalog Dashboard</p>
+        <div class="container mt-3">
+            <h4>Dashboard</h4>
+            <p>Media Catalog Dashboard</p>
+        </div>
     }
 
     @if (section === 'roles') {
-        <h4>Role List</h4>
-
-        @if (loading) {
-            <div class="d-flex justify-content-center mt-4">
-                <div class="spinner-border text-secondary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        }
-        @else {
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (role of roles; track role.id) {
-                    <tr>
-                        <td>{{ role.id }}</td>
-                        <td>{{ role.name }}</td>
-                        <ng-container *ngIf="isAdmin$ | async">
-                            <td class="text-end pe-5">
-                                <button class="btn btn-danger btn-sm" (click)="deleteRole(role.name)">
-                                    Delete
-                                </button>
-                            </td>
-                        </ng-container>
-                    </tr>
-                    } @empty {
-                    <tr>
-                        <td colspan="3" class="text-center">No roles found.</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        }
+        <app-role-list></app-role-list>
     }
 
     @if (section === 'users') {
-        <h4>User List</h4>
-
-        @if (loading) {
-            <div class="d-flex justify-content-center mt-4">
-                <div class="spinner-border text-secondary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        } 
-        @else {
-            @if (deleteUserAlertVisible) {
-                <div class="alert alert-warning alert-dismissible fade show py-2" role="alert">
-                    <strong>User is logged in.</strong>
-                    <button type="button" class="btn-close py-2 mt-1" (click)="closedeleteUserAlert()"></button>
-                </div>
-            }
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>LastName</th>
-                        <th>Email</th>
-                        <th>RoleId</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (user of users; track user.id) {
-                    <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.lastName }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.roleId }}</td>
-                        <ng-container *ngIf="isAdmin$ | async">
-                            <td class="text-end pe-5">
-                                <button class="btn btn-danger btn-sm" (click)="deleteUser(user.email)">
-                                    Delete
-                                </button>
-                            </td>
-                        </ng-container>
-                    </tr>
-                    } @empty {
-                    <tr>
-                        <td colspan="2" class="text-center">No users found.</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        }
+        <app-user-list></app-user-list>
     }
 
     @if (section === 'movies') {
-        <h4>Movie List</h4>
-
-        @if (loading) {
-            <div class="d-flex justify-content-center mt-4">
-                <div class="spinner-border text-secondary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        }
-        @else {
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Title</th>
-                        <th>Director</th>
-                        <th>ReleaseDate</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (movie of movies; track movie.id) {
-                    <tr>
-                        <td>{{ movie.id }}</td>
-                        <td>{{ movie.title }}</td>
-                        <td>{{ movie.director }}</td>
-                        <td>{{ movie.releaseDate | date:'dd/MM/yyyy' }}</td>
-                        <ng-container *ngIf="isAdmin$ | async">
-                            <td class="text-end pe-5">
-                                <button class="btn btn-danger btn-sm" (click)="deleteMovie(movie.title)">
-                                    Delete
-                                </button>
-                            </td>
-                        </ng-container>
-                    </tr>
-                    } @empty {
-                    <tr>
-                        <td colspan="2" class="text-center">No movies found.</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        }
+      <app-movie-list></app-movie-list>
     }
 
 </div>
