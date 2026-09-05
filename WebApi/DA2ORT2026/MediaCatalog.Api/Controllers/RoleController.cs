@@ -34,7 +34,7 @@ namespace MediaCatalog.Api.Controllers
         }
 
         [HttpPost]
-        [AuthorizationFilter("Administrator,User")]
+        [AuthorizationFilter("Administrator")]
         public IActionResult Create([FromBody] RoleCreateDTO newRole)
         {
             RoleDetailDTO role = _roleService.AddRole(newRole);
