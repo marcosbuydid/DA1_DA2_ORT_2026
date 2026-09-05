@@ -52,7 +52,7 @@ namespace MediaCatalog.DataAccess.InMemoryRepositories
         {
             Users.Add(new User(1, "Administrator", "MediaCatalog", "administrator@mediacatalog.com", 
                 "YfCcXFdr5hMSfeP2PqGnLahaL/Aq7qDX78vZTnxYlB3iC6FQHcQi5AB9ETjAWY66", 1));
-            Users.Add(new User(1, "User", "MediaCatalog", "user@mediacatalog.com",
+            Users.Add(new User(2, "User", "MediaCatalog", "user@mediacatalog.com",
                 "wlHbfWC68JPAJhdiDs9rGP67IWNvPxKkGAHbnHGdN/QqH1Feys3+0F8UXS4eJvxj", 2));
         }
     }
