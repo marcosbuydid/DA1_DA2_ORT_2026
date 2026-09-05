@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { RoleList } from '../../components/role-list/role-list';
 import { UserList } from '../../components/user-list/user-list';
 import { MovieList } from '../../components/movie-list/movie-list';
+import { Footer } from '../../../../layout/components/footer/footer';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Navbar, CommonModule, RoleList, UserList, MovieList],
+  imports: [Navbar, Footer, CommonModule, RoleList, UserList, MovieList],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
