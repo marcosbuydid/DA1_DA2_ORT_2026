@@ -34,7 +34,7 @@ namespace MediaCatalog.Api.Controllers
         }
 
         [HttpPost]
-        [AuthorizationFilter("Administrator,User")]
+        [AuthorizationFilter("Administrator")]
         public IActionResult Create([FromBody] UserCreateDTO newUser)
         {
             UserDetailDTO user = _userService.AddUser(newUser);
