@@ -76,7 +76,7 @@ namespace MediaCatalog.Api.Controllers
         }
 
         [HttpPut("by-email/{email}/password")]
-        [AuthorizationFilter("Administrator")]
+        [AuthorizationFilter("Administrator,User")]
         public IActionResult ChangePassword(string email, [FromBody] ChangePasswordDTO changePasswordDTO)
         {
             _userService.ChangePassword(email, changePasswordDTO);
