@@ -6,10 +6,11 @@ import { RoleList } from '../../components/role-list/role-list';
 import { UserList } from '../../components/user-list/user-list';
 import { MovieList } from '../../components/movie-list/movie-list';
 import { Footer } from '../../../../layout/components/footer/footer';
+import { ChangePassword } from '../../components/change-password/change-password';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Navbar, Footer, CommonModule, RoleList, UserList, MovieList],
+  imports: [Navbar, Footer, CommonModule, RoleList, UserList, MovieList, ChangePassword],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })

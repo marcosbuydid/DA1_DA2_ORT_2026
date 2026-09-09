@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { UserDetailDTO } from '../auth/models/user-detail.dto';
+import { ChangePasswordDTO } from '../auth/models/change-password.dto';
 
 @Injectable({
     providedIn: 'root'
@@ -22,5 +23,9 @@ export class UserService {
 
     deleteUser(email: string): Observable<any> {
         return this.http.delete(`${this.apiUrl}/by-email/${email}`);
+    }
+
+    changePassword(email: string, changePasswordDTO: ChangePasswordDTO): Observable<any> {
+        return this.http.put(`${this.apiUrl}/by-email/${email}/password`, changePasswordDTO);
     }
 }

@@ -63,7 +63,7 @@
 
     <ul class="navbar-nav navbar-profile">
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown"
+        <a class="nav-link dropdown-toggle d-flex align-items-center" role="button" data-bs-toggle="dropdown"
           aria-expanded="false">
           <i class="bi bi-person-circle fs-4"></i>
         </a>
@@ -77,6 +77,17 @@
                 {{ session.loggedUser.email }}
               </small>
             </li>
+            <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li class="px-3 pb-2">
+            <button class="btn btn-secondary btn-sm w-100" 
+              [routerLink]="['/dashboard', 'change-password']">Change Password
+            </button>
+          </li>
+          <li class="px-3 pb-2">
+            <button class="btn btn-danger btn-sm w-100" (click)="logout()">Logout</button>
+          </li>
           </ng-container>
 
           <ng-template #guest>
@@ -85,13 +96,6 @@
               <small class="text-muted">Not logged in</small>
             </li>
           </ng-template>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li>
-            <a class="dropdown-item text-danger" (click)="logout()">Logout</a>
-          </li>
 
         </ul>
       </li>
