@@ -13,7 +13,6 @@ export class RoleService {
   private readonly apiUrl = `${environment.baseUrl}roles`;
 
   getRoles(): Observable<RoleDetailDTO[]> {
-
     return this.http
       .get<{ result: RoleDetailDTO[] }>(this.apiUrl)
       .pipe(
@@ -23,5 +22,9 @@ export class RoleService {
 
   deleteRole(name: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/by-name/${name}`);
+  }
+
+  createRole(role: { name: string }): Observable<any> {
+    return this.http.post(this.apiUrl, role);
   }
 }

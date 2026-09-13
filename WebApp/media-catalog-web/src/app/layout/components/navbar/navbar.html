@@ -23,9 +23,11 @@
           <li>
             <a class="dropdown-item" [routerLink]="['/dashboard', 'roles']">Role List</a>
           </li>
-          <li>
-            <a class="dropdown-item">Add Role</a>
-          </li>
+          <ng-container *ngIf="isAdmin$ | async">
+            <li>
+              <a class="dropdown-item"  [routerLink]="['/dashboard', 'add-role']">Add Role</a>
+            </li>
+          </ng-container>
         </ul>
       </li>
 
