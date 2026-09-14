@@ -8,10 +8,12 @@ import { MovieList } from '../../components/movie-list/movie-list';
 import { Footer } from '../../../../layout/components/footer/footer';
 import { ChangePassword } from '../../components/change-password/change-password';
 import { AddRole } from '../../components/add-role/add-role';
+import { AddUser } from '../../components/add-user/add-user';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Navbar, Footer, CommonModule, RoleList, AddRole, UserList, MovieList, ChangePassword],
+  imports: [Navbar, Footer, CommonModule, RoleList, AddRole, UserList,
+    AddUser, MovieList, ChangePassword],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })

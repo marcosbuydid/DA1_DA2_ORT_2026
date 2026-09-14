@@ -26,6 +26,10 @@
         <app-user-list></app-user-list>
     }
 
+     @if (section === 'add-user') {
+        <app-add-user></app-add-user>
+    }
+
     @if (section === 'movies') {
       <app-movie-list></app-movie-list>
     }

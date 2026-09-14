@@ -25,7 +25,7 @@
           </li>
           <ng-container *ngIf="isAdmin$ | async">
             <li>
-              <a class="dropdown-item"  [routerLink]="['/dashboard', 'add-role']">Add Role</a>
+              <a class="dropdown-item" [routerLink]="['/dashboard', 'add-role']">Add Role</a>
             </li>
           </ng-container>
         </ul>
@@ -38,11 +38,13 @@
 
         <ul class="dropdown-menu dropdown-menu-light">
           <li>
-            <a class="dropdown-item"  [routerLink]="['/dashboard', 'users']">User List</a>
+            <a class="dropdown-item" [routerLink]="['/dashboard', 'users']">User List</a>
           </li>
-          <li>
-            <a class="dropdown-item">Add User</a>
-          </li>
+          <ng-container *ngIf="isAdmin$ | async">
+            <li>
+              <a class="dropdown-item" [routerLink]="['/dashboard', 'add-user']">Add User</a>
+            </li>
+          </ng-container>
         </ul>
       </li>
 

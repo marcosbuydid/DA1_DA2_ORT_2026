@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { UserDetailDTO } from '../auth/models/user-detail.dto';
 import { ChangePasswordDTO } from '../auth/models/change-password.dto';
+import { CreateUserDTO } from '../auth/models/create-user.dto';
 
 @Injectable({
     providedIn: 'root'
@@ -28,4 +29,8 @@ export class UserService {
     changePassword(email: string, changePasswordDTO: ChangePasswordDTO): Observable<any> {
         return this.http.put(`${this.apiUrl}/by-email/${email}/password`, changePasswordDTO);
     }
+
+     createUser(user: CreateUserDTO): Observable<any> {
+    return this.http.post(this.apiUrl, user);
+  }
 }
