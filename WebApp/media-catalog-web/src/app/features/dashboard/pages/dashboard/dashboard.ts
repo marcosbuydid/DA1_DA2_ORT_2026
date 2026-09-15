@@ -9,11 +9,12 @@ import { Footer } from '../../../../layout/components/footer/footer';
 import { ChangePassword } from '../../components/change-password/change-password';
 import { AddRole } from '../../components/add-role/add-role';
 import { AddUser } from '../../components/add-user/add-user';
+import { AddMovie } from '../../components/add-movie/add-movie';
 
 @Component({
   selector: 'app-dashboard',
   imports: [Navbar, Footer, CommonModule, RoleList, AddRole, UserList,
-    AddUser, MovieList, ChangePassword],
+    AddUser, MovieList, AddMovie, ChangePassword],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
