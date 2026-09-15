@@ -10,13 +10,14 @@ import { MovieList } from './features/dashboard/components/movie-list/movie-list
 import { AddMovie } from './features/dashboard/components/add-movie/add-movie';
 import { ChangePassword } from './features/dashboard/components/change-password/change-password';
 import { Home } from './features/dashboard/components/home/home';
+import { authGuard } from './core/guards/auth-guard';
 
 
 export const routes: Routes = [
     { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
     { path: 'auth/login', component: Login },
     {
-        path: 'dashboard', component: Dashboard,
+        path: 'dashboard', component: Dashboard, canActivate: [authGuard],
         children: [
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: Home },
