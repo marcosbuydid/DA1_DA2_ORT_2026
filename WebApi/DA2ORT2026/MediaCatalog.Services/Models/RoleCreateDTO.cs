@@ -5,8 +5,7 @@ namespace MediaCatalog.Services.Models
 {
     public class RoleCreateDTO
     {
-        [RegularExpression("^(Administrator|User)$",
-            ErrorMessage = "Role must be Administrator or User")]
+        [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; }
 
         public RoleCreateDTO() { }

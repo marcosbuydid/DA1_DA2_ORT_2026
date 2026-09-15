@@ -1,0 +1,19 @@
+.watermark {
+  position: absolute;
+  inset: -20%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  transform: rotate(-23deg);
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.watermark span {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: var(--bs-secondary);
+  white-space: nowrap;
+}

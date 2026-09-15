@@ -1,0 +1,59 @@
+/* Make the navbar appear above the page content */
+.navbar {
+    position: relative;
+    z-index: 1050;
+}
+
+/* Keep dropdowns above everything underneath */
+.navbar .dropdown-menu {
+    position: absolute;
+    z-index: 1060;
+}
+
+/* Don't clip dropdown menus */
+.navbar-collapse {
+    overflow: visible !important;
+}
+
+.navbar-center {
+    z-index: 1051;
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+
+    .navbar-center {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .navbar-profile {
+        margin-left: auto;
+    }
+}
+
+/* Mobile / tablet */
+@media (max-width: 991.98px) {
+
+    .navbar-center {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0 !important;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .navbar-center .nav-item {
+        width: 100%;
+    }
+
+    .navbar-center .btn {
+        width: 100%;
+        text-align: left;
+    }
+
+    .navbar-profile {
+        margin-top: 1rem;
+    }
+}
